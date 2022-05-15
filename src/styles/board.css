@@ -1,0 +1,58 @@
+:root{
+    --board-square-width: 4vw;
+    --board-dot-width: 2vw;
+}
+
+.board{
+    margin-left: calc((100vw - var(--board-square-width) * 8) /2);
+    margin-top: 15vh;
+    border-color: black;
+    border-style: solid;
+    border-width: 2px;
+    width: calc(var(--board-square-width) * 8);
+}
+.board-square{
+    width: var(--board-square-width)  !important;
+    height: var(--board-square-width) !important;
+}
+.green-square{
+    background-color: green;
+}
+.white-square{
+    background-color: white;
+    border-color: green;
+}
+.board-row{
+    display: flex;
+}
+.chess-piece, .piece{
+    width: var(--board-square-width);
+    height: var(--board-square-width);
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.piece{
+    top: 0;
+    left: 0;
+    position: absolute;
+}
+.chess-piece:hover{
+    cursor: pointer;
+}
+.board-square{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: var(--board-square-width);
+}
+.has-dot{
+    width: var(--board-dot-width) ;
+    height: var(--board-dot-width);
+    border-radius: 1000px;
+    border-style: none;
+    background-color: aqua;
+    position: absolute;
+    
+}
