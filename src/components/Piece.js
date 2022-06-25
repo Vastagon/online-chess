@@ -1,13 +1,5 @@
-import { useEffect } from "react"
 import "../styles/board.css"
-
-// export interface Props{
-//     color?: string 
-//     piece?: string
-//     position: number[]
-//     boardpositions: string[][]
-//     pieceClicked: boolean
-// }
+import boardPosition from "./boardpositions.json"
 
 const Piece = (props) =>{
     ///Array of all positions that a piece can move
@@ -22,29 +14,34 @@ const Piece = (props) =>{
     }
 
     function clickPiece(){
+        console.log(props.position)
         ///PAWN LOGIC
         props.setPieceClicked(true) 
-        if(props.piece == "whitePawn"){
+        if(props.piece === "whitePawn"){
             ///increase row by one, or two if first move
-            if(!hasMoved){
+            if(!hasMoved && boardPosition[props.position[0]-1][props.position[1]] === ""){/// && boardPosition[props.position[0]-2][props.position[1]] === ""
                 potentialMovement = [[props.position[0]-2, props.position[1]], [props.position[0]-1, props.position[1]]]
             }else{
-                potentialMovement = [[props.position[0]-1, props.position[1]]]
+                if(boardPosition[props.position[0]-1][props.position[1]] === ""){
+                    potentialMovement = [[props.position[0]-1, props.position[1]]]
+                }
             }
             ///Checking if pawn can take piece diagonally
-            if((props.boardpositions[props.position[0]-1][props.position[1]-1]?.substring(0,5)) === "white"){
+            if((props.boardpositions[props.position[0]-1][props.position[1]-1]?.substring(0,5)) === "black"){
                 potentialMovement.push([props.position[0]-1, props.position[1]-1])
             }
-            if((props.boardpositions[props.position[0]-1][props.position[1]+1]?.substring(0,5)) === "white"){
+            if((props.boardpositions[props.position[0]-1][props.position[1]+1]?.substring(0,5)) === "black"){
                 potentialMovement.push([props.position[0]-1, props.position[1]+1])
             }
         }
         if(props.piece === "blackPawn"){
             ///increase row by one, or two if first move
-            if(!hasMoved){
+            if(!hasMoved && boardPosition[props.position[0]+1][props.position[1]] === ""){
                 potentialMovement = [[props.position[0]+2, props.position[1]], [props.position[0]+1, props.position[1]]]
             }else{
-                potentialMovement = [[props.position[0]+1, props.position[1]]]
+                if(boardPosition[props.position[0]+1][props.position[1]] === ""){
+                    potentialMovement = [[props.position[0]+1, props.position[1]]]
+                }
             }
             ///Checking if pawn can take piece diagonally
             if((props.boardpositions[props.position[0]+1][props.position[1]+1]?.substring(0,5)) === "white"){

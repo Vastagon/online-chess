@@ -27,10 +27,9 @@ const Board = () =>{
                 evenRow = !evenRow
                 let hasDot
                 ///Initial class for board divs
-                // evenRow ? hasDot = "board-square white-square" : hasDot = "board-square green-square"
 
                 ///Shows dots on all potential movement squares
-                for(let i = 0; i < potentialMovement.length; i++){
+                for(let i = 0; i < potentialMovement?.length; i++){
                     if(JSON.stringify([rowIndex, index]) == JSON.stringify(potentialMovement[i])){
                         // hasDot = "has-dot " + hasDot
                         hasDot = true
@@ -40,7 +39,7 @@ const Board = () =>{
 
                 return (<div key={uuid()} className={evenRow ? "board-square white-square" : "board-square green-square"}>
                     <div className={hasDot ? "has-dot" : null} />
-                    <Piece key={uuid()} canMove={canMove} setPieceClicked={setPieceClicked} position={[rowIndex,index]} boardpositions={boardpositions} piece={boardpositions[rowIndex][index]}/>
+                    <Piece boardPositions={boardPositions} key={uuid()} canMove={canMove} setPieceClicked={setPieceClicked} position={[rowIndex,index]} boardpositions={boardpositions} piece={boardpositions[rowIndex][index]}/>
                 </div>)
             })}</div>) 
             
@@ -50,14 +49,13 @@ const Board = () =>{
 
 
     useEffect(() =>{
-        // @ts-expect-error
         setBoardDiv(boardpositions.map((prev, rowIndex) =>{
             evenRow = !evenRow
             return(<div key={uuid()} className="board-row">{prev.map((prev, index) =>{
                 evenRow = !evenRow
 
                 return (<div key={uuid()} className={evenRow? "board-square white-square" : "board-square green-square"}>
-                    <Piece key={uuid()} canMove={canMove} setPieceClicked={setPieceClicked} position={[rowIndex,index]} boardpositions={boardpositions} piece={boardpositions[rowIndex][index]}/>
+                    <Piece boardPositions={boardPositions} key={uuid()} canMove={canMove} setPieceClicked={setPieceClicked} position={[rowIndex,index]} boardpositions={boardpositions} piece={boardpositions[rowIndex][index]}/>
                 </div>)
             })}</div>) 
             
