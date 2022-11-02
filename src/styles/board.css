@@ -54,5 +54,5 @@
     border-style: none;
     background-color: aqua;
     position: absolute;
-    
+    z-index: 100;
 }
