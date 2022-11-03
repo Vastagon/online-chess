@@ -8,7 +8,7 @@ import {v4 as uuid} from "uuid"
 
 
 const Board = () =>{
-    const [boardPositions, setBoardPosition] = useState(boardpositions)
+    const [boardPosition, setBoardPosition] = useState(boardpositions)
     const [potentialMovement, setPotentialMovement] = useState([])
     const [lastClickedPosition, setLastClickedPosition] = useState()
 
@@ -19,7 +19,7 @@ const Board = () =>{
 
     ///Shows squares it can move
     function canMove(){
-        setBoardDiv(boardPositions.map((prev, rowIndex) =>{
+        setBoardDiv(boardPosition.map((prev, rowIndex) =>{
             evenRow = !evenRow
             return(<div key={uuid()} className="board-row">{prev.map((prev, index) =>{
                 evenRow = !evenRow
@@ -37,11 +37,9 @@ const Board = () =>{
                 ///onClick={() => squareClicked([rowIndex,index])}
                 return (<div key={uuid()} className={evenRow ? "board-square white-square" : "board-square green-square"}>
                     <div onClick={() => potentialMovementGetsClicked([rowIndex,index])} className={hasDot ? "has-dot" : null} />
-                    <Piece setLastClickedPosition={setLastClickedPosition} potentialMovementGetsClicked={potentialMovementGetsClicked} potentialMovement={potentialMovement} setPotentialMovement={setPotentialMovement} boardPositions={boardPositions} key={uuid()} canMove={canMove} pieceClicked={pieceClicked} setPieceClicked={setPieceClicked} position={[rowIndex,index]} boardpositions={boardpositions} piece={boardpositions[rowIndex][index]}/>
+                    <Piece setLastClickedPosition={setLastClickedPosition} potentialMovementGetsClicked={potentialMovementGetsClicked} potentialMovement={potentialMovement} setPotentialMovement={setPotentialMovement} boardPosition={boardPosition} key={uuid()} canMove={canMove} pieceClicked={pieceClicked} setPieceClicked={setPieceClicked} position={[rowIndex,index]} piece={boardpositions[rowIndex][index]}/>
                 </div>)
             })}</div>) 
-             
-
         }))
     }
 
@@ -49,6 +47,8 @@ const Board = () =>{
     ///Runs whenever new piece is selected
     useEffect(() =>{ 
         canMove()
+        console.log("Potential Movement Underneath")
+        console.log(potentialMovement)
     }, [potentialMovement])
 
 
@@ -60,12 +60,14 @@ const Board = () =>{
         for(let i = 0; i < potentialMovement.length; i++){
             console.log(JSON.stringify(potentialMovement[i]))
             if(JSON.stringify(potentialMovement[i]) == JSON.stringify(clickedSquare)){
-                boardPositions[clickedSquare[0]][clickedSquare[1]] = boardPositions[lastClickedPosition[0]][lastClickedPosition[1]]
+                boardPosition[clickedSquare[0]][clickedSquare[1]] = boardPosition[lastClickedPosition[0]][lastClickedPosition[1]]
+                boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] = ""
+                setPotentialMovement([])
             }
         }
     }
     
-    if(!boardDiv) return null
+    if(!boardDiv || !boardPosition) return null
 
     return(
         <div className="board">
