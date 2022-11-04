@@ -57,20 +57,85 @@ const Piece = (props) =>{
             let temp = []
             ///Guessing using state is what's causing this problem. It's using the last J to manipulate these
             ///Using temp variable and pushing to state at the end
+
+            ///Checks bottom
             while(notBlocked){
                 ///Checks for positions below
-                if(props.boardPosition[props.position[0]+j][props.position[1]] === ""){ 
-                    temp.push([props.position[0]+j, props.position[1]])
+                // console.log(props.position[0]+j)
+                if(props.position[0] + j < 8){
+                    console.log(props.position[0]+j)
+                    if(props?.boardPosition[props.position[0]+j][props.position[1]] === ""){ 
+                        temp.push([props.position[0]+j, props.position[1]])
+                    }else{
+                        notBlocked = false
+                        ///Checks if stoppage is enemy piece
+                        if((props.boardPosition[props.position[0]+j][props.position[1]]).substring(0,1) === "w"){
+                            temp.push([props.position[0]+j, props.position[1]])
+                        }
+                    }                     
+                }
+               
+
+                
+
+
+                j++
+            }
+            notBlocked = true
+            j = 1
+            
+            ///Checks top
+            while(notBlocked){
+                ///Checks for positions below
+                if(props?.boardPosition[props.position[0]-j][props.position[1]] === "" && props.boardPosition[props.position[0]-j][props.position[1]] !== undefined){ 
+                    temp.push([props.position[0]-j, props.position[1]])
                 }else{
                     notBlocked = false
                     ///Checks if stoppage is enemy piece
-                    if((props.boardPosition[props.position[0]+j][props.position[1]]).substring(0,1) === "w"){
-                        temp.push([props.position[0]+j, props.position[1]])
+                    if((props.boardPosition[props.position[0]-j][props.position[1]]).substring(0,1) === "w"){
+                        temp.push([props.position[0]-j, props.position[1]])
                     }
                     props.setPotentialMovement(temp)
                 }
                 j++
             }
+            notBlocked = true
+            j = 1
+
+            ///Checks left
+            while(notBlocked){
+                ///Checks for positions below
+                if(props.boardPosition[props.position[0]][props.position[1]-j] === "" && props.boardPosition[props.position[0]][props.position[1]-j] !== undefined){ 
+                    temp.push([props.position[0], props.position[1]-j])
+                }else{
+                    notBlocked = false
+                    ///Checks if stoppage is enemy piece
+                    if((props.boardPosition[props.position[0]][props.position[1]-j])?.substring(0,1) === "w"){
+                        temp.push([props.position[0], props.position[1]-j])
+                    }
+                    props.setPotentialMovement(temp)
+                }
+                j++
+            }
+            notBlocked = true
+            j = 1
+
+            ///Checks right
+            while(notBlocked){
+                ///Checks for positions below
+                if(props.boardPosition[props.position[0]][props.position[1]+j] === "" && props.boardPosition[props.position[0]][props.position[1]+j] !== undefined){ 
+                    temp.push([props.position[0], props.position[1]+j])
+                }else{
+                    notBlocked = false
+                    ///Checks if stoppage is enemy piece
+                    if((props.boardPosition[props.position[0]][props.position[1]+j])?.substring(0,1) === "w"){
+                        temp.push([props.position[0], props.position[1]+j])
+                    }
+                    props.setPotentialMovement(temp)
+                }
+                j++
+            }
+            ///End of Rook Logic
         }
     }
 
