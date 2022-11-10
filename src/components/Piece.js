@@ -7,6 +7,10 @@ const Piece = (props) =>{
     function clickPiece(){
         ///Global state to save last clicked position
         props.setLastClickedPosition(props.position)
+        let isBlack = true
+        if(props.piece.substring(0,1) === "w"){
+            isBlack = false
+        }
         props.setPotentialMovement([])
 
         console.log("Clicked piece position: " + props.position)
@@ -60,25 +64,30 @@ const Piece = (props) =>{
 
             ///Checks bottom
             while(notBlocked){
+                ///This is running infinitely
+                console.log("Not blocked")
                 ///Checks for positions below
                 // console.log(props.position[0]+j)
                 if(props.position[0] + j < 8){
                     console.log(props.position[0]+j)
                     if(props?.boardPosition[props.position[0]+j][props.position[1]] === ""){ 
                         temp.push([props.position[0]+j, props.position[1]])
+                        console.log(1)
                     }else{
+                        console.log(2)
                         notBlocked = false
                         ///Checks if stoppage is enemy piece
-                        if((props.boardPosition[props.position[0]+j][props.position[1]]).substring(0,1) === "w"){
+                        if((props.boardPosition[props.position[0]+j][props.position[1]]).substring(0,1) === "w" && props.piece.substring(0,1) === "b"){
+                            temp.push([props.position[0]+j, props.position[1]])
+                        }
+                        if((props.boardPosition[props.position[0]+j][props.position[1]]).substring(0,1) === "b" && props.piece.substring(0,1) === "w"){
                             temp.push([props.position[0]+j, props.position[1]])
                         }
                     }                     
+                }else{
+                    notBlocked = false
                 }
                
-
-                
-
-
                 j++
             }
             notBlocked = true
@@ -86,31 +95,44 @@ const Piece = (props) =>{
             
             ///Checks top
             while(notBlocked){
+                console.log("Top Not blocked")
                 ///Checks for positions below
-                if(props?.boardPosition[props.position[0]-j][props.position[1]] === "" && props.boardPosition[props.position[0]-j][props.position[1]] !== undefined){ 
-                    temp.push([props.position[0]-j, props.position[1]])
+                if(props.position[0] - j > 0){
+                    if(props?.boardPosition[props.position[0]-j][props.position[1]] === ""){ 
+                        temp.push([props.position[0]-j, props.position[1]])
+                    }else{
+                        notBlocked = false
+                        ///Checks if stoppage is enemy piece
+                        if((props.boardPosition[props.position[0]-j][props.position[1]]).substring(0,1) === "w" && props.piece.substring(0,1) === "b"){
+                            temp.push([props.position[0]-j, props.position[1]])
+                        }
+                        if((props.boardPosition[props.position[0]-j][props.position[1]]).substring(0,1) === "b" && props.piece.substring(0,1) === "w"){
+                            temp.push([props.position[0]-j, props.position[1]])
+                        }
+                        props.setPotentialMovement(temp)
+                    }
                 }else{
                     notBlocked = false
-                    ///Checks if stoppage is enemy piece
-                    if((props.boardPosition[props.position[0]-j][props.position[1]]).substring(0,1) === "w"){
-                        temp.push([props.position[0]-j, props.position[1]])
-                    }
-                    props.setPotentialMovement(temp)
                 }
-                j++
+
+                j++                
             }
             notBlocked = true
             j = 1
 
             ///Checks left
             while(notBlocked){
+                console.log("Left Not blocked")
                 ///Checks for positions below
                 if(props.boardPosition[props.position[0]][props.position[1]-j] === "" && props.boardPosition[props.position[0]][props.position[1]-j] !== undefined){ 
                     temp.push([props.position[0], props.position[1]-j])
                 }else{
                     notBlocked = false
                     ///Checks if stoppage is enemy piece
-                    if((props.boardPosition[props.position[0]][props.position[1]-j])?.substring(0,1) === "w"){
+                    if((props.boardPosition[props.position[0]][props.position[1]-j])?.substring(0,1) === "w" && props.piece.substring(0,1) === "b"){
+                        temp.push([props.position[0], props.position[1]-j])
+                    }
+                    if((props.boardPosition[props.position[0]][props.position[1]-j])?.substring(0,1) === "b" && props.piece.substring(0,1) === "w"){
                         temp.push([props.position[0], props.position[1]-j])
                     }
                     props.setPotentialMovement(temp)
@@ -122,22 +144,96 @@ const Piece = (props) =>{
 
             ///Checks right
             while(notBlocked){
-                ///Checks for positions below
+                console.log("Right Not blocked")
+                ///Checks for positions righy
                 if(props.boardPosition[props.position[0]][props.position[1]+j] === "" && props.boardPosition[props.position[0]][props.position[1]+j] !== undefined){ 
                     temp.push([props.position[0], props.position[1]+j])
                 }else{
                     notBlocked = false
                     ///Checks if stoppage is enemy piece
-                    if((props.boardPosition[props.position[0]][props.position[1]+j])?.substring(0,1) === "w"){
+                    if((props.boardPosition[props.position[0]][props.position[1]+j])?.substring(0,1) === "w" && props.piece.substring(0,1) === "b"){
+                        temp.push([props.position[0], props.position[1]+j])
+                    }
+                    if((props.boardPosition[props.position[0]][props.position[1]+j])?.substring(0,1) === "b" && props.piece.substring(0,1) === "w"){
                         temp.push([props.position[0], props.position[1]+j])
                     }
                     props.setPotentialMovement(temp)
                 }
                 j++
             }
-            ///End of Rook Logic
+        ///End of Rook Logic function
+        }
+
+        ///King logic
+        if(props.piece === "blackKing" || props.piece === "whiteKing"){
+            let temp = []
+            ///Check 8 spaces around king
+
+            ///Position underneath king
+            try(props.boardPosition[props.position[0]-1][props.position[1]] == undefined){
+                console.log("Top missing")
+            }
+
+            //Top Left
+            if(props.boardPosition[props.position[0]-1][props.position[1]-1] === ""){
+                temp.push([props.position[0]-1, props.position[1]-1])
+            }
+            //Top Center
+            if(props.boardPosition[props.position[0]-1][props.position[1]] === ""){
+                temp.push([props.position[0]-1, props.position[1]])
+            }
+            //Top Right
+            if(props.boardPosition[props.position[0]-1][props.position[1]+1] === ""){
+                temp.push([props.position[0]-1, props.position[1]+1])
+            }
+            //Center Right
+            if(props.boardPosition[props.position[0]][props.position[1]+1] === ""){
+                temp.push([props.position[0], props.position[1]+1])
+            }
+            //Bottom Right
+            if(props.boardPosition[props.position[0]+1][props.position[1]+1] === ""){
+                temp.push([props.position[0]+1, props.position[1]+1])
+            }
+            //Bottom Center
+            if(props.boardPosition[props.position[0]+1][props.position[1]] === ""){
+                temp.push([props.position[0]+1, props.position[1]])
+            }
+            //Bottom Left
+            if(props.boardPosition[props.position[0]+1][props.position[1]-1] === ""){
+                temp.push([props.position[0]+1, props.position[1]-1])
+            }
+            //Center Left
+            if(props.boardPosition[props.position[0]][props.position[1]-1] === ""){
+                temp.push([props.position[0], props.position[1]-1])
+            }
+       
+
+
+            props.setPotentialMovement(temp)
+
+
+
+        ///End of King logic
         }
     }
+
+
+    function checkIfInArray(position, modifierX, modifierY){
+        if (position.length > x + modifierX && position[x].length > y + modifierY) {
+            return position[x][y];
+        }
+    
+        return null;
+    }
+
+    // checkIfEnemyPiece(props.boardPosition[props.position[0]][props.position[1]+j])
+
+    // function checkIfEnemyPiece(enemyPosition){
+    //     ///Return true or false
+    //     if()
+
+    //     return true
+    // }
 
     // useEffect(() =>{
     //     console.log(props.potentialMovement)
