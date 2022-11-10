@@ -1,4 +1,4 @@
 # Online Chess App
 
 ## Description
-Currently working on my own version of a chess engine. Will then proceed to use SocketIO to create a multiplayer experience
+All movement and pie taking is done. Now just need to finish logic for each piece, make the pieces take turns, and check for check, checkmate, and castling
