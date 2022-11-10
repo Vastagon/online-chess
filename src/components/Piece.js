@@ -1,9 +1,9 @@
 import { useEffect } from "react"
 import "../styles/board.css"
 import boardPosition from "./boardpositions.json"
-
+ 
 const Piece = (props) =>{
-    
+   
     function clickPiece(){
         ///Global state to save last clicked position
         props.setLastClickedPosition(props.position)
@@ -12,10 +12,10 @@ const Piece = (props) =>{
             isBlack = false
         }
         props.setPotentialMovement([])
-
+ 
         console.log("Clicked piece position: " + props.position)
         ///PAWN LOGIC
-        props.setPieceClicked(true) 
+        props.setPieceClicked(true)
         if(props.piece === "whitePawn"){
             ///increase row by one, or two if first move
             if((props.position[0] === 6 || props.position[0] === 1) && boardPosition[props.position[0]-1][props.position[1]] === "" && boardPosition[props.position[0]-2][props.position[1]] === ""){
@@ -50,10 +50,10 @@ const Piece = (props) =>{
                 props.setPotentialMovement(prev => [...prev, [props.position[0]+1, props.position[1]-1]])
             }
         }
-
+ 
         ///Runs function on Board that shows potential movement
         // props.canMove(props.potentialMovement)
-
+ 
         ///ROOK LOGIC
         if(props.piece === "blackRook" || props.piece === "whiteRook"){
             let j = 1
@@ -61,7 +61,7 @@ const Piece = (props) =>{
             let temp = []
             ///Guessing using state is what's causing this problem. It's using the last J to manipulate these
             ///Using temp variable and pushing to state at the end
-
+ 
             ///Checks bottom
             while(notBlocked){
                 ///This is running infinitely
@@ -70,7 +70,7 @@ const Piece = (props) =>{
                 // console.log(props.position[0]+j)
                 if(props.position[0] + j < 8){
                     console.log(props.position[0]+j)
-                    if(props?.boardPosition[props.position[0]+j][props.position[1]] === ""){ 
+                    if(props?.boardPosition[props.position[0]+j][props.position[1]] === ""){
                         temp.push([props.position[0]+j, props.position[1]])
                         console.log(1)
                     }else{
@@ -83,7 +83,7 @@ const Piece = (props) =>{
                         if((props.boardPosition[props.position[0]+j][props.position[1]]).substring(0,1) === "b" && props.piece.substring(0,1) === "w"){
                             temp.push([props.position[0]+j, props.position[1]])
                         }
-                    }                     
+                    }                    
                 }else{
                     notBlocked = false
                 }
@@ -92,13 +92,13 @@ const Piece = (props) =>{
             }
             notBlocked = true
             j = 1
-            
+           
             ///Checks top
             while(notBlocked){
                 console.log("Top Not blocked")
                 ///Checks for positions below
                 if(props.position[0] - j > 0){
-                    if(props?.boardPosition[props.position[0]-j][props.position[1]] === ""){ 
+                    if(props?.boardPosition[props.position[0]-j][props.position[1]] === ""){
                         temp.push([props.position[0]-j, props.position[1]])
                     }else{
                         notBlocked = false
@@ -114,17 +114,17 @@ const Piece = (props) =>{
                 }else{
                     notBlocked = false
                 }
-
+ 
                 j++                
             }
             notBlocked = true
             j = 1
-
+ 
             ///Checks left
             while(notBlocked){
                 console.log("Left Not blocked")
                 ///Checks for positions below
-                if(props.boardPosition[props.position[0]][props.position[1]-j] === "" && props.boardPosition[props.position[0]][props.position[1]-j] !== undefined){ 
+                if(props.boardPosition[props.position[0]][props.position[1]-j] === "" && props.boardPosition[props.position[0]][props.position[1]-j] !== undefined){
                     temp.push([props.position[0], props.position[1]-j])
                 }else{
                     notBlocked = false
@@ -141,12 +141,12 @@ const Piece = (props) =>{
             }
             notBlocked = true
             j = 1
-
+ 
             ///Checks right
             while(notBlocked){
                 console.log("Right Not blocked")
                 ///Checks for positions righy
-                if(props.boardPosition[props.position[0]][props.position[1]+j] === "" && props.boardPosition[props.position[0]][props.position[1]+j] !== undefined){ 
+                if(props.boardPosition[props.position[0]][props.position[1]+j] === "" && props.boardPosition[props.position[0]][props.position[1]+j] !== undefined){
                     temp.push([props.position[0], props.position[1]+j])
                 }else{
                     notBlocked = false
@@ -163,17 +163,17 @@ const Piece = (props) =>{
             }
         ///End of Rook Logic function
         }
-
+ 
         ///King logic
         if(props.piece === "blackKing" || props.piece === "whiteKing"){
             let temp = []
             ///Check 8 spaces around king
-
+ 
             ///Position underneath king
             try(props.boardPosition[props.position[0]-1][props.position[1]] == undefined){
                 console.log("Top missing")
             }
-
+ 
             //Top Left
             if(props.boardPosition[props.position[0]-1][props.position[1]-1] === ""){
                 temp.push([props.position[0]-1, props.position[1]-1])
@@ -207,46 +207,46 @@ const Piece = (props) =>{
                 temp.push([props.position[0], props.position[1]-1])
             }
        
-
-
+ 
+ 
             props.setPotentialMovement(temp)
-
-
-
+ 
+ 
+ 
         ///End of King logic
         }
     }
-
-
+ 
+ 
     function checkIfInArray(position, modifierX, modifierY){
         if (position.length > x + modifierX && position[x].length > y + modifierY) {
             return position[x][y];
         }
-    
+   
         return null;
     }
-
+ 
     // checkIfEnemyPiece(props.boardPosition[props.position[0]][props.position[1]+j])
-
+ 
     // function checkIfEnemyPiece(enemyPosition){
     //     ///Return true or false
     //     if()
-
+ 
     //     return true
     // }
-
+ 
     // useEffect(() =>{
     //     console.log(props.potentialMovement)
     // }, [props.potentialMovement])
-
+ 
     ///rendering
     if(props.piece !== undefined){
         ///Displays piece
         return(
             <div onClick={clickPiece} className="piece">
-                {props.piece ? <img className={props.piece !== undefined ? "chess-piece" : "piece"} 
-                src={props.color === "white" ? require(`../images/${props.piece}.png`) : require(`../images/${props.piece}.png`)} 
-                alt="Not here" 
+                {props.piece ? <img className={props.piece !== undefined ? "chess-piece" : "piece"}
+                src={props.color === "white" ? require(`../images/${props.piece}.png`) : require(`../images/${props.piece}.png`)}
+                alt="Not here"
             />:
                 null}
             </div>
@@ -255,17 +255,18 @@ const Piece = (props) =>{
         return(
             ///Displays empty square
             <div className="piece">
-                {props.piece ? <img className={props.piece !== undefined ? "chess-piece" : "piece"} 
-                src={props.color === "white" ? require(`../images/${props.piece}.png`) : require(`../images/${props.piece}.png`)} 
-                alt="Not here" 
+                {props.piece ? <img className={props.piece !== undefined ? "chess-piece" : "piece"}
+                src={props.color === "white" ? require(`../images/${props.piece}.png`) : require(`../images/${props.piece}.png`)}
+                alt="Not here"
             />:
                 null}
             </div>                
         )
-
+ 
     }
-
-    
+ 
+   
 }
-
+ 
 export default Piece
+
