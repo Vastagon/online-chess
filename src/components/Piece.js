@@ -184,49 +184,49 @@ const Piece = (props) =>{
 
             //Top Left
             if(topKingCheck(props.position[0]) && leftKingCheck(props.position[1])){
-                if(props.boardPosition[props.position[0]-1][props.position[1]-1] === ""){
+                if(props.boardPosition[props.position[0]-1][props.position[1]-1] === "" || checkIfOppositePiece(props.piece, props.boardPosition[props.position[0]-1][props.position[1]-1])){
                     temp.push([props.position[0]-1, props.position[1]-1])
                 }                
             }
             //Top Center
             if(topKingCheck(props.position[0])){
-                if(props.boardPosition[props.position[0]-1][props.position[1]] === ""){
+                if(props.boardPosition[props.position[0]-1][props.position[1]] === "" || checkIfOppositePiece(props.piece, props.boardPosition[props.position[0]-1][props.position[1]])){
                     temp.push([props.position[0]-1, props.position[1]])
                 }                
             }
             //Top Right
             if(topKingCheck(props.position[0]) && rightKingCheck(props.position[1])){
-                if(props.boardPosition[props.position[0]-1][props.position[1]+1] === ""){
+                if(props.boardPosition[props.position[0]-1][props.position[1]+1] === "" || checkIfOppositePiece(props.piece, props.boardPosition[props.position[0]-1][props.position[1]+1])){
                     temp.push([props.position[0]-1, props.position[1]+1])
                 }                
             }
             //Center Right
             if(rightKingCheck(props.position[1])){
-                if(props.boardPosition[props.position[0]][props.position[1]+1] === ""){
+                if(props.boardPosition[props.position[0]][props.position[1]+1] === "" || checkIfOppositePiece(props.piece, props.boardPosition[props.position[0]][props.position[1]+1])){
                     temp.push([props.position[0], props.position[1]+1])
                 }                
             }
             //Bottom Right
             if(rightKingCheck(props.position[1]) && bottomKingCheck(props.position[0])){
-                if(props.boardPosition[props.position[0]+1][props.position[1]+1] === ""){
+                if(props.boardPosition[props.position[0]+1][props.position[1]+1] === "" || checkIfOppositePiece(props.piece, props.boardPosition[props.position[0]+1][props.position[1]+1])){
                     temp.push([props.position[0]+1, props.position[1]+1])
                 }                
             }
             //Bottom Center
             if(bottomKingCheck(props.position[0])){
-                if(props.boardPosition[props.position[0]+1][props.position[1]] === ""){
+                if(props.boardPosition[props.position[0]+1][props.position[1]] === "" || checkIfOppositePiece(props.piece, props.boardPosition[props.position[0]+1][props.position[1]])){
                     temp.push([props.position[0]+1, props.position[1]])
                 }                
             }
             //Bottom Left
             if(bottomKingCheck(props.position[0]) && leftKingCheck(props.position[1])){
-                if(props.boardPosition[props.position[0]+1][props.position[1]-1] === ""){
+                if(props.boardPosition[props.position[0]+1][props.position[1]-1] === "" || checkIfOppositePiece(props.piece, props.boardPosition[props.position[0]+1][props.position[1]-1])){
                     temp.push([props.position[0]+1, props.position[1]-1])
                 }                
             }
             //Center Left
             if(leftKingCheck(props.position[1])){
-                if(props.boardPosition[props.position[0]][props.position[1]-1] === ""){
+                if(props.boardPosition[props.position[0]][props.position[1]-1] === "" || checkIfOppositePiece(props.piece, props.boardPosition[props.position[0]][props.position[1]-1])){
                     temp.push([props.position[0], props.position[1]-1])
                 }                
             }
@@ -234,11 +234,31 @@ const Piece = (props) =>{
             props.setPotentialMovement(temp)
         ///End of King logic
         }
+
+
+
+
+
+
+
+
+
+        ///Knight Logic
+        if(props.piece === "blackKnight" || props.piece === "whiteKnight"){
+
+        }
+
     }
 
 
  
- 
+    function checkIfOppositePiece(movingPiece, takenPiece){
+        if(movingPiece.substring(0,1) !== takenPiece.substring(0,1)){
+            return true
+        }else{
+            return false
+        }
+    }
 
 
 
