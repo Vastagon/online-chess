@@ -167,77 +167,81 @@ const Piece = (props) =>{
         ///King logic
         if(props.piece === "blackKing" || props.piece === "whiteKing"){
             let temp = []
-            ///Check 8 spaces around king
- 
-            ///Position underneath king
-            try(props.boardPosition[props.position[0]-1][props.position[1]] == undefined){
-                console.log("Top missing")
+
+            ///Functions created to return true or false depending on where king is
+            function topKingCheck(num){
+                return num !== 0
             }
- 
+            function bottomKingCheck(num){
+                return num !== 7
+            }
+            function leftKingCheck(num){
+                return num !== 0
+            }
+            function rightKingCheck(num){
+                return num !== 7
+            }
+
             //Top Left
-            if(props.boardPosition[props.position[0]-1][props.position[1]-1] === ""){
-                temp.push([props.position[0]-1, props.position[1]-1])
+            if(topKingCheck(props.position[0]) && leftKingCheck(props.position[1])){
+                if(props.boardPosition[props.position[0]-1][props.position[1]-1] === ""){
+                    temp.push([props.position[0]-1, props.position[1]-1])
+                }                
             }
             //Top Center
-            if(props.boardPosition[props.position[0]-1][props.position[1]] === ""){
-                temp.push([props.position[0]-1, props.position[1]])
+            if(topKingCheck(props.position[0])){
+                if(props.boardPosition[props.position[0]-1][props.position[1]] === ""){
+                    temp.push([props.position[0]-1, props.position[1]])
+                }                
             }
             //Top Right
-            if(props.boardPosition[props.position[0]-1][props.position[1]+1] === ""){
-                temp.push([props.position[0]-1, props.position[1]+1])
+            if(topKingCheck(props.position[0]) && rightKingCheck(props.position[1])){
+                if(props.boardPosition[props.position[0]-1][props.position[1]+1] === ""){
+                    temp.push([props.position[0]-1, props.position[1]+1])
+                }                
             }
             //Center Right
-            if(props.boardPosition[props.position[0]][props.position[1]+1] === ""){
-                temp.push([props.position[0], props.position[1]+1])
+            if(rightKingCheck(props.position[1])){
+                if(props.boardPosition[props.position[0]][props.position[1]+1] === ""){
+                    temp.push([props.position[0], props.position[1]+1])
+                }                
             }
             //Bottom Right
-            if(props.boardPosition[props.position[0]+1][props.position[1]+1] === ""){
-                temp.push([props.position[0]+1, props.position[1]+1])
+            if(rightKingCheck(props.position[1]) && bottomKingCheck(props.position[0])){
+                if(props.boardPosition[props.position[0]+1][props.position[1]+1] === ""){
+                    temp.push([props.position[0]+1, props.position[1]+1])
+                }                
             }
             //Bottom Center
-            if(props.boardPosition[props.position[0]+1][props.position[1]] === ""){
-                temp.push([props.position[0]+1, props.position[1]])
+            if(bottomKingCheck(props.position[0])){
+                if(props.boardPosition[props.position[0]+1][props.position[1]] === ""){
+                    temp.push([props.position[0]+1, props.position[1]])
+                }                
             }
             //Bottom Left
-            if(props.boardPosition[props.position[0]+1][props.position[1]-1] === ""){
-                temp.push([props.position[0]+1, props.position[1]-1])
+            if(bottomKingCheck(props.position[0]) && leftKingCheck(props.position[1])){
+                if(props.boardPosition[props.position[0]+1][props.position[1]-1] === ""){
+                    temp.push([props.position[0]+1, props.position[1]-1])
+                }                
             }
             //Center Left
-            if(props.boardPosition[props.position[0]][props.position[1]-1] === ""){
-                temp.push([props.position[0], props.position[1]-1])
+            if(leftKingCheck(props.position[1])){
+                if(props.boardPosition[props.position[0]][props.position[1]-1] === ""){
+                    temp.push([props.position[0], props.position[1]-1])
+                }                
             }
-       
- 
  
             props.setPotentialMovement(temp)
- 
- 
- 
         ///End of King logic
         }
     }
+
+
  
  
-    function checkIfInArray(position, modifierX, modifierY){
-        if (position.length > x + modifierX && position[x].length > y + modifierY) {
-            return position[x][y];
-        }
-   
-        return null;
-    }
- 
-    // checkIfEnemyPiece(props.boardPosition[props.position[0]][props.position[1]+j])
- 
-    // function checkIfEnemyPiece(enemyPosition){
-    //     ///Return true or false
-    //     if()
- 
-    //     return true
-    // }
- 
-    // useEffect(() =>{
-    //     console.log(props.potentialMovement)
-    // }, [props.potentialMovement])
+
+
+
  
     ///rendering
     if(props.piece !== undefined){
