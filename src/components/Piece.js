@@ -245,7 +245,69 @@ const Piece = (props) =>{
 
         ///Knight Logic
         if(props.piece === "blackKnight" || props.piece === "whiteKnight"){
+            let temp = []
 
+            ///Checks two up, one left
+            if(props.position[0]-2 >= 0 && props.position[1]-1 >= 0){
+                if(props.boardPosition[props.position[0]-2][props.position[1]-1] === "" || checkIfOppositePiece(props.piece, props.boardPosition[props.position[0]-2][props.position[1]-1])){
+                    temp.push([props.position[0]-2, props.position[1]-1])
+                }            
+            }
+            ///Checks one up, two left
+            if(props.position[0]-1 >= 0 && props.position[1]-2 >= 0){
+                if(props.boardPosition[props.position[0]-1][props.position[1]-2] === "" || checkIfOppositePiece(props.piece, props.boardPosition[props.position[0]-1][props.position[1]-2])){
+                    temp.push([props.position[0]-1, props.position[1]-2])
+                }            
+            }
+
+            ///Checks one down, two right
+            if(props.position[0]+1 < 7 && props.position[1]+2 < 7){
+                if(props.boardPosition[props.position[0]+1][props.position[1]+2] === "" || checkIfOppositePiece(props.piece, props.boardPosition[props.position[0]+1][props.position[1]+2])){
+                    temp.push([props.position[0]+1, props.position[1]+2])
+                }
+            }
+            ///Two down, one right
+            if(props.position[0]+2 < 7 && props.position[1]+1 < 7){
+                if(props.boardPosition[props.position[0]+2][props.position[1]+1] === "" || checkIfOppositePiece(props.piece, props.boardPosition[props.position[0]+2][props.position[1]+1])){
+                    temp.push([props.position[0]+2, props.position[1]+1])
+                }
+            }
+
+            ///One down, two left
+            if(props.position[0]+1 < 7 && props.position[1]-2 >= 0){
+                if(props.boardPosition[props.position[0]+1][props.position[1]-2] === "" || checkIfOppositePiece(props.piece, props.boardPosition[props.position[0]+1][props.position[1]-2])){
+                    temp.push([props.position[0]+1, props.position[1]-2])
+                }
+            }
+            ///Two down, one left
+            if(props.position[0]+2 < 7 && props.position[1]-1 >= 0){
+                if(props.boardPosition[props.position[0]+2][props.position[1]-1] === "" || checkIfOppositePiece(props.piece, props.boardPosition[props.position[0]+2][props.position[1]-1])){
+                    temp.push([props.position[0]+2, props.position[1]-1])
+                }
+            }
+
+            ///Checks two up, one right
+            if(props.position[0]-2 >= 0 && props.position[1]+1 < 8){
+                if(props.boardPosition[props.position[0]-2][props.position[1]+1] === "" || checkIfOppositePiece(props.piece, props.boardPosition[props.position[0]-2][props.position[1]+1])){
+                    temp.push([props.position[0]-2, props.position[1]+1])
+                }            
+            }
+            ///Checks one up, two right
+            if(props.position[0]-1 >= 0 && props.position[1]+2 < 8){
+                if(props.boardPosition[props.position[0]-1][props.position[1]+2] === "" || checkIfOppositePiece(props.piece, props.boardPosition[props.position[0]-1][props.position[1]+2])){
+                    temp.push([props.position[0]-1, props.position[1]+2])
+                }            
+            }
+
+
+            props.setPotentialMovement(temp)
+        ///End of Knight Logic
+        }
+
+
+        ///Bishop Logic
+        if(props.piece === "blackBishop" || props.piece === "whiteBishop"){
+            
         }
 
     }
