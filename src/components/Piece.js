@@ -307,7 +307,93 @@ const Piece = (props) =>{
 
         ///Bishop Logic
         if(props.piece === "blackBishop" || props.piece === "whiteBishop"){
-            
+            let i = 1
+            let notBlocked = true
+            let temp = []
+
+            ///Bottom right diagonal 
+            while(notBlocked){
+                if(props.position[0]+i < 8 && props.position[1]+i < 8){
+                    if(props.boardPosition[props.position[0]+i][props.position[1]+i] === ""){
+                        temp.push([props.position[0]+i, props.position[1]+i])
+                    }else{ 
+                        if(checkIfOppositePiece(props.piece, props.boardPosition[props.position[0]+i][props.position[1]+i])){
+                            temp.push([props.position[0]+i, props.position[1]+i])
+                        }
+                        notBlocked = false
+                    }
+                }else{
+                    notBlocked = false
+                }
+
+                i++
+            }
+
+            i = 1
+            notBlocked = true
+
+            ///Bottom left diagonal 
+            while(notBlocked){
+                if(props.position[0]+i < 8 && props.position[1]-i >= 0){
+                    if(props.boardPosition[props.position[0]+i][props.position[1]-i] === ""){
+                        temp.push([props.position[0]+i, props.position[1]-i])
+                    }else{ 
+                        if(checkIfOppositePiece(props.piece, props.boardPosition[props.position[0]+i][props.position[1]-i])){
+                            temp.push([props.position[0]+i, props.position[1]-i])
+                        }
+                        notBlocked = false
+                    }
+                }else{
+                    notBlocked = false
+                }
+
+                i++
+            }
+
+            i = 1
+            notBlocked = true
+
+            ///Top left diagonal 
+            while(notBlocked){
+                if(props.position[0]-i >= 0 && props.position[1]-i >= 0){
+                    if(props.boardPosition[props.position[0]-i][props.position[1]-i] === ""){
+                        temp.push([props.position[0]-i, props.position[1]-i])
+                    }else{ 
+                        if(checkIfOppositePiece(props.piece, props.boardPosition[props.position[0]-i][props.position[1]-i])){
+                            temp.push([props.position[0]-i, props.position[1]-i])
+                        }
+                        notBlocked = false
+                    }
+                }else{
+                    notBlocked = false
+                }
+
+                i++
+            }
+
+            i = 1
+            notBlocked = true
+
+            ///Top right diagonal 
+            while(notBlocked){
+                if(props.position[0]-i >= 0 && props.position[1]+i < 8){
+                    if(props.boardPosition[props.position[0]-i][props.position[1]+i] === ""){
+                        temp.push([props.position[0]-i, props.position[1]+i])
+                    }else{ 
+                        if(checkIfOppositePiece(props.piece, props.boardPosition[props.position[0]-i][props.position[1]+i])){
+                            temp.push([props.position[0]-i, props.position[1]+i])
+                        }
+                        notBlocked = false
+                    }
+                }else{
+                    notBlocked = false
+                }
+
+                i++
+            }
+
+
+            props.setPotentialMovement(temp)
         }
 
     }
