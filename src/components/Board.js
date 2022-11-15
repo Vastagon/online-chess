@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import Piece from "./Piece"
 import boardpositions from "./boardpositions.json"
 import {v4 as uuid} from "uuid"
+import ChooseNewPiece from "./ChooseNewPiece"
 
 
 

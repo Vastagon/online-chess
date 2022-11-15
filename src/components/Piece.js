@@ -1,8 +1,10 @@
-import { useEffect } from "react"
 import "../styles/board.css"
 import boardPosition from "./boardpositions.json"
+import { useState } from "react"
+import ChooseNewPiece from "./ChooseNewPiece"
  
 const Piece = (props) =>{
+    const [showPieceModal, setShowPieceModal] = useState(false)
    
     function clickPiece(){
         ///Global state to save last clicked position
@@ -411,8 +413,19 @@ const Piece = (props) =>{
             i++
         }
 
-        ///props.setPotentialMovement(temp)
         return temp 
+    }
+
+    function checkIfPawnPromotes(yPosition){
+        if(yPosition === 7 || yPosition === 0){
+            setShowPieceModal(true)
+        }
+    }
+
+    ///Function that changes pawn to selected piece
+    function changePawn(piece, pawnPosi){
+        // props.boardPosition[pawnPosition[0]][pawnPosition[1]] == "whiteQueen"
+        console.log(props.boardPosition)
     }
 
 
@@ -426,8 +439,11 @@ const Piece = (props) =>{
                 {props.piece ? <img className={props.piece !== undefined ? "chess-piece" : "piece"}
                 src={props.color === "white" ? require(`../images/${props.piece}.png`) : require(`../images/${props.piece}.png`)}
                 alt="Not here"
-            />:
+            />
+            :
                 null}
+
+            {showPieceModal ? <ChooseNewPiece changePawn={changePawn} /> : null}
             </div>
         )
     }else{
@@ -439,6 +455,8 @@ const Piece = (props) =>{
                 alt="Not here"
             />:
                 null}
+
+            {showPieceModal ? <ChooseNewPiece changePawn={changePawn} /> : null}
             </div>                
         )
  
