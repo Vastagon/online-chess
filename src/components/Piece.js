@@ -4,7 +4,7 @@ import { useState } from "react"
 import ChooseNewPiece from "./ChooseNewPiece"
  
 const Piece = (props) =>{
-    const [showPieceModal, setShowPieceModal] = useState(false)
+    // const [showPieceModal, setShowPieceModal] = useState(false)
    
     function clickPiece(){
         ///Global state to save last clicked position
@@ -416,17 +416,13 @@ const Piece = (props) =>{
         return temp 
     }
 
-    function checkIfPawnPromotes(yPosition){
-        if(yPosition === 7 || yPosition === 0){
-            setShowPieceModal(true)
-        }
-    }
+    // function checkIfPawnPromotes(yPosition){
+    //     if(yPosition === 7 || yPosition === 0){
+    //         setShowPieceModal(true)
+    //     }
+    // }
 
-    ///Function that changes pawn to selected piece
-    function changePawn(piece, pawnPosi){
-        // props.boardPosition[pawnPosition[0]][pawnPosition[1]] == "whiteQueen"
-        console.log(props.boardPosition)
-    }
+
 
 
 
@@ -443,7 +439,7 @@ const Piece = (props) =>{
             :
                 null}
 
-            {showPieceModal ? <ChooseNewPiece changePawn={changePawn} /> : null}
+            {/* {showPieceModal ? <ChooseNewPiece changePawn={changePawn} /> : null} */}
             </div>
         )
     }else{
@@ -456,7 +452,7 @@ const Piece = (props) =>{
             />:
                 null}
 
-            {showPieceModal ? <ChooseNewPiece changePawn={changePawn} /> : null}
+            {/* {showPieceModal ? <ChooseNewPiece changePawn={changePawn} /> : null} */}
             </div>                
         )
  
