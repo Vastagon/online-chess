@@ -49,26 +49,40 @@ const Board = () =>{
     }
 
 
-    ///Runs whenever new piece is selected
+    ///Runs whenever new piece is selected, or when a pawn promotes
     useEffect(() =>{ 
         canMove()
-        console.log("Potential Movement Underneath")
-        console.log(potentialMovement)
+        // console.log("Potential Movement Underneath")
+        // console.log(potentialMovement)
     }, [potentialMovement, showPieceModal])
+
+    // useEffect(() =>{
+    //     setShowPieceModal(false)
+    // }, [blackOrWhitePromotion])
+
+    const [blackOrWhitePromotion, setBlackOrWhitePromotion] = useState("")
 
     ///Function that changes pawn to selected piece
     function changePawn(piece){
-        // boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] == "white"
-        boardPosition[mostRecentClickedPosition[0]][mostRecentClickedPosition[1]] = "whiteQueen"
-        console.log(boardPosition[lastClickedPosition[0]][lastClickedPosition[1]])
+        ///Choose whether it's black or white pawns
+        if(mostRecentClickedPosition[0] === 7){
+            boardPosition[mostRecentClickedPosition[0]][mostRecentClickedPosition[1]] = "black" + piece
+            setBlackOrWhitePromotion("black")
+        }else{
+            boardPosition[mostRecentClickedPosition[0]][mostRecentClickedPosition[1]] = "white" + piece
+            setBlackOrWhitePromotion("white")
+        }
+
         setShowPieceModal(false)
+
+        // setShowPieceModal(false)
     }
 
     function potentialMovementGetsClicked(clickedSquare){
         setMostRecentClickedPosition(clickedSquare)
         ///Checks if clicked square is in potentialMovement array
         for(let i = 0; i < potentialMovement.length; i++){
-            console.log(JSON.stringify(potentialMovement[i]))
+            ///Checks if position clicked is in potentialMovement array
             if(JSON.stringify(potentialMovement[i]) == JSON.stringify(clickedSquare)){
                 ///Checks if pawn is near the end
                 if(boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] === "blackPawn" || "whitePawn"){
@@ -76,6 +90,7 @@ const Board = () =>{
                         setShowPieceModal(true)
                     }
                 }
+                ///Resets potential movement and moves the piece to the proper location while deleting it from previous position
                 boardPosition[clickedSquare[0]][clickedSquare[1]] = boardPosition[lastClickedPosition[0]][lastClickedPosition[1]]
                 boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] = ""
                 setPotentialMovement([])
@@ -90,7 +105,7 @@ const Board = () =>{
     return(
         <div className="board">
             {boardDiv}
-            {showPieceModal ? <ChooseNewPiece changePawn={changePawn}/> : null}
+            {showPieceModal ? <ChooseNewPiece blackOrWhitePromotion={blackOrWhitePromotion} changePawn={changePawn}/> : null}
         </div>
     )
 }
