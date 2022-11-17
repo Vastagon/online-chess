@@ -416,30 +416,26 @@ const Piece = (props) =>{
         return temp 
     }
 
-    // function checkIfPawnPromotes(yPosition){
-    //     if(yPosition === 7 || yPosition === 0){
-    //         setShowPieceModal(true)
-    //     }
-    // }
+///Remove onclick for one side whenever whiteMoveBoolean changes
 
-
-
-
-
+    function canIMovePiece(){
+        console.log(props.piece.substring(0,5))
+        if((props.whiteMoveBoolean && props.piece.substring(0,5) === "white") || (!props.whiteMoveBoolean && props.piece.substring(0,5) === "black")){
+            clickPiece()
+        }
+    }
  
     ///rendering
     if(props.piece !== undefined){
         ///Displays piece
         return(
-            <div onClick={clickPiece} className="piece">
+            <div onClick={canIMovePiece} className="piece">
                 {props.piece ? <img className={props.piece !== undefined ? "chess-piece" : "piece"}
-                src={props.color === "white" ? require(`../images/${props.piece}.png`) : require(`../images/${props.piece}.png`)}
+                src={require(`../images/${props.piece}.png`)}
                 alt="Not here"
             />
             :
                 null}
-
-            {/* {showPieceModal ? <ChooseNewPiece changePawn={changePawn} /> : null} */}
             </div>
         )
     }else{
@@ -447,12 +443,10 @@ const Piece = (props) =>{
             ///Displays empty square
             <div className="piece">
                 {props.piece ? <img className={props.piece !== undefined ? "chess-piece" : "piece"}
-                src={props.color === "white" ? require(`../images/${props.piece}.png`) : require(`../images/${props.piece}.png`)}
+                src={require(`../images/${props.piece}.png`)}
                 alt="Not here"
             />:
                 null}
-
-            {/* {showPieceModal ? <ChooseNewPiece changePawn={changePawn} /> : null} */}
             </div>                
         )
  

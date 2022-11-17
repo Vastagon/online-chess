@@ -13,6 +13,7 @@ const Board = () =>{
     const [potentialMovement, setPotentialMovement] = useState([])
     const [lastClickedPosition, setLastClickedPosition] = useState()
     const [mostRecentClickedPosition, setMostRecentClickedPosition] = useState()
+    const [whiteMoveBoolean, setWhiteMoveBoolean] = useState(true)
 
     const [showPieceModal, setShowPieceModal] = useState(false)
 
@@ -42,7 +43,7 @@ const Board = () =>{
                 ///onClick={() => squareClicked([rowIndex,index])}
                 return (<div key={uuid()} className={evenRow ? "board-square white-square" : "board-square green-square"}>
                     <div onClick={() => potentialMovementGetsClicked([rowIndex,index])} className={hasDot ? "has-dot" : null} />
-                    <Piece setLastClickedPosition={setLastClickedPosition} potentialMovementGetsClicked={potentialMovementGetsClicked} potentialMovement={potentialMovement} setPotentialMovement={setPotentialMovement} boardPosition={boardPosition} key={uuid()} canMove={canMove} pieceClicked={pieceClicked} setPieceClicked={setPieceClicked} position={[rowIndex,index]} piece={boardpositions[rowIndex][index]}/>
+                    <Piece whiteMoveBoolean={whiteMoveBoolean} setLastClickedPosition={setLastClickedPosition} potentialMovementGetsClicked={potentialMovementGetsClicked} potentialMovement={potentialMovement} setPotentialMovement={setPotentialMovement} boardPosition={boardPosition} key={uuid()} canMove={canMove} pieceClicked={pieceClicked} setPieceClicked={setPieceClicked} position={[rowIndex,index]} piece={boardpositions[rowIndex][index]}/>
                 </div>)
             })}</div>) 
         }))
@@ -74,8 +75,6 @@ const Board = () =>{
         }
 
         setShowPieceModal(false)
-
-        // setShowPieceModal(false)
     }
 
     function potentialMovementGetsClicked(clickedSquare){
@@ -94,11 +93,13 @@ const Board = () =>{
                 boardPosition[clickedSquare[0]][clickedSquare[1]] = boardPosition[lastClickedPosition[0]][lastClickedPosition[1]]
                 boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] = ""
                 setPotentialMovement([])
+
+                ///Changes movement from white to black
+                setWhiteMoveBoolean(prev => !prev)
             }
         }
     }
     
-    console.log(showPieceModal)
 
     if(!boardDiv || !boardPosition) return null
 
