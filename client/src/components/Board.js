@@ -7,40 +7,43 @@ import ChooseNewPiece from "./ChooseNewPiece"
 import io from "socket.io-client"
 
 
-const socket = io.connect("http://localhost:3001")
+const socket = io.connect("http://localhost:3000")
 
 
 const Board = () =>{
-    const [boardPosition, setBoardPosition] = useState(boardpositions)
+    const [boardPosition, setBoardPosition] = useState()
     const [potentialMovement, setPotentialMovement] = useState([])
     const [lastClickedPosition, setLastClickedPosition] = useState()
     const [mostRecentClickedPosition, setMostRecentClickedPosition] = useState()
     const [blackOrWhitePromotion, setBlackOrWhitePromotion] = useState("")
     const [room, setRoom] = useState("1")
 
+    const [changeTurn, setChangeTurn] = useState(true)
     const [whiteMoveBoolean, setWhiteMoveBoolean] = useState(true)
     const [showPieceModal, setShowPieceModal] = useState(false)
     const [pieceClicked, setPieceClicked] = useState(false)
 
+    const [receivedServer, setReceivedServer] = useState(false)
+
     const [boardDiv, setBoardDiv] = useState()
     let evenRow = true
 
-    function joinRoom(e){
-        console.log("HERE")
+    function joinRoom(){
         setRoom("2")
     }
 
     useEffect(() =>{
-        console.log(room)
+        // console.log(room)
         if(room !== ""){
             socket.emit("join_room", room)
-            console.log(`Joined ${room}`)
+            // console.log(`Joined room ${room}`)
         }
     }, [room])
 
 
     ///Shows squares it can move
     function canMove(){
+        console.log("Can move run")
         console.log(boardPosition)
         setBoardDiv(boardPosition.map((prev, rowIndex) =>{
             evenRow = !evenRow
@@ -68,34 +71,47 @@ const Board = () =>{
 
     ///Runs whenever new piece is selected, or when a pawn promotes
     useEffect(() =>{ 
-        canMove()
+        if(boardPosition){
+            canMove()
+        }
         console.log("render")
-    }, [potentialMovement, showPieceModal])
+    }, [potentialMovement, showPieceModal, JSON.stringify(boardPosition)])
 
-    ///Need to emit piece moved whenever something gets clicked
-    ///Need to 
 
     useEffect(() =>{
-        ///Other client gets emit
-        socket.on("update_client_board", (data) =>{
-            console.log("Received new board")
-            setBoardPosition(data.boardPosition)
+        socket.on("start_client_board", (data) =>{
+            console.log("Start client board ran")
+            setBoardPosition(data.roomBoardPositions)
             setWhiteMoveBoolean(data.whiteMoveBoolean)
         })
-        console.log("Net render")
 
+        socket.on("update_client_board", (tempBoardData) =>{
+            console.log("Update client board ran")
+            console.log(tempBoardData.roomBoardPositions)
+
+            setBoardPosition(tempBoardData.roomBoardPositions)
+            setWhiteMoveBoolean(tempBoardData.whiteMoveBoolean)
+            // canMove(tempBoardData.roomBoardPositions)
+        })
     }, [socket])
+
+// console.log(`White move boolean: ${whiteMoveBoolean}`)
 
     useEffect(() => {
         ///Sends data to socket
-        socket.emit("piece_moved", {
-            boardPosition: boardPosition,
-            whiteMoveBoolean: whiteMoveBoolean,
-            room: room
-        })
+        console.log("Piece Moved")
 
-        canMove()
-    }, [whiteMoveBoolean])
+        if(boardPosition){
+            socket.emit("piece_moved", {
+                room: room,
+                whiteMoveBoolean: whiteMoveBoolean,
+                boardPosition: boardPosition
+            })
+            console.log("HERE")
+           
+            canMove()
+        }
+    }, [changeTurn])
 
 
     ///Function that changes pawn to selected piece
@@ -131,22 +147,39 @@ const Board = () =>{
                 setPotentialMovement([])
 
                 ///Changes movement from white to black
-                setWhiteMoveBoolean(prev => !prev)
+                setChangeTurn(prev => !prev)
             }
         }
     }
     
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     if(!boardDiv || !boardPosition) return null
 
     return(
-        <div className="board">
-            {boardDiv}
-            {showPieceModal ? <ChooseNewPiece blackOrWhitePromotion={blackOrWhitePromotion} changePawn={changePawn}/> : null}
-            
-                <input type="text" placeholder="Room" />
-                <button onClick={joinRoom} type="button">Submit</button>
-        </div>
+        <>
+            <div className="board">
+                {boardDiv}
+                {showPieceModal ? <ChooseNewPiece blackOrWhitePromotion={blackOrWhitePromotion} changePawn={changePawn}/> : null}
+            </div>     
+
+            <input type="text" placeholder="Room" />
+            <button onClick={joinRoom} type="button">Submit</button>
+        </>
+
     )
 }
 
