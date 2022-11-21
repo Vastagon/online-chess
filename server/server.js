@@ -58,3 +58,32 @@ if ("production" === "production"){
 server.listen(3000, () =>{
     console.log("Server is running")
 })
+
+
+//{
+    //   "name": "node-express-server-rest-api",
+    //   "version": "1.0.0",
+    //   "description": "",
+    //   "main": "index.js",
+    //   "scripts": {
+    //     "start": "nodemon server.js",
+    //     "test": "echo \"No test specified\" && exit 0"
+    //   },
+    //   "keywords": [],
+    //   "author": "",
+    //   "license": "ISC",
+    //   "devDependencies": {
+    //     "@babel/core": "^7.2.2",
+    //     "@babel/node": "^7.2.2",
+    //     "@babel/preset-env": "^7.2.3",
+    //     "nodemon": "^1.18.9"
+    //   },
+    //   "dependencies": {
+    //     "body-parser": "1.20.1",
+    //     "cors": "^2.8.5",
+    //     "dotenv": "^6.2.0",
+    //     "express": "^4.16.4",
+    //     "react": "18.2.0",
+    //     "uuid": "^3.4.0"
+    //   }
+    // }
