@@ -7,7 +7,9 @@ import ChooseNewPiece from "./ChooseNewPiece"
 import io from "socket.io-client"
 
 
-const socket = io.connect("http://localhost:3000")
+
+///Needs to be set to whichever location the express server is being hosted
+const socket = io.connect("http://localhost:3001")
 
 
 const Board = () =>{
@@ -17,7 +19,7 @@ const Board = () =>{
     const [mostRecentClickedPosition, setMostRecentClickedPosition] = useState()
     const [blackOrWhitePromotion, setBlackOrWhitePromotion] = useState("")
     const [room, setRoom] = useState("1")
-
+ 
     const [changeTurn, setChangeTurn] = useState(true)
     const [whiteMoveBoolean, setWhiteMoveBoolean] = useState(true)
     const [showPieceModal, setShowPieceModal] = useState(false)
@@ -80,14 +82,14 @@ const Board = () =>{
 
     useEffect(() =>{
         socket.on("start_client_board", (data) =>{
-            console.log("Start client board ran")
+            // console.log("Start client board ran")
             setBoardPosition(data.roomBoardPositions)
             setWhiteMoveBoolean(data.whiteMoveBoolean)
         })
 
         socket.on("update_client_board", (tempBoardData) =>{
-            console.log("Update client board ran")
-            console.log(tempBoardData.roomBoardPositions)
+            // console.log("Update client board ran")
+            // console.log(tempBoardData.roomBoardPositions)
 
             setBoardPosition(tempBoardData.roomBoardPositions)
             setWhiteMoveBoolean(tempBoardData.whiteMoveBoolean)
@@ -178,6 +180,10 @@ const Board = () =>{
 
             <input type="text" placeholder="Room" />
             <button onClick={joinRoom} type="button">Submit</button>
+
+            {
+            JSON.stringify(boardPosition)
+            }
         </>
 
     )
