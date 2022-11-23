@@ -1,5 +1,4 @@
 import "../styles/board.css"
-import ChooseNewPiece from "./ChooseNewPiece"
 
 import {
     pawnLogic,
@@ -52,20 +51,10 @@ const Piece = (props) =>{
     }///End of piece movement logic
 
 
- 
-    function checkIfOppositePiece(movingPiece, takenPiece){
-        if(movingPiece.substring(0,1) !== takenPiece.substring(0,1)){
-            return true
-        }else{
-            return false
-        }
-    }
-
-
 ///Remove onclick for one side whenever whiteMoveBoolean changes
 
+    ///Function that runs after click to see if it's white or black's turn
     function canIMovePiece(){
-        console.log(props.piece.substring(0,5))
         if((props.whiteMoveBoolean && props.piece.substring(0,5) === "white") || (!props.whiteMoveBoolean && props.piece.substring(0,5) === "black")){
             clickPiece()
         }

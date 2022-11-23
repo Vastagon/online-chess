@@ -5,7 +5,7 @@ import boardpositions from "./boardpositions.json"
 import {v4 as uuid} from "uuid"
 import ChooseNewPiece from "./ChooseNewPiece"
 import io from "socket.io-client"
-
+import {checkForCheckmate} from "./checkForCheckmate"
 
 
 ///Needs to be set to whichever location the express server is being hosted
@@ -19,14 +19,15 @@ const Board = () =>{
     const [mostRecentClickedPosition, setMostRecentClickedPosition] = useState()
     const [blackOrWhitePromotion, setBlackOrWhitePromotion] = useState("")
     const [room, setRoom] = useState("1")
- 
+    const [kingPositions, setKingPositions] = useState({blackKing: [0,4], whiteKing: [7,4]})
+
     const [changeTurn, setChangeTurn] = useState(true)
     const [whiteMoveBoolean, setWhiteMoveBoolean] = useState(true)
     const [showPieceModal, setShowPieceModal] = useState(false)
     const [pieceClicked, setPieceClicked] = useState(false)
 
-    const [receivedServer, setReceivedServer] = useState(false)
 
+    
     const [boardDiv, setBoardDiv] = useState()
     let evenRow = true
 
@@ -60,6 +61,22 @@ const Board = () =>{
                         hasDot = true 
                     }
                 }
+
+                // console.log(prev, index)
+
+                if(prev === "blackKing"){
+                    setKingPositions(prev => ({
+                        ...prev,
+                        blackKing: [rowIndex,index]
+                    }))
+                }
+                if(prev === "whiteKing"){
+                    console.log([rowIndex,index])
+                    setKingPositions(prev => ({
+                        ...prev,
+                        whiteKing: [rowIndex,index]
+                    }))
+                }
                 
                 ///Returns square
                 return (<div key={uuid()} className={evenRow ? "board-square white-square" : "board-square green-square"}>
@@ -70,6 +87,7 @@ const Board = () =>{
         }))
     }
 
+    // console.log(kingPositions)
 
     ///Runs whenever new piece is selected, or when a pawn promotes
     useEffect(() =>{ 
@@ -78,6 +96,12 @@ const Board = () =>{
         }
         console.log("render")
     }, [potentialMovement, showPieceModal, JSON.stringify(boardPosition)])
+
+    // useEffect(() =>{
+    //     if(boardPosition){
+    //         checkForCheckmate()
+    //     }
+    // }, [JSON.stringify(boardPosition)])
 
 
     useEffect(() =>{
@@ -97,7 +121,6 @@ const Board = () =>{
         })
     }, [socket])
 
-// console.log(`White move boolean: ${whiteMoveBoolean}`)
 
     useEffect(() => {
         ///Sends data to socket
