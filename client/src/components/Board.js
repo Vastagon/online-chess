@@ -9,7 +9,7 @@ import {checkForCheckmate} from "./checkForCheckmate"
 
 
 ///Needs to be set to whichever location the express server is being hosted
-const socket = io.connect("http://localhost:3001")
+const socket = io.connect("https://7qliix-3001.preview.csb.app/")
 
 
 const Board = () =>{
