@@ -4,13 +4,15 @@ const http = require('http')
 const {Server} = require('socket.io')
 const cors = require('cors')
 let boardPositions = require('./boardpositions.json')
-const roomVariablesMap = new Map();
 const path = require('path')
 ///if running both serpeately, then this should be 3001
 
 app.use(cors())
 
 const server = http.createServer(app)
+
+const roomVariablesMap = new Map();
+
 
 ///Origin needs to be set to wherever main site is located at
 const io = new Server(server, {

@@ -1,7 +1,12 @@
 let potentialMovement = []
+///These functions add to the potentialMovement array which is ran through in the canMove function on Board.js. They return all potential movement, which sets the potentialMovement state in Board.js to what it returns
+
+//position[0] = the y position of the selected piece. Ranges from 0-7, 0 being the highest position on the board
+//position[1] = the x position of the selected piece. Ranges from 0-7, 0 being the left most position on the board
+//boardPosition is the 2D array with all of the piece positions
+//piece is the name of the selected piece
 
 export function pawnLogic(position, piece, boardPosition){
-    // props.setPieceClicked(true)
     if(piece === "whitePawn"){
         ///increase row by one, or two if first move
         if((position[0] === 6 || position[0] === 1) && boardPosition[position[0]-1][position[1]] === "" && boardPosition[position[0]-2][position[1]] === ""){

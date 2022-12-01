@@ -27,7 +27,6 @@ const Board = () =>{
     const [pieceClicked, setPieceClicked] = useState(false)
 
 
-    
     const [boardDiv, setBoardDiv] = useState()
     let evenRow = true
 
@@ -44,10 +43,12 @@ const Board = () =>{
     }, [room])
 
 
+
     ///Shows squares it can move
     function canMove(){
         console.log("Can move run")
         console.log(boardPosition)
+
         setBoardDiv(boardPosition.map((prev, rowIndex) =>{
             evenRow = !evenRow
             ///Returns row
@@ -57,13 +58,12 @@ const Board = () =>{
 
                 ///Shows dots on all potential movement squares
                 for(let i = 0; i < potentialMovement?.length; i++){
-                    if(JSON.stringify([rowIndex, index]) == JSON.stringify(potentialMovement[i])){
+                    if(JSON.stringify([rowIndex, index]) === JSON.stringify(potentialMovement[i])){
                         hasDot = true 
                     }
                 }
 
-                // console.log(prev, index)
-
+                ///Updates state that holds position of kings
                 if(prev === "blackKing"){
                     setKingPositions(prev => ({
                         ...prev,
@@ -88,6 +88,7 @@ const Board = () =>{
     }
 
     // console.log(kingPositions)
+    console.log()
 
     ///Runs whenever new piece is selected, or when a pawn promotes
     useEffect(() =>{ 
@@ -96,6 +97,8 @@ const Board = () =>{
         }
         console.log("render")
     }, [potentialMovement, showPieceModal, JSON.stringify(boardPosition)])
+
+
 
     // useEffect(() =>{
     //     if(boardPosition){
@@ -114,9 +117,11 @@ const Board = () =>{
         socket.on("update_client_board", (tempBoardData) =>{
             // console.log("Update client board ran")
             // console.log(tempBoardData.roomBoardPositions)
+            let t = tempBoardData
 
             setBoardPosition(tempBoardData.roomBoardPositions)
             setWhiteMoveBoolean(tempBoardData.whiteMoveBoolean)
+
             // canMove(tempBoardData.roomBoardPositions)
         })
     }, [socket])
@@ -134,7 +139,7 @@ const Board = () =>{
             })
             console.log("HERE")
            
-            canMove()
+            ///canMove()
         }
     }, [changeTurn])
 
@@ -159,8 +164,8 @@ const Board = () =>{
         ///Checks if clicked square is in potentialMovement array
         for(let i = 0; i < potentialMovement.length; i++){
             ///Checks if position clicked is in potentialMovement array
-            if(JSON.stringify(potentialMovement[i]) == JSON.stringify(clickedSquare)){
-                ///Checks if pawn is near the end
+            if(JSON.stringify(potentialMovement[i]) === JSON.stringify(clickedSquare)){
+                ///Checks if pawn is near the end of the board / about to be promoted
                 if(boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] === "blackPawn" || "whitePawn"){
                     if((lastClickedPosition[0] === 6 && boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] === "blackPawn") || (lastClickedPosition[0] === 1 && boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] === "whitePawn")){
                         setShowPieceModal(true)
@@ -177,18 +182,6 @@ const Board = () =>{
         }
     }
     
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
