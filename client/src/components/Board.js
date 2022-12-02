@@ -1,11 +1,12 @@
 import "../styles/board.css"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import Piece from "./Piece"
 import boardpositions from "./boardpositions.json"
 import {v4 as uuid} from "uuid"
 import ChooseNewPiece from "./ChooseNewPiece"
 import io from "socket.io-client"
-import {checkForCheckmate} from "./checkForCheckmate"
+import {checkForBlackCheck, checkForCheckmate} from "./checkForCheckmate"
+import JoinGame from "./JoinGame"
 
 
 ///Needs to be set to whichever location the express server is being hosted
@@ -13,18 +14,20 @@ const socket = io.connect("http://localhost:3001")
 
 
 const Board = () =>{
-    const [boardPosition, setBoardPosition] = useState()
+    const [boardPosition, setBoardPosition] = useState(boardpositions)
     const [potentialMovement, setPotentialMovement] = useState([])
     const [lastClickedPosition, setLastClickedPosition] = useState()
     const [mostRecentClickedPosition, setMostRecentClickedPosition] = useState()
     const [blackOrWhitePromotion, setBlackOrWhitePromotion] = useState("")
     const [room, setRoom] = useState("1")
+    ///Need to change variables ffrom state if I don't need them as state
     const [kingPositions, setKingPositions] = useState({blackKing: [0,4], whiteKing: [7,4]})
 
     const [changeTurn, setChangeTurn] = useState(true)
     const [whiteMoveBoolean, setWhiteMoveBoolean] = useState(true)
     const [showPieceModal, setShowPieceModal] = useState(false)
     const [pieceClicked, setPieceClicked] = useState(false)
+    const [joinGame, setJoinGame] = useState(true)
 
 
     const [boardDiv, setBoardDiv] = useState()
@@ -81,30 +84,21 @@ const Board = () =>{
                 ///Returns square
                 return (<div key={uuid()} className={evenRow ? "board-square white-square" : "board-square green-square"}>
                     <div onClick={() => potentialMovementGetsClicked([rowIndex,index])} className={hasDot ? "has-dot" : null} />
-                    <Piece whiteMoveBoolean={whiteMoveBoolean} setLastClickedPosition={setLastClickedPosition} potentialMovementGetsClicked={potentialMovementGetsClicked} potentialMovement={potentialMovement} setPotentialMovement={setPotentialMovement} boardPosition={boardPosition} key={uuid()} pieceClicked={pieceClicked} setPieceClicked={setPieceClicked} position={[rowIndex,index]} piece={boardpositions[rowIndex][index]}/>
+                    <Piece whiteMoveBoolean={whiteMoveBoolean} setLastClickedPosition={setLastClickedPosition} potentialMovementGetsClicked={potentialMovementGetsClicked} potentialMovement={potentialMovement} setPotentialMovement={setPotentialMovement} boardPosition={boardPosition} key={uuid()} pieceClicked={pieceClicked} setPieceClicked={setPieceClicked} position={[rowIndex,index]} piece={boardPosition[rowIndex][index]}/>
                 </div>)
             })}</div>) 
         }))
     }
 
-    // console.log(kingPositions)
-    console.log()
 
     ///Runs whenever new piece is selected, or when a pawn promotes
     useEffect(() =>{ 
         if(boardPosition){
             canMove()
+            checkForBlackCheck(boardPosition, kingPositions)
         }
-        console.log("render")
     }, [potentialMovement, showPieceModal, JSON.stringify(boardPosition)])
 
-
-
-    // useEffect(() =>{
-    //     if(boardPosition){
-    //         checkForCheckmate()
-    //     }
-    // }, [JSON.stringify(boardPosition)])
 
 
     useEffect(() =>{
@@ -129,7 +123,6 @@ const Board = () =>{
 
     useEffect(() => {
         ///Sends data to socket
-        console.log("Piece Moved")
 
         if(boardPosition){
             socket.emit("piece_moved", {
@@ -137,7 +130,6 @@ const Board = () =>{
                 whiteMoveBoolean: whiteMoveBoolean,
                 boardPosition: boardPosition
             })
-            console.log("HERE")
            
             ///canMove()
         }
@@ -194,12 +186,10 @@ const Board = () =>{
                 {showPieceModal ? <ChooseNewPiece blackOrWhitePromotion={blackOrWhitePromotion} changePawn={changePawn}/> : null}
             </div>     
 
+            {/* {joinGame ? <JoinGame joinGame={joinGame}/> : null} */}
+
             <input type="text" placeholder="Room" />
             <button onClick={joinRoom} type="button">Submit</button>
-
-            {
-            JSON.stringify(boardPosition)
-            }
         </>
 
     )

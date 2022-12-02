@@ -27,3 +27,13 @@ h3{
 .modal-image:hover{
   cursor: pointer;
 }
+
+
+.join-game-modal-container{
+  position: fixed;
+  width: 40vw;
+  height: 40vh;
+  top: 30vh;
+  left: 30vw;
+  background-color: green;
+}

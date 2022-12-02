@@ -68,12 +68,9 @@ export function rookLogic(position, piece, boardPosition){
     while(notBlocked){
         ///Checks for positions below
         if(position[0] + j < 8){
-            console.log(position[0]+j)
             if(boardPosition[position[0]+j][position[1]] === ""){
                 temp.push([position[0]+j, position[1]])
-                console.log(1)
             }else{
-                console.log(2)
                 notBlocked = false
                 ///Checks if stoppage is enemy piece
                 if((boardPosition[position[0]+j][position[1]]).substring(0,1) === "w" && piece.substring(0,1) === "b"){
