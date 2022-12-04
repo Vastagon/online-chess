@@ -1,16 +1,34 @@
-
+import io from 'socket.io-client' 
 
 export default function JoinGame(props){
 
-    function submitJoinGame(e){
+    function changeCodeInput(e){
+        props.setRoom(e.target.value)
+    }
+
+    async function joinGameClicked(e){
         e.preventDefault()
+
+        // const sockets = await io.fetchSockets();
+        // const sockets = await io.fetchSockets();
+
+        console.log(props.socket)
+
+        
+    }
+
+    function createGameClicked(){
+
     }
 
     return(
         <div className="join-game-modal-container">
-            <form onSubmit={submitJoinGame}>
-                <button>Join Game</button>
-                <button>Create Game</button>
+            <form>
+                <label>Enter code to join an existing game</label>
+                <input onChange={changeCodeInput}></input>
+                <button onClick={joinGameClicked}>Join Game</button>
+                <br></br>
+                <button onClick={createGameClicked}>Create Game</button>
             </form>
         </div>
     )

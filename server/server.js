@@ -24,15 +24,27 @@ const io = new Server(server, {
 
 io.on("connection", (socket)=>{
     // console.log(`User Connected: ${socket.id}`)
+    socket.on("join_existing_game",(room) =>{
+        ///If there's not a second connection
+        if(!roomVariablesMap.get(room).secondPlayerJoined){
+            socket.join(room)
+            roomVariablesMap.set(room, roomVariablesMap.get(room))
+            ///Start clock and everything else here. This is where the game starts
+        }
+    })
 
     ///Whenever room changes on clientside
-    socket.on("join_room", (room) =>{
+    socket.on("create_new_game", () =>{
+        let room = Math.floor(Math.random() * 1000)
+        if(!io.sockets.adapter.rooms.get(room)){
+
+        }
         socket.join(room)
         let whiteMoveBoolean = true
         let roomBoardPositions = boardPositions
 
-        roomVariablesMap.set(room, {roomBoardPositions: roomBoardPositions, whiteMoveBoolean: whiteMoveBoolean})
-        io.in(room).emit("start_client_board", {roomBoardPositions: roomBoardPositions, whiteMoveBoolean: whiteMoveBoolean});
+        roomVariablesMap.set(room, {roomBoardPositions: roomBoardPositions, whiteMoveBoolean: whiteMoveBoolean, secondPlayerJoined: false})
+        io.in(room).emit("start_client_board", {roomBoardPositions: roomBoardPositions, whiteMoveBoolean: whiteMoveBoolean, secondPlayerJoined: false});
     })
 
     socket.on("piece_moved", (data)=>{
@@ -50,14 +62,6 @@ io.on("connection", (socket)=>{
 
 //process.env.NODE_ENV
 // if (process.ENV.NODE_ENV === "production"){
-//     console.log(path.join(__dirname, "../", "./client/build"))
-//     app.use(express.static(path.join(__dirname, "../", "./client/build")));
-//     app.get('*', (req,res) => {
-//         res.sendFile(path.join(__dirname, "../", "./client/build", "index.html"));
-//     });
-// }
-
-// if(true){
 //     console.log(path.join(__dirname, "../", "./client/build"))
 //     app.use(express.static(path.join(__dirname, "../", "./client/build")));
 //     app.get('*', (req,res) => {

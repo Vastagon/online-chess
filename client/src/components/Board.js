@@ -8,6 +8,9 @@ import io from "socket.io-client"
 import {checkForBlackCheck, checkForCheckmate} from "./checkForCheckmate"
 import JoinGame from "./JoinGame"
 
+///Stay disconnected until join or create game is clicked
+
+
 
 ///Needs to be set to whichever location the express server is being hosted
 const socket = io.connect("http://localhost:3001")
@@ -19,6 +22,7 @@ const Board = () =>{
     const [lastClickedPosition, setLastClickedPosition] = useState()
     const [mostRecentClickedPosition, setMostRecentClickedPosition] = useState()
     const [blackOrWhitePromotion, setBlackOrWhitePromotion] = useState("")
+    ///Variable to decide which SocketIO room to join
     const [room, setRoom] = useState("1")
     ///Need to change variables ffrom state if I don't need them as state
     const [kingPositions, setKingPositions] = useState({blackKing: [0,4], whiteKing: [7,4]})
@@ -33,17 +37,14 @@ const Board = () =>{
     const [boardDiv, setBoardDiv] = useState()
     let evenRow = true
 
-    function joinRoom(){
-        setRoom("2")
-    }
 
-    useEffect(() =>{
-        // console.log(room)
-        if(room !== ""){
-            socket.emit("join_room", room)
-            // console.log(`Joined room ${room}`)
-        }
-    }, [room])
+    // useEffect(() =>{
+    //     // console.log(room)
+    //     if(room !== ""){
+    //         socket.emit("create_new_game", room)
+    //         // console.log(`Joined room ${room}`)
+    //     }
+    // }, [room])
 
 
 
@@ -125,11 +126,11 @@ const Board = () =>{
         ///Sends data to socket
 
         if(boardPosition){
-            socket.emit("piece_moved", {
-                room: room,
-                whiteMoveBoolean: whiteMoveBoolean,
-                boardPosition: boardPosition
-            })
+            // socket.emit("piece_moved", {
+            //     room: room,
+            //     whiteMoveBoolean: whiteMoveBoolean,
+            //     boardPosition: boardPosition
+            // })
            
             ///canMove()
         }
@@ -186,12 +187,9 @@ const Board = () =>{
                 {showPieceModal ? <ChooseNewPiece blackOrWhitePromotion={blackOrWhitePromotion} changePawn={changePawn}/> : null}
             </div>     
 
-            {/* {joinGame ? <JoinGame joinGame={joinGame}/> : null} */}
+            {joinGame ? <JoinGame socket={socket} room={room} setRoom={setRoom} joinGame={joinGame}/> : null}
 
-            <input type="text" placeholder="Room" />
-            <button onClick={joinRoom} type="button">Submit</button>
         </>
-
     )
 }
 
