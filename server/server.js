@@ -36,7 +36,8 @@ io.on("connection", (socket)=>{
     ///Whenever room changes on clientside
     socket.on("create_new_game", () =>{
         let room = Math.floor(Math.random() * 1000)
-        if(!io.sockets.adapter.rooms.get(room)){
+        ///Checks if room exists
+        if(io.sockets.adapter.rooms.get(room)){
 
         }
         socket.join(room)
