@@ -1,6 +1,6 @@
-import io from 'socket.io-client' 
+import ConnectionFailedModal from './ConnectionFailedModal'
 
-export default function JoinGame(props){
+export default function ShowJoinGame(props){
 
     function changeCodeInput(e){
         props.setRoom(e.target.value)
@@ -9,20 +9,19 @@ export default function JoinGame(props){
     async function joinGameClicked(e){
         e.preventDefault()
 
-        // const sockets = await io.fetchSockets();
-        // const sockets = await io.fetchSockets();
 
-        console.log(props.socket)
-
+        props.socket.emit("join_existing_game", {room: props.room, socketid: props.socket.id})
         
     }
 
-    function createGameClicked(){
+    function createGameClicked(e){
+        e.preventDefault()
 
+        props.socket.emit("create_new_game")
     }
 
     return(
-        <div className="join-game-modal-container">
+        <>        <div className="join-game-modal-container">
             <form>
                 <label>Enter code to join an existing game</label>
                 <input onChange={changeCodeInput}></input>
@@ -31,6 +30,10 @@ export default function JoinGame(props){
                 <button onClick={createGameClicked}>Create Game</button>
             </form>
         </div>
+        {props.showFailedConnectionModal ? <ConnectionFailedModal showFailedConnectionModal={props.showFailedConnectionModal} setShowFailedConnectionModal={props.setShowFailedConnectionModal}/> : null}
+        
+        </>
+
     )
 }
 

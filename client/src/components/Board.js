@@ -6,7 +6,8 @@ import {v4 as uuid} from "uuid"
 import ChooseNewPiece from "./ChooseNewPiece"
 import io from "socket.io-client"
 import {checkForBlackCheck, checkForCheckmate} from "./checkForCheckmate"
-import JoinGame from "./JoinGame"
+import ShowJoinGame from "./ShowJoinGame"
+import WaitingOnSecondPlayer from "./WaitingOnSecondPlayer"
 
 ///Stay disconnected until join or create game is clicked
 
@@ -24,16 +25,19 @@ const Board = () =>{
     const [blackOrWhitePromotion, setBlackOrWhitePromotion] = useState("")
     ///Variable to decide which SocketIO room to join
     const [room, setRoom] = useState("1")
-    ///Need to change variables ffrom state if I don't need them as state
+    ///Need to change variables from state if I don't need them as state
     const [kingPositions, setKingPositions] = useState({blackKing: [0,4], whiteKing: [7,4]})
 
-    const [changeTurn, setChangeTurn] = useState(true)
     const [whiteMoveBoolean, setWhiteMoveBoolean] = useState(true)
     const [showPieceModal, setShowPieceModal] = useState(false)
     const [pieceClicked, setPieceClicked] = useState(false)
-    const [joinGame, setJoinGame] = useState(true)
 
+    ///States for displaying modals
+    const [showJoinGame, setShowJoinGame] = useState(true)
+    const [showFailedConnectionModal, setShowFailedConnectionModal] = useState(false)
+    const [showWaitingOnSecondPlayer, setShowWaitingOnFailedPlayer] = useState(false)
 
+    ///State that displays the board
     const [boardDiv, setBoardDiv] = useState()
     let evenRow = true
 
@@ -75,7 +79,7 @@ const Board = () =>{
                     }))
                 }
                 if(prev === "whiteKing"){
-                    console.log([rowIndex,index])
+                    // console.log([rowIndex,index])
                     setKingPositions(prev => ({
                         ...prev,
                         whiteKing: [rowIndex,index]
@@ -101,40 +105,30 @@ const Board = () =>{
     }, [potentialMovement, showPieceModal, JSON.stringify(boardPosition)])
 
 
-
+    ///Where all socket changes take place
     useEffect(() =>{
         socket.on("start_client_board", (data) =>{
-            // console.log("Start client board ran")
             setBoardPosition(data.roomBoardPositions)
             setWhiteMoveBoolean(data.whiteMoveBoolean)
         })
 
         socket.on("update_client_board", (tempBoardData) =>{
-            // console.log("Update client board ran")
-            // console.log(tempBoardData.roomBoardPositions)
             let t = tempBoardData
 
             setBoardPosition(tempBoardData.roomBoardPositions)
             setWhiteMoveBoolean(tempBoardData.whiteMoveBoolean)
+        })
 
-            // canMove(tempBoardData.roomBoardPositions)
+        socket.on("connection_failed", () =>{
+            ///Show that the connection failed visually, set room back to ""
+            setShowFailedConnectionModal(true)
+        })
+
+        socket.on("connection_successful", () =>{
+            setShowJoinGame(false)
         })
     }, [socket])
 
-
-    useEffect(() => {
-        ///Sends data to socket
-
-        if(boardPosition){
-            // socket.emit("piece_moved", {
-            //     room: room,
-            //     whiteMoveBoolean: whiteMoveBoolean,
-            //     boardPosition: boardPosition
-            // })
-           
-            ///canMove()
-        }
-    }, [changeTurn])
 
 
     ///Function that changes pawn to selected piece
@@ -168,14 +162,10 @@ const Board = () =>{
                 boardPosition[clickedSquare[0]][clickedSquare[1]] = boardPosition[lastClickedPosition[0]][lastClickedPosition[1]]
                 boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] = ""
                 setPotentialMovement([])
-
-                ///Changes movement from white to black
-                setChangeTurn(prev => !prev)
             }
         }
     }
     
-
 
 
     if(!boardDiv || !boardPosition) return null
@@ -187,8 +177,9 @@ const Board = () =>{
                 {showPieceModal ? <ChooseNewPiece blackOrWhitePromotion={blackOrWhitePromotion} changePawn={changePawn}/> : null}
             </div>     
 
-            {joinGame ? <JoinGame socket={socket} room={room} setRoom={setRoom} joinGame={joinGame}/> : null}
+            {showJoinGame ? <ShowJoinGame setShowFailedConnectionModal={setShowFailedConnectionModal} showFailedConnectionModal={showFailedConnectionModal} socket={socket} room={room} setRoom={setRoom} showJoinGame={showJoinGame}/> : null}
 
+            {showWaitingOnSecondPlayer ? <WaitingOnSecondPlayer /> : null}
         </>
     )
 }

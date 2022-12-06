@@ -8,6 +8,7 @@ import {
     queenLogic
 } from "./movementLogicFunctions"
 
+///Function that runs through every piece on the board and check if it's potential movement overlaps with king's position
 export function checkForBlackCheck(boardPosition, oppositeKingPosition){
     boardPosition.map((prev, rowIndex) =>{
 

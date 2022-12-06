@@ -37,3 +37,22 @@ h3{
   left: 30vw;
   background-color: green;
 }
+
+.connection-failed-modal-container{
+  position: fixed;
+  width: 20vw;
+  height: 20vh;
+  top: 40vh;
+  left: 40vw;
+  background-color: cadetblue;
+}
+
+.waiting-modal-container{
+  position: fixed;
+  width: 30vw;
+  height: 30vh;
+  top: 35vh;
+  left: 35vw;
+  background-color: whitesmoke;
+  color: black;
+}

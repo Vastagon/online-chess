@@ -24,17 +24,24 @@ const io = new Server(server, {
 
 io.on("connection", (socket)=>{
     // console.log(`User Connected: ${socket.id}`)
-    socket.on("join_existing_game",(room) =>{
-        ///If there's not a second connection
-        if(!roomVariablesMap.get(room).secondPlayerJoined){
-            socket.join(room)
-            roomVariablesMap.set(room, roomVariablesMap.get(room))
-            ///Start clock and everything else here. This is where the game starts
+    socket.on("join_existing_game", async (roomData) =>{
+        ///Checks the number of connections to the appropriate room and decides whether to 
+        const roomArray = await io.in(roomData.room).fetchSockets();
+        if(roomArray.length < 2){
+            socket.join(roomData.room)
+            console.log("Connected to room successfully")
+            io.to(roomData.socketid).emit("connection_successful")
+        }else{
+            console.log("Too many connections in room")
+            io.to(roomData.socketid).emit("connection_failed")
         }
+        
+
     })
 
+
     ///Whenever room changes on clientside
-    socket.on("create_new_game", () =>{
+    socket.on("create_new_game", async () =>{
         let room = Math.floor(Math.random() * 1000)
         ///Checks if room exists
         if(io.sockets.adapter.rooms.get(room)){
@@ -44,8 +51,14 @@ io.on("connection", (socket)=>{
         let whiteMoveBoolean = true
         let roomBoardPositions = boardPositions
 
-        roomVariablesMap.set(room, {roomBoardPositions: roomBoardPositions, whiteMoveBoolean: whiteMoveBoolean, secondPlayerJoined: false})
-        io.in(room).emit("start_client_board", {roomBoardPositions: roomBoardPositions, whiteMoveBoolean: whiteMoveBoolean, secondPlayerJoined: false});
+
+
+
+        console.log(sockets)
+
+        ///Change boolean to check if two players are connected
+        roomVariablesMap.set(room, {roomBoardPositions: roomBoardPositions, whiteMoveBoolean: whiteMoveBoolean})
+        io.in(room).emit("start_client_board", {roomBoardPositions: roomBoardPositions, whiteMoveBoolean: whiteMoveBoolean});
     })
 
     socket.on("piece_moved", (data)=>{
