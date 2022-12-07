@@ -30,12 +30,18 @@ h3{
 
 
 .join-game-modal-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: fixed;
   width: 40vw;
   height: 40vh;
   top: 30vh;
   left: 30vw;
   background-color: green;
+}
+.join-game-form{
+
 }
 
 .connection-failed-modal-container{

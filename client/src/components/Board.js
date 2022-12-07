@@ -142,7 +142,9 @@ const Board = () =>{
         ///Joining existing game succeeded
         socket.on("existing_connection_successful", () =>{
             setShowJoinGame(false)
+            setShowWaitingOnSecondPlayer(false)
             setIsConnectedToRoom(true)
+            console.log("Existing connection successful")
         })
 
         console.log(boardPosition)

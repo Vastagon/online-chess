@@ -33,7 +33,7 @@ io.on("connection", (socket)=>{
         if(roomArray.length < 2){
             socket.join(roomData.room)
             console.log("Connected to room successfully")
-            io.to(roomData.socketid).emit("existing_connection_successful")
+            io.to(roomData.room).emit("existing_connection_successful")
         }else{
             console.log("Too many existing connections in room")
             io.to(roomData.socketid).emit("existing_connection_failed")

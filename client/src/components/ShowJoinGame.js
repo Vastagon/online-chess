@@ -21,9 +21,11 @@ export default function ShowJoinGame(props){
     }
 
     return(
-        <>        <div className="join-game-modal-container">
-            <form>
+        <>        
+        <div className="join-game-modal-container">
+            <form className='join-game-form'>
                 <label>Enter code to join an existing game</label>
+                <br></br>
                 <input onChange={changeCodeInput}></input>
                 <button onClick={joinGameClicked}>Join Game</button>
                 <br></br>
