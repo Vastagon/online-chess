@@ -10,6 +10,8 @@ import ShowJoinGame from "./ShowJoinGame"
 import WaitingOnSecondPlayer from "./WaitingOnSecondPlayer"
 
 ///Stay disconnected until join or create game is clicked
+///Emit when creating a game, get the room name from emit
+///
 
 
 
@@ -24,18 +26,21 @@ const Board = () =>{
     const [mostRecentClickedPosition, setMostRecentClickedPosition] = useState()
     const [blackOrWhitePromotion, setBlackOrWhitePromotion] = useState("")
     ///Variable to decide which SocketIO room to join
-    const [room, setRoom] = useState("1")
+    const [room, setRoom] = useState("")
     ///Need to change variables from state if I don't need them as state
     const [kingPositions, setKingPositions] = useState({blackKing: [0,4], whiteKing: [7,4]})
 
     const [whiteMoveBoolean, setWhiteMoveBoolean] = useState(true)
-    const [showPieceModal, setShowPieceModal] = useState(false)
     const [pieceClicked, setPieceClicked] = useState(false)
+    const [isConnectedToRoom, setIsConnectedToRoom] = useState(false)
+    const [changeSides, setChangeSides] = useState(false)
 
     ///States for displaying modals
     const [showJoinGame, setShowJoinGame] = useState(true)
     const [showFailedConnectionModal, setShowFailedConnectionModal] = useState(false)
-    const [showWaitingOnSecondPlayer, setShowWaitingOnFailedPlayer] = useState(false)
+    const [showWaitingOnSecondPlayer, setShowWaitingOnSecondPlayer] = useState(false)
+    const [showPieceModal, setShowPieceModal] = useState(false)
+
 
     ///State that displays the board
     const [boardDiv, setBoardDiv] = useState()
@@ -49,6 +54,12 @@ const Board = () =>{
     //         // console.log(`Joined room ${room}`)
     //     }
     // }, [room])
+
+    useEffect(() =>{
+        if(isConnectedToRoom){
+            socket.emit("piece_moved", {boardPosition: boardPosition, room: room});
+        }
+    }, [changeSides])
 
 
 
@@ -95,7 +106,7 @@ const Board = () =>{
         }))
     }
 
-
+//setIsConnectedToRoom
     ///Runs whenever new piece is selected, or when a pawn promotes
     useEffect(() =>{ 
         if(boardPosition){
@@ -108,25 +119,33 @@ const Board = () =>{
     ///Where all socket changes take place
     useEffect(() =>{
         socket.on("start_client_board", (data) =>{
-            setBoardPosition(data.roomBoardPositions)
+            setBoardPosition(data.boardPosition)
             setWhiteMoveBoolean(data.whiteMoveBoolean)
+            setShowWaitingOnSecondPlayer(true)
+            setRoom(data.room)
         })
 
+        ///When piece gets moved
         socket.on("update_client_board", (tempBoardData) =>{
-            let t = tempBoardData
-
-            setBoardPosition(tempBoardData.roomBoardPositions)
+            console.log(tempBoardData)
+            setBoardPosition(tempBoardData.boardPosition)
             setWhiteMoveBoolean(tempBoardData.whiteMoveBoolean)
-        })
+        }) 
 
-        socket.on("connection_failed", () =>{
+        ///Joining existing game failed
+        socket.on("existing_connection_failed", () =>{
             ///Show that the connection failed visually, set room back to ""
             setShowFailedConnectionModal(true)
+            setRoom("")
         })
 
-        socket.on("connection_successful", () =>{
+        ///Joining existing game succeeded
+        socket.on("existing_connection_successful", () =>{
             setShowJoinGame(false)
+            setIsConnectedToRoom(true)
         })
+
+        console.log(boardPosition)
     }, [socket])
 
 
@@ -162,6 +181,7 @@ const Board = () =>{
                 boardPosition[clickedSquare[0]][clickedSquare[1]] = boardPosition[lastClickedPosition[0]][lastClickedPosition[1]]
                 boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] = ""
                 setPotentialMovement([])
+                setChangeSides(prev => !prev)
             }
         }
     }
@@ -179,7 +199,7 @@ const Board = () =>{
 
             {showJoinGame ? <ShowJoinGame setShowFailedConnectionModal={setShowFailedConnectionModal} showFailedConnectionModal={showFailedConnectionModal} socket={socket} room={room} setRoom={setRoom} showJoinGame={showJoinGame}/> : null}
 
-            {showWaitingOnSecondPlayer ? <WaitingOnSecondPlayer /> : null}
+            {showWaitingOnSecondPlayer ? <WaitingOnSecondPlayer room={room} /> : null}
         </>
     )
 }
