@@ -144,10 +144,11 @@ const Board = () =>{
         })
 
         ///Joining existing game succeeded
-        socket.on("existing_connection_successful", () =>{
+        socket.on("existing_connection_successful", (serverSocketIDs) =>{
             setShowJoinGame(false)
             setShowWaitingOnSecondPlayer(false)
             setIsConnectedToRoom(true)
+            setSocketIDs({whiteSocketID: serverSocketIDs.whiteSocketID, blackSocketID: serverSocketIDs.blackSocketID})
             console.log("Existing connection successful")
         })
 

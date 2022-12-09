@@ -33,8 +33,12 @@ io.on("connection", (socket)=>{
             socket.join(roomData.room)
             console.log("Connected to room successfully")
             ///Check if white or black is undefined, check from there
-            roomVariablesMap.set(room, {boardPosition: boardPosition, whiteMoveBoolean: whiteMoveBoolean, whiteSocketID: whiteSocketID, blackSocketID: blackSocketID})
-            io.to(roomData.room).emit("existing_connection_successful")
+            if(roomVariablesMap.get(roomData.room).whiteSocketID.length > 0){
+                roomVariablesMap.set(roomData.room, {...roomVariablesMap.get(roomData.room), blackSocketID: roomData.socketID})
+            }
+            console.log(roomVariablesMap.get(roomData.room))
+            // roomVariablesMap.set(roomData.room, {boardPosition: boardPosition, whiteMoveBoolean: whiteMoveBoolean, whiteSocketID: whiteSocketID, blackSocketID: blackSocketID})
+            io.to(roomData.room).emit("existing_connection_successful", roomVariablesMap.get(roomData.room))
         }else{
             console.log("Too many existing connections in room")
             io.to(roomData.socketid).emit("existing_connection_failed")
@@ -70,7 +74,7 @@ io.on("connection", (socket)=>{
             io.in(room).emit("start_client_board", {boardPosition: boardPosition, whiteMoveBoolean: whiteMoveBoolean, room: room, whiteSocketID: whiteSocketID, blackSocketID: blackSocketID});
         }
     })
-
+ 
     ///Whenever a piece gets moved
     socket.on("piece_moved", (data)=>{
         let tempBoardData = roomVariablesMap.get(data.room)
@@ -79,6 +83,8 @@ io.on("connection", (socket)=>{
         tempBoardData.whiteMoveBoolean = !tempBoardData.whiteMoveBoolean
 
         roomVariablesMap.set(data.room, tempBoardData)
+
+        console.log(roomVariablesMap.get(data.room))
 
         io.in(data.room).emit("update_client_board", tempBoardData);
     })
