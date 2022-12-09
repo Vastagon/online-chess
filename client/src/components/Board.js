@@ -1,11 +1,11 @@
 import "../styles/board.css"
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState } from "react"
 import Piece from "./Piece"
 import boardpositions from "./boardpositions.json"
 import {v4 as uuid} from "uuid"
 import ChooseNewPiece from "./ChooseNewPiece"
 import io from "socket.io-client"
-import {checkForBlackCheck, checkForCheckmate} from "./checkForCheckmate"
+import {checkForBlackCheck} from "./checkForCheckmate"
 import ShowJoinGame from "./ShowJoinGame"
 import WaitingOnSecondPlayer from "./WaitingOnSecondPlayer"
 
@@ -45,16 +45,12 @@ const Board = () =>{
     ///State that displays the board
     const [boardDiv, setBoardDiv] = useState()
     let evenRow = true
+    const [socketIDs, setSocketIDs] = useState({})
 
 
-    // useEffect(() =>{
-    //     // console.log(room)
-    //     if(room !== ""){
-    //         socket.emit("create_new_game", room)
-    //         // console.log(`Joined room ${room}`)
-    //     }
-    // }, [room])
 
+
+    ///Runs when a piece is moved
     useEffect(() =>{
         if(isConnectedToRoom){
             socket.emit("piece_moved", {boardPosition: boardPosition, room: room});
@@ -64,7 +60,7 @@ const Board = () =>{
 
 
     ///Shows squares it can move
-    function canMove(){
+    function updateBoard(){
         console.log("Can move run")
         console.log(boardPosition)
 
@@ -100,7 +96,9 @@ const Board = () =>{
                 ///Returns square
                 return (<div key={uuid()} className={evenRow ? "board-square white-square" : "board-square green-square"}>
                     <div onClick={() => potentialMovementGetsClicked([rowIndex,index])} className={hasDot ? "has-dot" : null} />
-                    <Piece whiteMoveBoolean={whiteMoveBoolean} setLastClickedPosition={setLastClickedPosition} potentialMovementGetsClicked={potentialMovementGetsClicked} potentialMovement={potentialMovement} setPotentialMovement={setPotentialMovement} boardPosition={boardPosition} key={uuid()} pieceClicked={pieceClicked} setPieceClicked={setPieceClicked} position={[rowIndex,index]} piece={boardPosition[rowIndex][index]}/>
+                    <Piece socket={socket} socketIDs={socketIDs} whiteMoveBoolean={whiteMoveBoolean} setLastClickedPosition={setLastClickedPosition} potentialMovementGetsClicked={potentialMovementGetsClicked} 
+                        potentialMovement={potentialMovement} setPotentialMovement={setPotentialMovement} boardPosition={boardPosition} key={uuid()} pieceClicked={pieceClicked} 
+                        setPieceClicked={setPieceClicked} position={[rowIndex,index]} piece={boardPosition[rowIndex][index]} />
                 </div>)
             })}</div>) 
         }))
@@ -110,18 +108,24 @@ const Board = () =>{
     ///Runs whenever new piece is selected, or when a pawn promotes
     useEffect(() =>{ 
         if(boardPosition){
-            canMove()
+            updateBoard()
             checkForBlackCheck(boardPosition, kingPositions)
         }
-    }, [potentialMovement, showPieceModal, JSON.stringify(boardPosition)])
+    }, [potentialMovement, showPieceModal, JSON.stringify(boardPosition), whiteMoveBoolean])
 
 
     ///Where all socket changes take place
     useEffect(() =>{
+        ///When create new game button clicked
         socket.on("start_client_board", (data) =>{
             setBoardPosition(data.boardPosition)
             setWhiteMoveBoolean(data.whiteMoveBoolean)
             setShowWaitingOnSecondPlayer(true)
+            setSocketIDs(prev => ({
+                ...prev,
+                whiteSocketID: data.whiteSocketID
+            }))
+            // whiteSocketID = data.whiteSocketID
             setRoom(data.room)
         })
 
@@ -171,8 +175,9 @@ const Board = () =>{
         setMostRecentClickedPosition(clickedSquare)
         ///Checks if clicked square is in potentialMovement array
         for(let i = 0; i < potentialMovement.length; i++){
-            ///Checks if position clicked is in potentialMovement array
-            if(JSON.stringify(potentialMovement[i]) === JSON.stringify(clickedSquare)){
+            ///Checks if position clicked is in potentialMovement array and if it causes a checkmate
+            ///&& (checkForBlackCheck()) should be added in next line.
+            if(JSON.stringify(potentialMovement[i]) === JSON.stringify(clickedSquare) ){
                 ///Checks if pawn is near the end of the board / about to be promoted
                 if(boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] === "blackPawn" || "whitePawn"){
                     if((lastClickedPosition[0] === 6 && boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] === "blackPawn") || (lastClickedPosition[0] === 1 && boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] === "whitePawn")){
@@ -187,7 +192,14 @@ const Board = () =>{
             }
         }
     }
-    
+
+///Need to run the checkForBlackCheck function with updated data while keeping a temporary board. If it causes an illegal check, don't update boardPosition
+
+
+
+    // if(socket.id === whiteSocketID && whiteMoveBoolean){
+
+    // }
 
 
     if(!boardDiv || !boardPosition) return null

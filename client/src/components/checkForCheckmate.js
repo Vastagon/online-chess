@@ -51,7 +51,7 @@ export function checkForBlackCheck(boardPosition, oppositeKingPosition){
 
             for(let i = 0; i < potentialMovement.length; i++){
                 if(JSON.stringify(oppositeKingPosition.whiteKing) === JSON.stringify(potentialMovement[i])){
-                    console.log("Check found")
+                    return true
                 }
             }
         })

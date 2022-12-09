@@ -1,5 +1,4 @@
 import "../styles/board.css"
-
 import {
     pawnLogic,
     rookLogic,
@@ -10,7 +9,6 @@ import {
 } from "./movementLogicFunctions"
  
 const Piece = (props) =>{
-   
     function clickPiece(){
         ///Global state to save last clicked position
         props.setLastClickedPosition(props.position)
@@ -55,7 +53,7 @@ const Piece = (props) =>{
 
     ///Function that runs after click to see if it's white or black's turn
     function canIMovePiece(){
-        if((props.whiteMoveBoolean && props.piece.substring(0,5) === "white") || (!props.whiteMoveBoolean && props.piece.substring(0,5) === "black")){
+        if((props.whiteMoveBoolean && props.piece.substring(0,5) === "white" && props.socket.id === props.socketIDs.whiteSocketID) || (!props.whiteMoveBoolean && props.piece.substring(0,5) === "black" && props.socket.id === props.socketIDs.blackSocketID)){
             clickPiece()
         }
     }

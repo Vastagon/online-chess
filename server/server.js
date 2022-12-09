@@ -5,7 +5,6 @@ const {Server} = require('socket.io')
 const cors = require('cors')
 let initialBoardPositions = require('./boardpositions.json')
 const path = require('path')
-///if running both serpeately, then this should be 3001
 
 app.use(cors())
 require('dotenv').config();
@@ -30,37 +29,49 @@ io.on("connection", (socket)=>{
     socket.on("join_existing_game", async (roomData) =>{
         ///Checks the number of connections to the appropriate room and decides whether to 
         const roomArray = await io.in(roomData.room).fetchSockets();
-        if(roomArray.length < 2){
+        if(roomArray.length < 2 && roomArray.length !== 0){
             socket.join(roomData.room)
             console.log("Connected to room successfully")
+            ///Check if white or black is undefined, check from there
+            roomVariablesMap.set(room, {boardPosition: boardPosition, whiteMoveBoolean: whiteMoveBoolean, whiteSocketID: whiteSocketID, blackSocketID: blackSocketID})
             io.to(roomData.room).emit("existing_connection_successful")
         }else{
             console.log("Too many existing connections in room")
             io.to(roomData.socketid).emit("existing_connection_failed")
         }
-        
-
     })
 
-    // socket.on("")
-
-
-    ///Whenever room changes on clientside
-    socket.on("create_new_game", async () =>{
+    ///Whenever new game button is clicked
+    socket.on("create_new_game", async (socketID) =>{
         let room = Math.floor(Math.random() * 1000).toString()
         ///Checks if room exists
         if(!io.sockets.adapter.rooms.get(room)){
             socket.join(room)
             let whiteMoveBoolean = true
             let boardPosition = initialBoardPositions
+            let whiteSocketID
+            let blackSocketID
+
+            ///Choose randomly if player is white or black
+            // let isWhite = Boolean(Math.round(Math.random() + 0.3))
+            let isWhite = true
+            if(isWhite){
+                whiteSocketID = socketID
+            }else{
+                blackSocketID = socketID
+            }
+
+            ///Set white property to one socket.id, and black to the other, alternate the ID's everytime a piece moves, 
+            ///if the client's socketID matches the server, then they can move the deisgnated color
 
 
             ///Change boolean to check if two players are connected
-            roomVariablesMap.set(room, {boardPosition: boardPosition, whiteMoveBoolean: whiteMoveBoolean})
-            io.in(room).emit("start_client_board", {boardPosition: boardPosition, whiteMoveBoolean: whiteMoveBoolean, room: room});
+            roomVariablesMap.set(room, {boardPosition: boardPosition, whiteMoveBoolean: whiteMoveBoolean, whiteSocketID: whiteSocketID, blackSocketID: blackSocketID})
+            io.in(room).emit("start_client_board", {boardPosition: boardPosition, whiteMoveBoolean: whiteMoveBoolean, room: room, whiteSocketID: whiteSocketID, blackSocketID: blackSocketID});
         }
     })
 
+    ///Whenever a piece gets moved
     socket.on("piece_moved", (data)=>{
         let tempBoardData = roomVariablesMap.get(data.room)
         
@@ -73,14 +84,14 @@ io.on("connection", (socket)=>{
     })
 }) 
  
-
+ 
 //process.env.NODE_ENV
 // if (process.ENV.NODE_ENV === "production"){
 //     console.log(path.join(__dirname, "../", "./client/build"))
 //     app.use(express.static(path.join(__dirname, "../", "./client/build")));
 //     app.get('*', (req,res) => {
 //         res.sendFile(path.join(__dirname, "../", "./client/build", "index.html"));
-//     });
+//     }); 
 // }
 
 

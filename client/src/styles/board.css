@@ -56,3 +56,13 @@
     position: absolute;
     z-index: 100;
 }
+
+
+
+/* Flip board for black */
+.black-board{
+    transform: rotate(180deg);
+}
+.black-piece{
+    transform: rotate(180deg);
+}

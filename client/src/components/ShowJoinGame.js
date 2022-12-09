@@ -10,14 +10,14 @@ export default function ShowJoinGame(props){
         e.preventDefault()
 
 
-        props.socket.emit("join_existing_game", {room: props.room, socketid: props.socket.id})
+        props.socket.emit("join_existing_game", {room: props.room, socketID: props.socket.id})
         
     }
 
     function createGameClicked(e){
         e.preventDefault()
 
-        props.socket.emit("create_new_game")
+        props.socket.emit("create_new_game", props.socket.id)
     }
 
     return(
