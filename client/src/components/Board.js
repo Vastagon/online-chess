@@ -48,7 +48,9 @@ const Board = () =>{
     const [socketIDs, setSocketIDs] = useState({})
 
 
-
+    if(socket.id === socketIDs.blackSocketID){
+        ///use .black-board and .black-piece
+    }
 
     ///Runs when a piece is moved
     useEffect(() =>{
@@ -151,8 +153,6 @@ const Board = () =>{
             setSocketIDs({whiteSocketID: serverSocketIDs.whiteSocketID, blackSocketID: serverSocketIDs.blackSocketID})
             console.log("Existing connection successful")
         })
-
-        console.log(boardPosition)
     }, [socket])
 
 
@@ -198,16 +198,11 @@ const Board = () =>{
 
 
 
-    // if(socket.id === whiteSocketID && whiteMoveBoolean){
-
-    // }
-
-
     if(!boardDiv || !boardPosition) return null
 
     return(
         <>
-            <div className="board">
+            <div className={socket.id === socketIDs.blackSocketID ? "black-board board" : "board"}>
                 {boardDiv}
                 {showPieceModal ? <ChooseNewPiece blackOrWhitePromotion={blackOrWhitePromotion} changePawn={changePawn}/> : null}
             </div>     
