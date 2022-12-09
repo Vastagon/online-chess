@@ -113,7 +113,7 @@ const Board = () =>{
             updateBoard()
             checkForBlackCheck(boardPosition, kingPositions)
         }
-    }, [potentialMovement, showPieceModal, JSON.stringify(boardPosition), whiteMoveBoolean])
+    }, [potentialMovement, showPieceModal, JSON.stringify(boardPosition), whiteMoveBoolean, socketIDs])
 
 
     ///Where all socket changes take place
@@ -152,6 +152,7 @@ const Board = () =>{
             setIsConnectedToRoom(true)
             setSocketIDs({whiteSocketID: serverSocketIDs.whiteSocketID, blackSocketID: serverSocketIDs.blackSocketID})
             console.log("Existing connection successful")
+            alert("Both players connected, begin playing")
         })
     }, [socket])
 
@@ -202,7 +203,7 @@ const Board = () =>{
 
     return(
         <>
-            <div className={socket.id === socketIDs.blackSocketID ? "black-board board" : "board"}>
+            <div className={socket.id === socketIDs.blackSocketID && isConnectedToRoom ? "black-board board" : "board"}>
                 {boardDiv}
                 {showPieceModal ? <ChooseNewPiece blackOrWhitePromotion={blackOrWhitePromotion} changePawn={changePawn}/> : null}
             </div>     

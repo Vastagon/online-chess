@@ -6,21 +6,21 @@
         "blackPawn", "blackPawn", "blackPawn", "blackPawn", "blackPawn", "blackPawn", "blackPawn", "blackPawn"
     ],
     [ 
-        "","whiteBishop","","","","","",""
+        "","","","","","","",""
     ],
     [ 
         "","","","","","","",""
     ],
     [ 
-        "","","","whiteKing","","","",""
+        "","","","","","","",""
     ],
     [ 
-        "","","blackRook","","","","",""
+        "","","","","","","",""
     ],
     [ 
         "whitePawn","whitePawn","whitePawn","whitePawn","whitePawn","whitePawn","whitePawn","whitePawn"
     ],
     [ 
-        "whiteRook","whiteKnight","whiteBishop","","whiteQueen","whiteBishop","whiteKnight","whiteRook"
+        "whiteRook","whiteKnight","whiteBishop","whiteKing","whiteQueen","whiteBishop","whiteKnight","whiteRook"
     ]
 ]

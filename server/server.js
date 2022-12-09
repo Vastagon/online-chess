@@ -32,12 +32,14 @@ io.on("connection", (socket)=>{
         if(roomArray.length < 2 && roomArray.length !== 0){
             socket.join(roomData.room)
             console.log("Connected to room successfully")
-            ///Check if white or black is undefined, check from there
-            if(roomVariablesMap.get(roomData.room).whiteSocketID.length > 0){
+
+            ///Check if white or black is undefined
+            if(roomVariablesMap.get(roomData.room).whiteSocketID?.length > 0){
                 roomVariablesMap.set(roomData.room, {...roomVariablesMap.get(roomData.room), blackSocketID: roomData.socketID})
+            }else{
+                roomVariablesMap.set(roomData.room, {...roomVariablesMap.get(roomData.room), whiteSocketID: roomData.socketID})
             }
-            console.log(roomVariablesMap.get(roomData.room))
-            // roomVariablesMap.set(roomData.room, {boardPosition: boardPosition, whiteMoveBoolean: whiteMoveBoolean, whiteSocketID: whiteSocketID, blackSocketID: blackSocketID})
+
             io.to(roomData.room).emit("existing_connection_successful", roomVariablesMap.get(roomData.room))
         }else{
             console.log("Too many existing connections in room")
@@ -84,21 +86,19 @@ io.on("connection", (socket)=>{
 
         roomVariablesMap.set(data.room, tempBoardData)
 
-        console.log(roomVariablesMap.get(data.room))
-
         io.in(data.room).emit("update_client_board", tempBoardData);
     })
 }) 
  
  
 //process.env.NODE_ENV
-// if (process.ENV.NODE_ENV === "production"){
-//     console.log(path.join(__dirname, "../", "./client/build"))
-//     app.use(express.static(path.join(__dirname, "../", "./client/build")));
-//     app.get('*', (req,res) => {
-//         res.sendFile(path.join(__dirname, "../", "./client/build", "index.html"));
-//     }); 
-// }
+if (process.env.NODE_ENV === "production"){
+    console.log(path.join(__dirname, "../", "./client/build"))
+    app.use(express.static(path.join(__dirname, "../", "./client/build")));
+    app.get('*', (req,res) => {
+        res.sendFile(path.join(__dirname, "../", "./client/build", "index.html"));
+    }); 
+}
 
 
 ///This should be different place from where site is located. Have been able to keep it the same though, further tersting needed
