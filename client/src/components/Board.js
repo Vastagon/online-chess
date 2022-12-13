@@ -5,13 +5,10 @@ import boardpositions from "./boardpositions.json"
 import {v4 as uuid} from "uuid"
 import ChooseNewPiece from "./ChooseNewPiece"
 import io from "socket.io-client"
-import {checkForBlackCheck} from "./checkForCheckmate"
+import {checkForBlackCheck, checkForWhiteCheck} from "./checkForCheckmate"
 import ShowJoinGame from "./ShowJoinGame"
 import WaitingOnSecondPlayer from "./WaitingOnSecondPlayer"
 
-///Stay disconnected until join or create game is clicked
-///Emit when creating a game, get the room name from emit
-///
 
 
 
@@ -47,11 +44,6 @@ const Board = () =>{
     let evenRow = true
     const [socketIDs, setSocketIDs] = useState({})
 
-
-    if(socket.id === socketIDs.blackSocketID){
-        ///use .black-board and .black-piece
-    }
-
     ///Runs when a piece is moved
     useEffect(() =>{
         if(isConnectedToRoom){
@@ -61,57 +53,16 @@ const Board = () =>{
 
 
 
-    ///Shows squares it can move
-    function updateBoard(){
-        console.log("Can move run")
-        console.log(boardPosition)
+///Need to run the checkForBlackCheck function with updated data while keeping a temporary board. If it causes an illegal check, don't update boardPosition
 
-        setBoardDiv(boardPosition.map((prev, rowIndex) =>{
-            evenRow = !evenRow
-            ///Returns row
-            return(<div key={uuid()} className="board-row">{prev.map((prev, index) =>{
-                evenRow = !evenRow
-                let hasDot
 
-                ///Shows dots on all potential movement squares
-                for(let i = 0; i < potentialMovement?.length; i++){
-                    if(JSON.stringify([rowIndex, index]) === JSON.stringify(potentialMovement[i])){
-                        hasDot = true 
-                    }
-                }
-
-                ///Updates state that holds position of kings
-                if(prev === "blackKing"){
-                    setKingPositions(prev => ({
-                        ...prev,
-                        blackKing: [rowIndex,index]
-                    }))
-                }
-                if(prev === "whiteKing"){
-                    // console.log([rowIndex,index])
-                    setKingPositions(prev => ({
-                        ...prev,
-                        whiteKing: [rowIndex,index]
-                    }))
-                }
-                
-                ///Returns square
-                return (<div key={uuid()} className={evenRow ? "board-square white-square" : "board-square green-square"}>
-                    <div onClick={() => potentialMovementGetsClicked([rowIndex,index])} className={hasDot ? "has-dot" : null} />
-                    <Piece socket={socket} socketIDs={socketIDs} whiteMoveBoolean={whiteMoveBoolean} setLastClickedPosition={setLastClickedPosition} potentialMovementGetsClicked={potentialMovementGetsClicked} 
-                        potentialMovement={potentialMovement} setPotentialMovement={setPotentialMovement} boardPosition={boardPosition} key={uuid()} pieceClicked={pieceClicked} 
-                        setPieceClicked={setPieceClicked} position={[rowIndex,index]} piece={boardPosition[rowIndex][index]} />
-                </div>)
-            })}</div>) 
-        }))
-    }
-
-//setIsConnectedToRoom
     ///Runs whenever new piece is selected, or when a pawn promotes
     useEffect(() =>{ 
         if(boardPosition){
             updateBoard()
             checkForBlackCheck(boardPosition, kingPositions)
+            // if(checkForBlackCheck(boardPosition, kingPositions)) console.log("Black Check")
+            // if(checkForWhiteCheck(boardPosition, kingPositions)) console.log("White Check")
         }
     }, [potentialMovement, showPieceModal, JSON.stringify(boardPosition), whiteMoveBoolean, socketIDs])
 
@@ -133,7 +84,6 @@ const Board = () =>{
 
         ///When piece gets moved
         socket.on("update_client_board", (tempBoardData) =>{
-            console.log(tempBoardData)
             setBoardPosition(tempBoardData.boardPosition)
             setWhiteMoveBoolean(tempBoardData.whiteMoveBoolean)
         }) 
@@ -195,8 +145,51 @@ const Board = () =>{
         }
     }
 
-///Need to run the checkForBlackCheck function with updated data while keeping a temporary board. If it causes an illegal check, don't update boardPosition
 
+
+
+
+    ///Shows squares it can move
+    function updateBoard(){
+        setBoardDiv(boardPosition.map((prev, rowIndex) =>{
+            evenRow = !evenRow
+            ///Returns row
+            return(<div key={uuid()} className="board-row">{prev.map((prev, index) =>{
+                evenRow = !evenRow
+                let hasDot
+
+                ///Shows dots on all potential movement squares
+                for(let i = 0; i < potentialMovement?.length; i++){
+                    if(JSON.stringify([rowIndex, index]) === JSON.stringify(potentialMovement[i])){
+                        hasDot = true 
+                    }
+                }
+
+                ///Updates state that holds position of kings
+                if(prev === "blackKing"){
+                    setKingPositions(prev => ({
+                        ...prev,
+                        blackKing: [rowIndex,index]
+                    }))
+                }
+                if(prev === "whiteKing"){
+                    // console.log([rowIndex,index])
+                    setKingPositions(prev => ({
+                        ...prev,
+                        whiteKing: [rowIndex,index]
+                    }))
+                }
+                
+                ///Returns square
+                return (<div key={uuid()} className={evenRow ? "board-square white-square" : "board-square green-square"}>
+                    <div onClick={() => potentialMovementGetsClicked([rowIndex,index])} className={hasDot ? "has-dot" : null} />
+                    <Piece socket={socket} socketIDs={socketIDs} whiteMoveBoolean={whiteMoveBoolean} setLastClickedPosition={setLastClickedPosition} potentialMovementGetsClicked={potentialMovementGetsClicked} 
+                        potentialMovement={potentialMovement} setPotentialMovement={setPotentialMovement} boardPosition={boardPosition} key={uuid()} pieceClicked={pieceClicked} 
+                        setPieceClicked={setPieceClicked} position={[rowIndex,index]} piece={boardPosition[rowIndex][index]} />
+                </div>)
+            })}</div>) 
+        }))
+    }
 
 
     if(!boardDiv || !boardPosition) return null
