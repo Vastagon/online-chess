@@ -1,6 +1,8 @@
 :root{
     --board-square-width: 4vw;
+    --board-square-width-mobile: 10vw;
     --board-dot-width: 2vw;
+    --board-dot-width-mobile: 5vw
 }
 
 .board{
@@ -65,4 +67,31 @@
 }
 .black-piece{
     transform: rotate(180deg);
+}
+
+
+@media screen and (max-width: 950px) {
+    .board{
+        margin-left: calc((100vw - var(--board-square-width-mobile) * 8) /2);
+        margin-top: 15vh;
+        border-width: 2px;
+        width: calc(var(--board-square-width-mobile) * 8);
+    }
+    .board-square{
+        width: var(--board-square-width-mobile)  !important;
+        height: var(--board-square-width-mobile) !important;
+    }
+    .chess-piece, .piece{
+        width: var(--board-square-width-mobile);
+        height: var(--board-square-width-mobile);
+    }
+    .has-dot{
+        width: var(--board-dot-width-mobile) ;
+        height: var(--board-dot-width-mobile);
+        border-radius: 1000px;
+        border-style: none;
+        background-color: aqua;
+        position: absolute;
+        z-index: 100;
+    }
 }

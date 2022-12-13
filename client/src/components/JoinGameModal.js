@@ -1,6 +1,6 @@
 import ConnectionFailedModal from './ConnectionFailedModal'
 
-export default function ShowJoinGame(props){
+export default function JoinGameModal(props){
 
     function changeCodeInput(e){
         props.setRoom(e.target.value)

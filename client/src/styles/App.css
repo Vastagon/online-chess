@@ -62,3 +62,18 @@ h3{
   background-color: whitesmoke;
   color: black;
 }
+
+@media screen and (max-width: 950px) {
+  .join-game-modal-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    width: 70vw;
+    height: 60vh;
+    top: 15vh;
+    left: 15vw;
+    background-color: green;
+  }
+
+}

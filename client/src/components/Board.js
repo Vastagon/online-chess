@@ -6,8 +6,8 @@ import {v4 as uuid} from "uuid"
 import ChooseNewPiece from "./ChooseNewPiece"
 import io from "socket.io-client"
 import {checkForBlackCheck, checkForWhiteCheck} from "./checkForCheckmate"
-import ShowJoinGame from "./ShowJoinGame"
 import WaitingOnSecondPlayer from "./WaitingOnSecondPlayer"
+import JoinGameModal from "./JoinGameModal"
 
 
 
@@ -56,7 +56,6 @@ const Board = () =>{
 ///Need to run the checkForBlackCheck function with updated data while keeping a temporary board. If it causes an illegal check, don't update boardPosition
 
 
-    ///Runs whenever new piece is selected, or when a pawn promotes
     useEffect(() =>{ 
         if(boardPosition){
             updateBoard()
@@ -78,7 +77,6 @@ const Board = () =>{
                 ...prev,
                 whiteSocketID: data.whiteSocketID
             }))
-            // whiteSocketID = data.whiteSocketID
             setRoom(data.room)
         })
 
@@ -136,6 +134,7 @@ const Board = () =>{
                         setShowPieceModal(true)
                     }
                 }
+                
                 ///Resets potential movement and moves the piece to the proper location while deleting it from previous position
                 boardPosition[clickedSquare[0]][clickedSquare[1]] = boardPosition[lastClickedPosition[0]][lastClickedPosition[1]]
                 boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] = ""
@@ -201,7 +200,7 @@ const Board = () =>{
                 {showPieceModal ? <ChooseNewPiece blackOrWhitePromotion={blackOrWhitePromotion} changePawn={changePawn}/> : null}
             </div>     
 
-            {showJoinGame ? <ShowJoinGame setShowFailedConnectionModal={setShowFailedConnectionModal} showFailedConnectionModal={showFailedConnectionModal} socket={socket} room={room} setRoom={setRoom} showJoinGame={showJoinGame}/> : null}
+            {showJoinGame ? <JoinGameModal setShowFailedConnectionModal={setShowFailedConnectionModal} showFailedConnectionModal={showFailedConnectionModal} socket={socket} room={room} setRoom={setRoom} showJoinGame={showJoinGame}/> : null}
 
             {showWaitingOnSecondPlayer ? <WaitingOnSecondPlayer room={room} /> : null}
         </>
