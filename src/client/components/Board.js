@@ -18,7 +18,7 @@ if(process.env.REACT_APP_PRODUCTION === "production"){
 }else{
     socketUrl = "http://localhost:3001"
 }
-const socket = io.connect(socketUrl)
+const socket = io.connect(socketUrl) 
 
 
 const Board = () =>{
