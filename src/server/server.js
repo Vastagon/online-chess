@@ -12,12 +12,18 @@ require('dotenv').config();
 const server = http.createServer(app)
 
 const roomVariablesMap = new Map();
+let originUrl
 
+if(process.env.NODE_ENV === "production"){
+    originUrl = "https://vastagon-online-chess.herokuapp.com/"
+}else{
+    originUrl = "http://localhost:3000"
+}
 
 ///Origin needs to be set to wherever main site is located at
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: originUrl,
         methods: ["GET", "POST"]
     }
 })
@@ -106,6 +112,6 @@ if (process.env.NODE_ENV === "production"){
 //     console.log("Server is running")
 // })
 
-server.listen(3001, () =>{
+server.listen(process.env.PORT || 3001, () =>{
     console.log("Server is running")
 })

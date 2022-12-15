@@ -10,10 +10,16 @@ import WaitingOnSecondPlayer from "./WaitingOnSecondPlayer"
 import JoinGameModal from "./JoinGameModal"
 
 
-
+let socketUrl
 
 ///Needs to be set to whichever location the express server is being hosted
-const socket = io.connect("http://localhost:3001")
+if(process.env.REACT_APP_PRODUCTION === "production"){
+    socketUrl = process.env.REACT_APP_PRODUCTION_URL
+}else{
+    socketUrl = "http://localhost:3001"
+}
+
+const socket = io.connect(socketUrl)
 
 
 const Board = () =>{
