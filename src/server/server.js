@@ -99,10 +99,10 @@ io.on("connection", (socket)=>{
  
 //process.env.NODE_ENV
 if (process.env.NODE_ENV === "production"){
-    console.log(path.join(__dirname, "../", "./client/build"))
-    app.use(express.static(path.join(__dirname, "../", "./client/build")));
+    console.log(path.join(__dirname, "../../build"))
+    app.use(express.static(path.join(__dirname, "../../build")));
     app.get('*', (req,res) => {
-        res.sendFile(path.join(__dirname, "../", "./client/build", "index.html"));
+        res.sendFile(path.join(__dirname, "../../build", "index.html"));
     }); 
 }
 
@@ -113,5 +113,5 @@ if (process.env.NODE_ENV === "production"){
 // })
 
 server.listen(process.env.PORT || 3001, () =>{
-    console.log("Server is running")
+    console.log(`Server is running on: ${process.env.PORT || 3001}`)
 })

@@ -19,7 +19,7 @@
         "socket.io": "^4.5.3"
     },
     "scripts": {
-      "server": "nodemon ./server/server.js",
+      "server": "nodemon ./src/server/server.js",
       "client": "concurrently \"serve -s build\" \"npm run server\"",
       "build": "react-scripts build",
       "start": "node ./src/server/server.js",
