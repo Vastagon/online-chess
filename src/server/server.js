@@ -11,7 +11,7 @@ require('dotenv').config();
 
 const server = http.createServer(app)
 
-const roomVariablesMap = new Map();
+const roomVariablesMap = new Map(); 
 let originUrl
 
 if(process.env.NODE_ENV === "production"){
@@ -22,13 +22,13 @@ if(process.env.NODE_ENV === "production"){
 
 ///Origin needs to be set to wherever main site is located at
 const io = new Server(server, {
-    cors: {
+    cors: { 
         origin: originUrl,
         methods: ["GET", "POST"]
     }
-})
+}) 
 
-
+ 
 
 io.on("connection", (socket)=>{
     // console.log(`User Connected: ${socket.id}`)

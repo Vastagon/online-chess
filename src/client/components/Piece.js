@@ -14,10 +14,13 @@ const Piece = (props) =>{
         props.setLastClickedPosition(props.position)
         props.setPotentialMovement([])
  
-        console.log("Clicked piece position: " + props.position)
-
+        // console.log("Clicked piece position: " + props.position)
+        ///This is logging proper piece and isn't changing
+        console.log(props.piece)
         ///PAWN LOGIC
-        props.setPotentialMovement(pawnLogic(props.position, props.piece, props.boardPosition))
+        if(props.piece === "blackPawn" || props.piece === "whitePawn"){
+            props.setPotentialMovement(pawnLogic(props.position, props.piece, props.boardPosition))
+        }
   
         ///ROOK LOGIC
         if(props.piece === "blackRook" || props.piece === "whiteRook"){
@@ -53,6 +56,8 @@ const Piece = (props) =>{
     ///Function that runs after click to see if it's white or black's turn
     function canIMovePiece(){
         if((props.whiteMoveBoolean && props.piece.substring(0,5) === "white" && props.socket.id === props.socketIDs.whiteSocketID) || (!props.whiteMoveBoolean && props.piece.substring(0,5) === "black" && props.socket.id === props.socketIDs.blackSocketID)){
+            props.setPotentialMovement([]) 
+
             clickPiece()
         }
     }

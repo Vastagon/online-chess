@@ -64,11 +64,12 @@ const Board = () =>{
     useEffect(() =>{ 
         if(boardPosition){
             updateBoard()
-            checkForBlackCheck(boardPosition, kingPositions)
+            // checkForBlackCheck(boardPosition, kingPositions)
             // if(checkForBlackCheck(boardPosition, kingPositions)) console.log("Black Check")
             // if(checkForWhiteCheck(boardPosition, kingPositions)) console.log("White Check")
         }
     }, [potentialMovement, showPieceModal, JSON.stringify(boardPosition), whiteMoveBoolean, socketIDs])
+
 
 
     ///Where all socket changes take place
@@ -130,8 +131,6 @@ const Board = () =>{
         setMostRecentClickedPosition(clickedSquare)
         ///Checks if clicked square is in potentialMovement array
         for(let i = 0; i < potentialMovement.length; i++){
-            ///Checks if position clicked is in potentialMovement array and if it causes a checkmate
-            ///&& (checkForBlackCheck()) should be added in next line.
             if(JSON.stringify(potentialMovement[i]) === JSON.stringify(clickedSquare) ){
                 ///Checks if pawn is near the end of the board / about to be promoted
                 if(boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] === "blackPawn" || "whitePawn"){
@@ -194,7 +193,7 @@ const Board = () =>{
             })}</div>) 
         }))
     }
-
+    console.log(potentialMovement)
 
     if(!boardDiv || !boardPosition) return null
 

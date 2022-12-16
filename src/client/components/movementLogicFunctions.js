@@ -7,6 +7,10 @@ let potentialMovement = []
 //piece is the name of the selected piece
 
 export function pawnLogic(position, piece, boardPosition){
+    // console.log(position)
+    // ///Logging white pawn, but switching to black pawn
+    console.log(piece)
+    // console.log(boardPosition)
     if(piece === "whitePawn"){
         ///increase row by one, or two if first move
         if((position[0] === 6 || position[0] === 1) && boardPosition[position[0]-1][position[1]] === "" && boardPosition[position[0]-2][position[1]] === ""){
