@@ -65,8 +65,8 @@ const Board = () =>{
         if(boardPosition){
             updateBoard()
             // checkForBlackCheck(boardPosition, kingPositions)
-            // if(checkForBlackCheck(boardPosition, kingPositions)) console.log("Black Check")
-            // if(checkForWhiteCheck(boardPosition, kingPositions)) console.log("White Check")
+            if(checkForBlackCheck(boardPosition, kingPositions)) console.log("Black Checks white")
+            if(checkForWhiteCheck(boardPosition, kingPositions)) console.log("White Checks black")
         }
     }, [potentialMovement, showPieceModal, JSON.stringify(boardPosition), whiteMoveBoolean, socketIDs])
 

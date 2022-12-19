@@ -20,6 +20,7 @@
         "server": "nodemon ./src/server/server.js",
         "client": "concurrently \"serve -s build\" \"npm run server\"",
         "build": "react-scripts build",
+        "clientStart": "react-scripts start",
         "start": "node ./src/server/server.js",
         "dev": "concurrently \"npm run server\" \"react-scripts start\"",
         "test": "jest"

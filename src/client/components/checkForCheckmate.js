@@ -8,15 +8,16 @@ import {
     queenLogic
 } from "./movementLogicFunctions"
 
+
 ///Function that runs through every piece on the board and check if it's potential movement overlaps with king's position
 export function checkForBlackCheck(boardPosition, oppositeKingPosition){
-    boardPosition.map((prev, rowIndex) =>{
+    for(let i = 0; i < boardPosition.length; i++){
 
-        prev.map((piece, index) =>{
-            //let piece = boardPosition[rowIndex][index]
-            let position = [rowIndex, index]
+        for(let j = 0; j < boardPosition[i].length; j++){
+            let piece = boardPosition[i][j]
+            let position = [i, j]
             let potentialMovement = []
-
+    
             ///PAWN LOGIC
             if(piece === "blackPawn"){
                 potentialMovement = pawnLogic(position, piece, boardPosition)
@@ -26,41 +27,35 @@ export function checkForBlackCheck(boardPosition, oppositeKingPosition){
             if(piece === "blackRook"){
                 potentialMovement = rookLogic(position, piece, boardPosition)
             }
-
+    
             ///Bishop Logic
             if(piece === "blackBishop"){
-                potentialMovement = bishopLogic(position, piece, boardPosition)
-                console.log(potentialMovement)
-                console.log(oppositeKingPosition)
-
+                potentialMovement = bishopLogic(position, piece, boardPosition) 
             }
-
+    
             ///Queen Logic
             if(piece === "blackQueen"){
                 potentialMovement = queenLogic(position, piece, boardPosition)
-
+    
             }
     
             ///King logic
             if(piece === "blackKing"){
                 potentialMovement = kingLogic(position, piece, boardPosition)
             }
-
+    
             ///Knight Logic
             if(piece === "blackKnight"){
                 potentialMovement = knightLogic(position, piece, boardPosition)
             }
-
+    
             for(let i = 0; i < potentialMovement.length; i++){
-                // console.log(oppositeKingPosition)                
-                // console.log(potentialMovement[i])
                 if(JSON.stringify(oppositeKingPosition.whiteKing) === JSON.stringify(potentialMovement[i])){
-                    console.log("HERE")
                     return true
                 }
             }
-        })
-    })  
+        }
+    }
 }
 
 
@@ -68,13 +63,13 @@ export function checkForBlackCheck(boardPosition, oppositeKingPosition){
 
 
 export function checkForWhiteCheck(boardPosition, oppositeKingPosition){
-    boardPosition.map((prev, rowIndex) =>{
+    for(let i = 0; i < boardPosition.length; i++){
 
-        prev.map((piece, index) =>{
-            //let piece = boardPosition[rowIndex][index]
-            let position = [rowIndex, index]
+        for(let j = 0; j < boardPosition[i].length; j++){
+            let piece = boardPosition[i][j]
+            let position = [i, j]
             let potentialMovement = []
-
+    
             ///PAWN LOGIC
             if(piece === "whitePawn"){
                 potentialMovement = pawnLogic(position, piece, boardPosition)
@@ -84,39 +79,33 @@ export function checkForWhiteCheck(boardPosition, oppositeKingPosition){
             if(piece === "whiteRook"){
                 potentialMovement = rookLogic(position, piece, boardPosition)
             }
-
+    
             ///Bishop Logic
             if(piece === "whiteBishop"){
-                potentialMovement = bishopLogic(position, piece, boardPosition)
-                console.log(potentialMovement)
-                console.log(oppositeKingPosition)
+                potentialMovement = bishopLogic(position, piece, boardPosition) 
             }
-
+    
             ///Queen Logic
             if(piece === "whiteQueen"){
                 potentialMovement = queenLogic(position, piece, boardPosition)
-
+    
             }
     
             ///King logic
             if(piece === "whiteKing"){
                 potentialMovement = kingLogic(position, piece, boardPosition)
             }
-
+    
             ///Knight Logic
             if(piece === "whiteKnight"){
                 potentialMovement = knightLogic(position, piece, boardPosition)
             }
-
+    
             for(let i = 0; i < potentialMovement.length; i++){
-
-                // console.log(potentialMovement[i])
-                // console.log(oppositeKingPosition)
-
                 if(JSON.stringify(oppositeKingPosition.blackKing) === JSON.stringify(potentialMovement[i])){
                     return true
                 }
             }
-        })
-    }) 
+        }
+    }
 }
