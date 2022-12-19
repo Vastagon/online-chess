@@ -3,4 +3,7 @@
 ## Description
 All movement and pie taking is done. Now just need to finish logic for each piece, make the pieces take turns, and check for check, checkmate, and castling
 
-### NPM Start should be node ./src/server/server.js
+# Scripts
+
+### `npm run dev`
+Uses Concurently to start the server with nodemon and starts the react-scripts
