@@ -1,58 +1,83 @@
 let potentialMovement = []
 ///These functions add to the potentialMovement array which is ran through in the canMove function on Board.js. They return all potential movement, which sets the potentialMovement state in Board.js to what it returns
 
-//position[0] = the y position of the selected piece. Ranges from 0-7, 0 being the highest position on the board
-//position[1] = the x position of the selected piece. Ranges from 0-7, 0 being the left most position on the board
+//y = the y position of the selected piece. Ranges from 0-7, 0 being the highest position on the board
+//x = the x position of the selected piece. Ranges from 0-7, 0 being the left most position on the board
 //boardPosition is the 2D array with all of the piece positions
 //piece is the name of the selected piece
 
 export function pawnLogic(position, piece, boardPosition){
-    // console.log(position)
-    // ///Logging white pawn, but switching to black pawn
-    console.log(piece)
-    // console.log(boardPosition)
-    if(piece === "whitePawn"){
-        ///increase row by one, or two if first move
-        if((position[0] === 6 || position[0] === 1) && boardPosition[position[0]-1][position[1]] === "" && boardPosition[position[0]-2][position[1]] === ""){
-            potentialMovement = [[position[0]-2, position[1]], [position[0]-1, position[1]]]
-        }else{
-            if(boardPosition[position[0]-1][position[1]] === ""){
-                potentialMovement = [[position[0]-1, position[1]]]
-            }
-        }
-        ///Checking if pawn can take piece diagonally
-        if((boardPosition[position[0]-1][position[1]-1]?.substring(0,5)) === "black"){
-            potentialMovement = [...potentialMovement, [position[0]-1, position[1]-1]]
-        }
-        if((boardPosition[position[0]-1][position[1]+1]?.substring(0,5)) === "black"){
-            potentialMovement = [...potentialMovement, [position[0]-1, position[1]+1]]
-        }
-    }
+    let temp = []
+    let x = position[1]
+    let y = position[0]
+///Check if near an edge before movement
+
     if(piece === "blackPawn"){
-        ///increase row by one, or two if first move
-        if((position[0] === 6 || position[0] === 1) && boardPosition[position[0]+1][position[1]] === "" && boardPosition[position[0]+2][position[1]] === ""){
-            potentialMovement =([[position[0]+2, position[1]], [position[0]+1, position[1]]])
-        }else{
-            if(boardPosition[position[0]+1][position[1]] === ""){
-                potentialMovement = [[position[0]+1, position[1]]]
-            }
+        ///One ahead
+        console.log(y, x)
+        if(y + 1 < 8){
+            console.log(boardPosition[y+1][x])
+            if(boardPosition[y+1][x] === ""){
+                temp.push([y+1,x])
+            }            
+            ///Two ahead
+            if((y === 6 || y === 1)){
+                if(boardPosition[y+2][x] === "" && boardPosition[y+1][x] === ""){
+                    temp.push([y+2, x])
+                }                
+            }        
         }
-        ///Checking if pawn can take piece diagonally
-        if((boardPosition[position[0]+1][position[1]+1]?.substring(0,5)) === "white"){
-            potentialMovement = [...potentialMovement, [position[0]+1, position[1]+1]]
+
+        ///Attacking
+        if(boardPosition[y+1][x+1].substring(0,1) === "w"){
+            temp.push([y+1, x+1])
         }
-        if((boardPosition[position[0]+1][position[1]-1]?.substring(0,5)) === "white"){
-            potentialMovement = [...potentialMovement, [position[0]+1, position[1]-1]]
+        if(boardPosition[y+1][x-1].substring(0,1) === "w"){
+            temp.push([y+1, x-1])
         }
     }
 
-    return potentialMovement
+
+
+
+
+    if(piece === "whitePawn"){
+        ///One ahead
+        console.log(y, x)
+        if(y - 1 < 8){
+            console.log(boardPosition[y-1][x])
+            if(boardPosition[y-1][x] === ""){
+                console.log("here")
+                ///Allow the piece to move
+                temp.push([y-1, x])
+            }            
+            ///Two ahead
+            if((y === 6 || y === 1)){
+                console.log(boardPosition[y-2][x])
+                if(boardPosition[y-2][x] === "" && boardPosition[y-1][x] === ""){
+                    ///Allow the piece to move
+                    temp.push([y-2, x])
+                }                
+            }        
+        }
+
+        ///Attacking
+        if(boardPosition[y-1][x-1].substring(0,1) === "b"){
+            temp.push([y-1, x-1])
+        }
+        if(boardPosition[y-1][x+1].substring(0,1) === "b"){
+            temp.push([y-1, x+1])
+        }
+    }
+
+
+    return temp 
 }
 
 
 
 
-
+///Using the old potentialMovement. Might have something to do with how data is sent with sockets
 
 
 
@@ -68,20 +93,23 @@ export function rookLogic(position, piece, boardPosition){
     let notBlocked = true
     let temp = []
 
+    let x = position[1]
+    let y = position[0]
+
     ///Checks bottom
     while(notBlocked){
         ///Checks for positions below
-        if(position[0] + j < 8){
-            if(boardPosition[position[0]+j][position[1]] === ""){
-                temp.push([position[0]+j, position[1]])
+        if(y + j < 8){
+            if(boardPosition[y+j][x] === ""){
+                temp.push([y+j, x])
             }else{
                 notBlocked = false
                 ///Checks if stoppage is enemy piece
-                if((boardPosition[position[0]+j][position[1]]).substring(0,1) === "w" && piece.substring(0,1) === "b"){
-                    temp.push([position[0]+j, position[1]])
+                if((boardPosition[y+j][x]).substring(0,1) === "w" && piece.substring(0,1) === "b"){
+                    temp.push([y+j, x])
                 }
-                if((boardPosition[position[0]+j][position[1]]).substring(0,1) === "b" && piece.substring(0,1) === "w"){
-                    temp.push([position[0]+j, position[1]])
+                if((boardPosition[y+j][x]).substring(0,1) === "b" && piece.substring(0,1) === "w"){
+                    temp.push([y+j, x])
                 }
             }                    
         }else{
@@ -96,17 +124,17 @@ export function rookLogic(position, piece, boardPosition){
     ///Checks top
     while(notBlocked){
         ///Checks for positions below
-        if(position[0] - j > 0){
-            if(boardPosition[position[0]-j][position[1]] === ""){
-                temp.push([position[0]-j, position[1]])
+        if(y - j > 0){
+            if(boardPosition[y-j][x] === ""){
+                temp.push([y-j, x])
             }else{
                 notBlocked = false
                 ///Checks if stoppage is enemy piece
-                if((boardPosition[position[0]-j][position[1]]).substring(0,1) === "w" && piece.substring(0,1) === "b"){
-                    temp.push([position[0]-j, position[1]])
+                if((boardPosition[y-j][x]).substring(0,1) === "w" && piece.substring(0,1) === "b"){
+                    temp.push([y-j, x])
                 }
-                if((boardPosition[position[0]-j][position[1]]).substring(0,1) === "b" && piece.substring(0,1) === "w"){
-                    temp.push([position[0]-j, position[1]])
+                if((boardPosition[y-j][x]).substring(0,1) === "b" && piece.substring(0,1) === "w"){
+                    temp.push([y-j, x])
                 }
                 potentialMovement = temp
             }
@@ -122,16 +150,16 @@ export function rookLogic(position, piece, boardPosition){
     ///Checks left
     while(notBlocked){
         ///Checks for positions below
-        if(boardPosition[position[0]][position[1]-j] === "" && boardPosition[position[0]][position[1]-j] !== undefined){
-            temp.push([position[0], position[1]-j])
+        if(boardPosition[y][x-j] === "" && boardPosition[y][x-j] !== undefined){
+            temp.push([y, x-j])
         }else{
             notBlocked = false
             ///Checks if stoppage is enemy piece
-            if((boardPosition[position[0]][position[1]-j])?.substring(0,1) === "w" && piece.substring(0,1) === "b"){
-                temp.push([position[0], position[1]-j])
+            if((boardPosition[y][x-j])?.substring(0,1) === "w" && piece.substring(0,1) === "b"){
+                temp.push([y, x-j])
             }
-            if((boardPosition[position[0]][position[1]-j])?.substring(0,1) === "b" && piece.substring(0,1) === "w"){
-                temp.push([position[0], position[1]-j])
+            if((boardPosition[y][x-j])?.substring(0,1) === "b" && piece.substring(0,1) === "w"){
+                temp.push([y, x-j])
             }
             potentialMovement = temp
         }
@@ -143,16 +171,16 @@ export function rookLogic(position, piece, boardPosition){
     ///Checks right
     while(notBlocked){
         ///Checks for positions righy
-        if(boardPosition[position[0]][position[1]+j] === "" && boardPosition[position[0]][position[1]+j] !== undefined){
-            temp.push([position[0], position[1]+j])
+        if(boardPosition[y][x+j] === "" && boardPosition[y][x+j] !== undefined){
+            temp.push([y, x+j])
         }else{
             notBlocked = false
             ///Checks if stoppage is enemy piece
-            if((boardPosition[position[0]][position[1]+j])?.substring(0,1) === "w" && piece.substring(0,1) === "b"){
-                temp.push([position[0], position[1]+j])
+            if((boardPosition[y][x+j])?.substring(0,1) === "w" && piece.substring(0,1) === "b"){
+                temp.push([y, x+j])
             }
-            if((boardPosition[position[0]][position[1]+j])?.substring(0,1) === "b" && piece.substring(0,1) === "w"){
-                temp.push([position[0], position[1]+j])
+            if((boardPosition[y][x+j])?.substring(0,1) === "b" && piece.substring(0,1) === "w"){
+                temp.push([y, x+j])
             }
             // potentialMovement = temp
             return temp
@@ -191,15 +219,18 @@ export function rookLogic(position, piece, boardPosition){
     let i = 1
     let notBlocked = true
     let temp = []
+
+    let x = position[1]
+    let y = position[0]
    
     ///Bottom right diagonal 
     while(notBlocked){
-        if(position[0]+i < 8 && position[1]+i < 8){
-            if(boardPosition[position[0]+i][position[1]+i] === ""){
-                temp.push([position[0]+i, position[1]+i])
+        if(y+i < 8 && x+i < 8){
+            if(boardPosition[y+i][x+i] === ""){
+                temp.push([y+i, x+i])
             }else{ 
-                if(checkIfOppositePiece(piece, boardPosition[position[0]+i][position[1]+i])){
-                    temp.push([position[0]+i, position[1]+i])
+                if(checkIfOppositePiece(piece, boardPosition[y+i][x+i])){
+                    temp.push([y+i, x+i])
                 }
                 notBlocked = false
             }
@@ -215,12 +246,12 @@ export function rookLogic(position, piece, boardPosition){
    
     ///Bottom left diagonal 
     while(notBlocked){
-        if(position[0]+i < 8 && position[1]-i >= 0){
-            if(boardPosition[position[0]+i][position[1]-i] === ""){
-                temp.push([position[0]+i, position[1]-i])
+        if(y+i < 8 && x-i >= 0){
+            if(boardPosition[y+i][x-i] === ""){
+                temp.push([y+i, x-i])
             }else{ 
-                if(checkIfOppositePiece(piece, boardPosition[position[0]+i][position[1]-i])){
-                    temp.push([position[0]+i, position[1]-i])
+                if(checkIfOppositePiece(piece, boardPosition[y+i][x-i])){
+                    temp.push([y+i, x-i])
                 }
                 notBlocked = false
             }
@@ -236,12 +267,12 @@ export function rookLogic(position, piece, boardPosition){
    
     ///Top left diagonal 
     while(notBlocked){
-        if(position[0]-i >= 0 && position[1]-i >= 0){
-            if(boardPosition[position[0]-i][position[1]-i] === ""){
-                temp.push([position[0]-i, position[1]-i])
+        if(y-i >= 0 && x-i >= 0){
+            if(boardPosition[y-i][x-i] === ""){
+                temp.push([y-i, x-i])
             }else{ 
-                if(checkIfOppositePiece(piece, boardPosition[position[0]-i][position[1]-i])){
-                    temp.push([position[0]-i, position[1]-i])
+                if(checkIfOppositePiece(piece, boardPosition[y-i][x-i])){
+                    temp.push([y-i, x-i])
                 }
                 notBlocked = false
             }
@@ -257,12 +288,12 @@ export function rookLogic(position, piece, boardPosition){
    
     ///Top right diagonal 
     while(notBlocked){
-        if(position[0]-i >= 0 && position[1]+i < 8){
-            if(boardPosition[position[0]-i][position[1]+i] === ""){
-                temp.push([position[0]-i, position[1]+i])
+        if(y-i >= 0 && x+i < 8){
+            if(boardPosition[y-i][x+i] === ""){
+                temp.push([y-i, x+i])
             }else{ 
-                if(checkIfOppositePiece(piece, boardPosition[position[0]-i][position[1]+i])){
-                    temp.push([position[0]-i, position[1]+i])
+                if(checkIfOppositePiece(piece, boardPosition[y-i][x+i])){
+                    temp.push([y-i, x+i])
                 }
                 notBlocked = false
             }
@@ -304,6 +335,9 @@ export function queenLogic(position, piece, boardPosition){
 export function kingLogic(position, piece, boardPosition){
     let temp = []
 
+    let x = position[1]
+    let y = position[0]
+
     ///export Functions created to return true or false depending on where king is
     function topKingCheck(num){
         return num !== 0
@@ -319,51 +353,51 @@ export function kingLogic(position, piece, boardPosition){
     }
 
     //Top Left
-    if(topKingCheck(position[0]) && leftKingCheck(position[1])){
-        if(boardPosition[position[0]-1][position[1]-1] === "" || checkIfOppositePiece(piece, boardPosition[position[0]-1][position[1]-1])){
-            temp.push([position[0]-1, position[1]-1])
+    if(topKingCheck(y) && leftKingCheck(x)){
+        if(boardPosition[y-1][x-1] === "" || checkIfOppositePiece(piece, boardPosition[y-1][x-1])){
+            temp.push([y-1, x-1])
         }                
     }
     //Top Center
-    if(topKingCheck(position[0])){
-        if(boardPosition[position[0]-1][position[1]] === "" || checkIfOppositePiece(piece, boardPosition[position[0]-1][position[1]])){
-            temp.push([position[0]-1, position[1]])
+    if(topKingCheck(y)){
+        if(boardPosition[y-1][x] === "" || checkIfOppositePiece(piece, boardPosition[y-1][x])){
+            temp.push([y-1, x])
         }                
     }
     //Top Right
-    if(topKingCheck(position[0]) && rightKingCheck(position[1])){
-        if(boardPosition[position[0]-1][position[1]+1] === "" || checkIfOppositePiece(piece, boardPosition[position[0]-1][position[1]+1])){
-            temp.push([position[0]-1, position[1]+1])
+    if(topKingCheck(y) && rightKingCheck(x)){
+        if(boardPosition[y-1][x+1] === "" || checkIfOppositePiece(piece, boardPosition[y-1][x+1])){
+            temp.push([y-1, x+1])
         }                
     }
     //Center Right
-    if(rightKingCheck(position[1])){
-        if(boardPosition[position[0]][position[1]+1] === "" || checkIfOppositePiece(piece, boardPosition[position[0]][position[1]+1])){
-            temp.push([position[0], position[1]+1])
+    if(rightKingCheck(x)){
+        if(boardPosition[y][x+1] === "" || checkIfOppositePiece(piece, boardPosition[y][x+1])){
+            temp.push([y, x+1])
         }                
     }
     //Bottom Right
-    if(rightKingCheck(position[1]) && bottomKingCheck(position[0])){
-        if(boardPosition[position[0]+1][position[1]+1] === "" || checkIfOppositePiece(piece, boardPosition[position[0]+1][position[1]+1])){
-            temp.push([position[0]+1, position[1]+1])
+    if(rightKingCheck(x) && bottomKingCheck(y)){
+        if(boardPosition[y+1][x+1] === "" || checkIfOppositePiece(piece, boardPosition[y+1][x+1])){
+            temp.push([y+1, x+1])
         }                
     }
     //Bottom Center
-    if(bottomKingCheck(position[0])){
-        if(boardPosition[position[0]+1][position[1]] === "" || checkIfOppositePiece(piece, boardPosition[position[0]+1][position[1]])){
-            temp.push([position[0]+1, position[1]])
+    if(bottomKingCheck(y)){
+        if(boardPosition[y+1][x] === "" || checkIfOppositePiece(piece, boardPosition[y+1][x])){
+            temp.push([y+1, x])
         }                
     }
     //Bottom Left
-    if(bottomKingCheck(position[0]) && leftKingCheck(position[1])){
-        if(boardPosition[position[0]+1][position[1]-1] === "" || checkIfOppositePiece(piece, boardPosition[position[0]+1][position[1]-1])){
-            temp.push([position[0]+1, position[1]-1])
+    if(bottomKingCheck(y) && leftKingCheck(x)){
+        if(boardPosition[y+1][x-1] === "" || checkIfOppositePiece(piece, boardPosition[y+1][x-1])){
+            temp.push([y+1, x-1])
         }                
     }
     //Center Left
-    if(leftKingCheck(position[1])){
-        if(boardPosition[position[0]][position[1]-1] === "" || checkIfOppositePiece(piece, boardPosition[position[0]][position[1]-1])){
-            temp.push([position[0], position[1]-1])
+    if(leftKingCheck(x)){
+        if(boardPosition[y][x-1] === "" || checkIfOppositePiece(piece, boardPosition[y][x-1])){
+            temp.push([y, x-1])
         }                
     }
 
@@ -391,55 +425,58 @@ export function knightLogic(position, piece, boardPosition){
 ///Knight Logic
     let temp = []
 
+    let x = position[1]
+    let y = position[0]
+
     ///Checks two up, one left
-    if(position[0]-2 >= 0 && position[1]-1 >= 0){
-        if(boardPosition[position[0]-2][position[1]-1] === "" || checkIfOppositePiece(piece, boardPosition[position[0]-2][position[1]-1])){
-            temp.push([position[0]-2, position[1]-1])
+    if(y-2 >= 0 && x-1 >= 0){
+        if(boardPosition[y-2][x-1] === "" || checkIfOppositePiece(piece, boardPosition[y-2][x-1])){
+            temp.push([y-2, x-1])
         }            
     }
     ///Checks one up, two left
-    if(position[0]-1 >= 0 && position[1]-2 >= 0){
-        if(boardPosition[position[0]-1][position[1]-2] === "" || checkIfOppositePiece(piece, boardPosition[position[0]-1][position[1]-2])){
-            temp.push([position[0]-1, position[1]-2])
+    if(y-1 >= 0 && x-2 >= 0){
+        if(boardPosition[y-1][x-2] === "" || checkIfOppositePiece(piece, boardPosition[y-1][x-2])){
+            temp.push([y-1, x-2])
         }            
     }
 
     ///Checks one down, two right
-    if(position[0]+1 < 7 && position[1]+2 < 7){
-        if(boardPosition[position[0]+1][position[1]+2] === "" || checkIfOppositePiece(piece, boardPosition[position[0]+1][position[1]+2])){
-            temp.push([position[0]+1, position[1]+2])
+    if(y+1 < 7 && x+2 < 7){
+        if(boardPosition[y+1][x+2] === "" || checkIfOppositePiece(piece, boardPosition[y+1][x+2])){
+            temp.push([y+1, x+2])
         }
     }
     ///Two down, one right
-    if(position[0]+2 < 7 && position[1]+1 < 7){
-        if(boardPosition[position[0]+2][position[1]+1] === "" || checkIfOppositePiece(piece, boardPosition[position[0]+2][position[1]+1])){
-            temp.push([position[0]+2, position[1]+1])
+    if(y+2 < 7 && x+1 < 7){
+        if(boardPosition[y+2][x+1] === "" || checkIfOppositePiece(piece, boardPosition[y+2][x+1])){
+            temp.push([y+2, x+1])
         }
     }
 
     ///One down, two left
-    if(position[0]+1 < 7 && position[1]-2 >= 0){
-        if(boardPosition[position[0]+1][position[1]-2] === "" || checkIfOppositePiece(piece, boardPosition[position[0]+1][position[1]-2])){
-            temp.push([position[0]+1, position[1]-2])
+    if(y+1 < 7 && x-2 >= 0){
+        if(boardPosition[y+1][x-2] === "" || checkIfOppositePiece(piece, boardPosition[y+1][x-2])){
+            temp.push([y+1, x-2])
         }
     }
     ///Two down, one left
-    if(position[0]+2 < 7 && position[1]-1 >= 0){
-        if(boardPosition[position[0]+2][position[1]-1] === "" || checkIfOppositePiece(piece, boardPosition[position[0]+2][position[1]-1])){
-            temp.push([position[0]+2, position[1]-1])
+    if(y+2 < 7 && x-1 >= 0){
+        if(boardPosition[y+2][x-1] === "" || checkIfOppositePiece(piece, boardPosition[y+2][x-1])){
+            temp.push([y+2, x-1])
         }
     }
 
     ///Checks two up, one right
-    if(position[0]-2 >= 0 && position[1]+1 < 8){
-        if(boardPosition[position[0]-2][position[1]+1] === "" || checkIfOppositePiece(piece, boardPosition[position[0]-2][position[1]+1])){
-            temp.push([position[0]-2, position[1]+1])
+    if(y-2 >= 0 && x+1 < 8){
+        if(boardPosition[y-2][x+1] === "" || checkIfOppositePiece(piece, boardPosition[y-2][x+1])){
+            temp.push([y-2, x+1])
         }            
     }
     ///Checks one up, two right
-    if(position[0]-1 >= 0 && position[1]+2 < 8){
-        if(boardPosition[position[0]-1][position[1]+2] === "" || checkIfOppositePiece(piece, boardPosition[position[0]-1][position[1]+2])){
-            temp.push([position[0]-1, position[1]+2])
+    if(y-1 >= 0 && x+2 < 8){
+        if(boardPosition[y-1][x+2] === "" || checkIfOppositePiece(piece, boardPosition[y-1][x+2])){
+            temp.push([y-1, x+2])
         }            
     }
 
@@ -458,8 +495,8 @@ export function knightLogic(position, piece, boardPosition){
 
 function checkIfOppositePiece(movingPiece, takenPiece){
  if(movingPiece.substring(0,1) !== takenPiece.substring(0,1)){
-     return true
+    return true
  }else{
-     return false
+    return false
  }
 }

@@ -53,6 +53,7 @@ const Board = () =>{
     useEffect(() =>{
         if(isConnectedToRoom){
             socket.emit("piece_moved", {boardPosition: boardPosition, room: room});
+            setPotentialMovement([]) 
         }
     }, [changeSides])
 
@@ -65,8 +66,8 @@ const Board = () =>{
         if(boardPosition){
             updateBoard()
             // checkForBlackCheck(boardPosition, kingPositions)
-            if(checkForBlackCheck(boardPosition, kingPositions)) console.log("Black Checks white")
-            if(checkForWhiteCheck(boardPosition, kingPositions)) console.log("White Checks black")
+            // if(checkForBlackCheck(boardPosition, kingPositions)) console.log("Black Checks white")
+            // if(checkForWhiteCheck(boardPosition, kingPositions)) console.log("White Checks black")
         }
     }, [potentialMovement, showPieceModal, JSON.stringify(boardPosition), whiteMoveBoolean, socketIDs])
 
@@ -90,6 +91,8 @@ const Board = () =>{
         socket.on("update_client_board", (tempBoardData) =>{
             setBoardPosition(tempBoardData.boardPosition)
             setWhiteMoveBoolean(tempBoardData.whiteMoveBoolean)
+            setPotentialMovement([]) 
+            console.log(potentialMovement)
         }) 
 
         ///Joining existing game failed
@@ -123,6 +126,7 @@ const Board = () =>{
             setBlackOrWhitePromotion("white")
         }
 
+        setPotentialMovement([]) 
         setShowPieceModal(false)
     }
 
@@ -193,7 +197,6 @@ const Board = () =>{
             })}</div>) 
         }))
     }
-    console.log(potentialMovement)
 
     if(!boardDiv || !boardPosition) return null
 
