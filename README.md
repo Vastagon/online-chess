@@ -10,3 +10,6 @@ Uses Concurently to start the server with nodemon and starts the react-scripts
 
 ### `npm run clientScript`
 Runs react-scripts start
+
+### `heroku git:remote -a vastagon-online-chess`
+Run after heroku login to create a new build and serve it for heroku
