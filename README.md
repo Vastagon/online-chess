@@ -7,3 +7,6 @@ All movement and pie taking is done. Now just need to finish logic for each piec
 
 ### `npm run dev`
 Uses Concurently to start the server with nodemon and starts the react-scripts
+
+### `npm run clientScript`
+Runs react-scripts start
