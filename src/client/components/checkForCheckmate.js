@@ -11,6 +11,7 @@ import {
 
 ///Function that runs through every piece on the board and check if it's potential movement overlaps with king's position
 export function checkForBlackCheck(boardPosition, oppositeKingPosition){
+    console.log("Checking for black check")
     for(let i = 0; i < boardPosition.length; i++){
 
         for(let j = 0; j < boardPosition[i].length; j++){

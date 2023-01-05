@@ -14,9 +14,7 @@ export function pawnLogic(position, piece, boardPosition){
 
     if(piece === "blackPawn"){
         ///One ahead
-        console.log(y, x)
         if(y + 1 < 8){
-            console.log(boardPosition[y+1][x])
             if(boardPosition[y+1][x] === ""){
                 temp.push([y+1,x])
             }            
@@ -29,12 +27,17 @@ export function pawnLogic(position, piece, boardPosition){
         }
 
         ///Attacking
-        if(boardPosition[y+1][x+1].substring(0,1) === "w"){
-            temp.push([y+1, x+1])
+        if(y + 1 < 8 && x + 1 < 8){
+            if(boardPosition[y+1][x+1].substring(0,1) === "w"){
+                temp.push([y+1, x+1])
+            }            
         }
-        if(boardPosition[y+1][x-1].substring(0,1) === "w"){
-            temp.push([y+1, x-1])
+        if(y + 1 < 8 && x - 1 >= 0){
+            if(boardPosition[y+1][x-1].substring(0,1) === "w"){
+                temp.push([y+1, x-1])
+            }
         }
+
     }
 
 
@@ -43,17 +46,13 @@ export function pawnLogic(position, piece, boardPosition){
 
     if(piece === "whitePawn"){
         ///One ahead
-        console.log(y, x)
         if(y - 1 < 8){
-            console.log(boardPosition[y-1][x])
             if(boardPosition[y-1][x] === ""){
-                console.log("here")
                 ///Allow the piece to move
                 temp.push([y-1, x])
             }            
             ///Two ahead
             if((y === 6 || y === 1)){
-                console.log(boardPosition[y-2][x])
                 if(boardPosition[y-2][x] === "" && boardPosition[y-1][x] === ""){
                     ///Allow the piece to move
                     temp.push([y-2, x])
@@ -62,12 +61,17 @@ export function pawnLogic(position, piece, boardPosition){
         }
 
         ///Attacking
-        if(boardPosition[y-1][x-1].substring(0,1) === "b"){
-            temp.push([y-1, x-1])
+        if(y - 1 >= 0 && x - 1 >= 0){
+            if(boardPosition[y-1][x-1].substring(0,1) === "b"){
+                temp.push([y-1, x-1])
+            }        
         }
-        if(boardPosition[y-1][x+1].substring(0,1) === "b"){
-            temp.push([y-1, x+1])
+        if(y - 1 >= 0 && x + 1 < 8){
+            if(boardPosition[y-1][x+1].substring(0,1) === "b"){
+                temp.push([y-1, x+1])
+            }
         }
+
     }
 
 

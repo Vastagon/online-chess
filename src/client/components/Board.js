@@ -65,11 +65,16 @@ const Board = () =>{
     useEffect(() =>{ 
         if(boardPosition){
             updateBoard()
-            // checkForBlackCheck(boardPosition, kingPositions)
-            // if(checkForBlackCheck(boardPosition, kingPositions)) console.log("Black Checks white")
-            // if(checkForWhiteCheck(boardPosition, kingPositions)) console.log("White Checks black")
         }
-    }, [potentialMovement, showPieceModal, JSON.stringify(boardPosition), whiteMoveBoolean, socketIDs])
+    }, [potentialMovement, showPieceModal, JSON.stringify(boardPosition), socketIDs])
+
+    useEffect(() =>{
+        if(boardPosition){
+            updateBoard()
+            if(checkForBlackCheck(boardPosition, kingPositions)) console.log("Black Checks white")
+            if(checkForWhiteCheck(boardPosition, kingPositions)) console.log("White Checks black")
+        }
+    }, [whiteMoveBoolean])
 
 
 
