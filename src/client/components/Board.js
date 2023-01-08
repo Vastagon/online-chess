@@ -6,6 +6,7 @@ import {v4 as uuid} from "uuid"
 import ChooseNewPiece from "./ChooseNewPiece"
 import io from "socket.io-client"
 import {checkForBlackCheck, checkForWhiteCheck} from "./checkForCheckmate"
+import {updateKingPositionsForMovementFunctions} from "./movementLogicFunctions"
 import WaitingOnSecondPlayer from "./WaitingOnSecondPlayer"
 import JoinGameModal from "./JoinGameModal"
 
@@ -181,15 +182,17 @@ const Board = () =>{
                 if(prev === "blackKing"){
                     setKingPositions(prev => ({
                         ...prev,
-                        blackKing: [rowIndex,index]
+                        blackKing: [rowIndex, index]
                     }))
+                    updateKingPositionsForMovementFunctions("black", [rowIndex, index])
                 }
                 if(prev === "whiteKing"){
                     // console.log([rowIndex,index])
                     setKingPositions(prev => ({
                         ...prev,
-                        whiteKing: [rowIndex,index]
+                        whiteKing: [rowIndex, index]
                     }))
+                    updateKingPositionsForMovementFunctions("white", [rowIndex, index])
                 }
                 
                 ///Returns square

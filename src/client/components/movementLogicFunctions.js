@@ -1,4 +1,17 @@
+import { checkForBlackCheck, checkForWhiteCheck } from "./checkForCheckmate"
+let kingPositions = {blackKing: [0,4], whiteKing: [7,4]}
 let potentialMovement = []
+
+export function updateKingPositionsForMovementFunctions(color, newPosition){
+    if(color === "white"){
+        kingPositions.whiteKing = newPosition
+    }else{
+        kingPositions.blackKing = newPosition
+    }
+
+    console.log(kingPositions)
+}
+
 ///These functions add to the potentialMovement array which is ran through in the canMove function on Board.js. They return all potential movement, which sets the potentialMovement state in Board.js to what it returns
 
 //y = the y position of the selected piece. Ranges from 0-7, 0 being the highest position on the board
