@@ -30,8 +30,9 @@ const Board = () =>{
     const [blackOrWhitePromotion, setBlackOrWhitePromotion] = useState("")
     ///Variable to decide which SocketIO room to join
     const [room, setRoom] = useState("")
-    ///Need to change variables from state if I don't need them as state
+
     const [kingPositions, setKingPositions] = useState({blackKing: [0,4], whiteKing: [7,4]})
+    const [darkenedSquares, setDarkenedSquares] = useState([])
 
     const [whiteMoveBoolean, setWhiteMoveBoolean] = useState(true)
     const [pieceClicked, setPieceClicked] = useState(false)
@@ -53,12 +54,15 @@ const Board = () =>{
     ///Runs when a piece is moved
     useEffect(() =>{
         if(isConnectedToRoom){
-            socket.emit("piece_moved", {boardPosition: boardPosition, room: room});
+            console.log(mostRecentClickedPosition)///Where the piece moved from
+            console.log(lastClickedPosition)///Where the piece moved to
+            setDarkenedSquares([mostRecentClickedPosition, lastClickedPosition])
+            socket.emit("piece_moved", {boardPosition: boardPosition, room: room, darkenedSquares: [mostRecentClickedPosition, lastClickedPosition]});
             setPotentialMovement([]) 
         }
     }, [changeSides])
 
-
+console.log(darkenedSquares)
 
 ///Need to run the checkForBlackCheck function with updated data while keeping a temporary board. If it causes an illegal check, don't update boardPosition
 
@@ -170,6 +174,7 @@ const Board = () =>{
             return(<div key={uuid()} className="board-row">{prev.map((prev, index) =>{
                 evenRow = !evenRow
                 let hasDot
+                let darken = false
 
                 ///Shows dots on all potential movement squares
                 for(let i = 0; i < potentialMovement?.length; i++){
@@ -194,6 +199,32 @@ const Board = () =>{
                     }))
                     updateKingPositionsForMovementFunctions("white", [rowIndex, index])
                 }
+
+                ///Decides if this square should be a different color
+                if(darkenedSquares?.length > 1){
+                    for(let i = 0; i < 2; i++){
+                        console.log(darkenedSquares)
+                        if(rowIndex === darkenedSquares[i][0] && index === darkenedSquares[i][1]){
+                            ///Make square different color here
+                            darken = true
+                        }                    
+                    }                    
+                }
+
+                // if(evenRow){
+                //     if(darkened){
+                //         return "darkened board-square white-square"
+                //     }else{
+                //         return "board-square white-square"
+                //     }
+                // }else{
+                //     if(darkened){
+                //         return "darkened board-square green-square"
+                //     }else{
+                //         return "board-square green-square"
+                //     }
+                // }
+
                 
                 ///Returns square
                 return (<div key={uuid()} className={evenRow ? "board-square white-square" : "board-square green-square"}>

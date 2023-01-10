@@ -24,6 +24,10 @@
     background-color: white;
     border-color: green;
 }
+.previous-square{
+    opacity: .8;
+    color: yellow;
+}
 .board-row{
     display: flex;
 }
