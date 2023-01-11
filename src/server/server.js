@@ -48,7 +48,7 @@ io.on("connection", (socket)=>{
 
             io.to(roomData.room).emit("existing_connection_successful", roomVariablesMap.get(roomData.room))
         }else{
-            console.log("Too many existing connections in room")
+            console.log("Too many existing connections in room or room doesn't exist")
             io.to(roomData.socketid).emit("existing_connection_failed")
         }
     })
@@ -89,11 +89,12 @@ io.on("connection", (socket)=>{
         
         tempBoardData.boardPosition = data.boardPosition
         tempBoardData.whiteMoveBoolean = !tempBoardData.whiteMoveBoolean
-        tempBoardData.darkenedSquares = []
+        tempBoardData.darkenedSquares = data.darkenedSquares
 
         roomVariablesMap.set(data.room, tempBoardData)
 
-        io.in(data.room).emit("update_client_board", tempBoardData);
+        ///Emiting only to other client
+        socket.to(data.room).emit("update_client_board", tempBoardData);
     })
 }) 
  

@@ -54,15 +54,13 @@ const Board = () =>{
     ///Runs when a piece is moved
     useEffect(() =>{
         if(isConnectedToRoom){
-            console.log(mostRecentClickedPosition)///Where the piece moved from
-            console.log(lastClickedPosition)///Where the piece moved to
-            setDarkenedSquares([mostRecentClickedPosition, lastClickedPosition])
+            // console.log(mostRecentClickedPosition)///Where the piece moved from
+            // console.log(lastClickedPosition)///Where the piece moved to
             socket.emit("piece_moved", {boardPosition: boardPosition, room: room, darkenedSquares: [mostRecentClickedPosition, lastClickedPosition]});
             setPotentialMovement([]) 
         }
     }, [changeSides])
 
-console.log(darkenedSquares)
 
 ///Need to run the checkForBlackCheck function with updated data while keeping a temporary board. If it causes an illegal check, don't update boardPosition
 
@@ -102,7 +100,7 @@ console.log(darkenedSquares)
             setBoardPosition(tempBoardData.boardPosition)
             setWhiteMoveBoolean(tempBoardData.whiteMoveBoolean)
             setPotentialMovement([]) 
-            console.log(potentialMovement)
+            setDarkenedSquares(tempBoardData.darkenedSquares)
         }) 
 
         ///Joining existing game failed
@@ -118,7 +116,6 @@ console.log(darkenedSquares)
             setShowWaitingOnSecondPlayer(false)
             setIsConnectedToRoom(true)
             setSocketIDs({whiteSocketID: serverSocketIDs.whiteSocketID, blackSocketID: serverSocketIDs.blackSocketID})
-            console.log("Existing connection successful")
             alert("Both players connected, begin playing")
         })
     }, [socket])
@@ -174,7 +171,8 @@ console.log(darkenedSquares)
             return(<div key={uuid()} className="board-row">{prev.map((prev, index) =>{
                 evenRow = !evenRow
                 let hasDot
-                let darken = false
+                let darkened = false
+                let squareClassName
 
                 ///Shows dots on all potential movement squares
                 for(let i = 0; i < potentialMovement?.length; i++){
@@ -203,31 +201,30 @@ console.log(darkenedSquares)
                 ///Decides if this square should be a different color
                 if(darkenedSquares?.length > 1){
                     for(let i = 0; i < 2; i++){
-                        console.log(darkenedSquares)
                         if(rowIndex === darkenedSquares[i][0] && index === darkenedSquares[i][1]){
                             ///Make square different color here
-                            darken = true
+                            darkened = true
                         }                    
                     }                    
                 }
 
-                // if(evenRow){
-                //     if(darkened){
-                //         return "darkened board-square white-square"
-                //     }else{
-                //         return "board-square white-square"
-                //     }
-                // }else{
-                //     if(darkened){
-                //         return "darkened board-square green-square"
-                //     }else{
-                //         return "board-square green-square"
-                //     }
-                // }
+                if(evenRow){
+                    if(darkened){
+                        squareClassName = "darkened board-square white-square"
+                    }else{
+                        squareClassName = "board-square white-square"
+                    }
+                }else{
+                    if(darkened){
+                        squareClassName = "darkened board-square green-square"
+                    }else{
+                        squareClassName = "board-square green-square"
+                    }
+                }
 
                 
-                ///Returns square
-                return (<div key={uuid()} className={evenRow ? "board-square white-square" : "board-square green-square"}>
+                ///Returns individual square 64 times
+                return (<div key={uuid()} className={squareClassName}>
                     <div onClick={() => potentialMovementGetsClicked([rowIndex,index])} className={hasDot ? "has-dot" : null} />
                     <Piece socket={socket} socketIDs={socketIDs} whiteMoveBoolean={whiteMoveBoolean} setLastClickedPosition={setLastClickedPosition} potentialMovementGetsClicked={potentialMovementGetsClicked} 
                         potentialMovement={potentialMovement} setPotentialMovement={setPotentialMovement} boardPosition={boardPosition} key={uuid()} pieceClicked={pieceClicked} 
