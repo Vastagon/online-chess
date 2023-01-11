@@ -88,7 +88,9 @@ io.on("connection", (socket)=>{
         let tempBoardData = roomVariablesMap.get(data.room)
         
         tempBoardData.boardPosition = data.boardPosition
+        console.log(tempBoardData.whiteMoveBoolean)
         tempBoardData.whiteMoveBoolean = !tempBoardData.whiteMoveBoolean
+        console.log(tempBoardData.whiteMoveBoolean)
         tempBoardData.darkenedSquares = data.darkenedSquares
 
         roomVariablesMap.set(data.room, tempBoardData)
