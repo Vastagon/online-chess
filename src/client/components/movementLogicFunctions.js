@@ -8,8 +8,6 @@ export function updateKingPositionsForMovementFunctions(color, newPosition){
     }else{
         kingPositions.blackKing = newPosition
     }
-
-    console.log(kingPositions)
 }
 
 ///These functions add to the potentialMovement array which is ran through in the canMove function on Board.js. They return all potential movement, which sets the potentialMovement state in Board.js to what it returns

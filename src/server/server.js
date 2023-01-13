@@ -73,8 +73,6 @@ io.on("connection", (socket)=>{
                 blackSocketID = socketID
             }
 
-            ///Set white property to one socket.id, and black to the other, alternate the ID's everytime a piece moves, 
-            ///if the client's socketID matches the server, then they can move the deisgnated color
 
 
             ///Change boolean to check if two players are connected

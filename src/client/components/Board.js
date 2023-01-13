@@ -101,6 +101,7 @@ const Board = () =>{
 
         ///When piece gets moved
         socket.on("update_client_board", (tempBoardData) =>{
+            console.log("Update Client Board")
             setBoardPosition(tempBoardData.boardPosition)
             setWhiteMoveBoolean(tempBoardData.whiteMoveBoolean)
             setPotentialMovement([]) 
@@ -144,11 +145,14 @@ const Board = () =>{
 
 
     function potentialMovementGetsClicked(clickedSquare){
+        let tempBoard = boardPosition
+        console.log(tempBoard)
         setMostRecentClickedPosition(clickedSquare)
         ///Checks if clicked square is in potentialMovement array
         for(let i = 0; i < potentialMovement.length; i++){
+            console.log("How many times is this run")
+
             if(JSON.stringify(potentialMovement[i]) === JSON.stringify(clickedSquare) ){
-                let tempBoard = boardPosition
 
                 ///Checks if pawn is near the end of the board / about to be promoted
                 if(boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] === "blackPawn" || "whitePawn"){
@@ -165,22 +169,27 @@ const Board = () =>{
                 ///Check if this movement results in check
                 ///If black, then check for black check
                 ///Illegal move check working, but piece moves anyways
-                if(boardPosition[clickedSquare[0]][clickedSquare[1]].substring(0,1) === "w"){
+                if(boardPosition[clickedSquare[0]][clickedSquare[1]].substring(0,1) === "b"){
                     if(checkForBlackCheck(boardPosition, kingPositions)){
                         ///Don't let black move
+                        console.log(tempBoard)
                         setBoardPosition(tempBoard)
                         alert("Illegal Move")
                     }else{
                         setWhiteMoveBoolean(prev => !prev)
+                        console.log("Change sides")
                         setChangeSides(prev => !prev)
                     }                    
                 }else{
                     if(checkForWhiteCheck(boardPosition, kingPositions)){
-                        ///Don't let white move    
+                        ///Don't let white move   
+                        console.log(tempBoard)
+                        ///tempBoard is the new board, keep it temporary 
                         setBoardPosition(tempBoard)
                         alert("Illegal Move")
                     }else{
                         setWhiteMoveBoolean(prev => !prev)
+                        console.log("Change sides")
                         setChangeSides(prev => !prev)
                     }
                 }
@@ -255,7 +264,7 @@ const Board = () =>{
         return (
         <div key={uuid()} className={squareClassName}>
             <div onClick={() => potentialMovementGetsClicked([rowIndex,index])} className={hasDot ? "has-dot" : null} />
-                <Piece socket={socket} socketIDs={socketIDs} whiteMoveBoolean={whiteMoveBoolean} setLastClickedPosition={setLastClickedPosition} potentialMovementGetsClicked={potentialMovementGetsClicked} 
+                <Piece socket={socket} socketIDs={socketIDs} whiteMoveBoolean={whiteMoveBoolean} setLastClickedPosition={setLastClickedPosition} 
                 potentialMovement={potentialMovement} setPotentialMovement={setPotentialMovement} boardPosition={boardPosition} key={uuid()} pieceClicked={pieceClicked} 
                 setPieceClicked={setPieceClicked} position={[rowIndex,index]} piece={boardPosition[rowIndex][index]} />
             </div>)
@@ -265,7 +274,8 @@ const Board = () =>{
     }
 
     if(!boardDiv || !boardPosition) return null
-
+///Vanguard
+//Vu
     return(
         <>
             <div className={socket.id === socketIDs.blackSocketID && isConnectedToRoom ? "black-board board" : "board"}>
