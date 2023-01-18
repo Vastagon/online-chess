@@ -26,6 +26,8 @@ const socket = io.connect(socketUrl)
 
 const Board = () =>{
     const [boardPosition, setBoardPosition] = useState(boardpositions)
+    const [tempBoardPosition, setTempBoardPosition] = useState()
+
     const [potentialMovement, setPotentialMovement] = useState([])
     const [lastClickedPosition, setLastClickedPosition] = useState()
     const [mostRecentClickedPosition, setMostRecentClickedPosition] = useState()
@@ -60,6 +62,7 @@ const Board = () =>{
             // console.log(mostRecentClickedPosition)///Where the piece moved from
             // console.log(lastClickedPosition)///Where the piece moved to
             console.log("THERE")
+            setTempBoardPosition(boardPosition)
             socket.emit("piece_moved", {boardPosition: boardPosition, room: room, darkenedSquares: [mostRecentClickedPosition, lastClickedPosition]});
             setPotentialMovement([]) 
         }
@@ -73,7 +76,7 @@ const Board = () =>{
         if(boardPosition){
             updateBoard()
         }
-    }, [potentialMovement, showPieceModal, JSON.stringify(boardPosition), socketIDs])
+    }, [potentialMovement, showPieceModal, JSON.stringify(boardPosition), socketIDs, tempBoardPosition])
 
     useEffect(() =>{
         if(boardPosition){
@@ -89,6 +92,7 @@ const Board = () =>{
     useEffect(() =>{
         ///When create new game button clicked
         socket.on("start_client_board", (data) =>{
+            console.log("Start client board")
             setBoardPosition(data.boardPosition)
             setWhiteMoveBoolean(data.whiteMoveBoolean)
             setShowWaitingOnSecondPlayer(true)
@@ -102,6 +106,7 @@ const Board = () =>{
         ///When piece gets moved
         socket.on("update_client_board", (tempBoardData) =>{
             console.log("Update Client Board")
+            setTempBoardPosition(boardPosition)
             setBoardPosition(tempBoardData.boardPosition)
             setWhiteMoveBoolean(tempBoardData.whiteMoveBoolean)
             setPotentialMovement([]) 
@@ -143,10 +148,14 @@ const Board = () =>{
         setShowPieceModal(false)
     }
 
+    useEffect(() =>{
+        console.log(tempBoardPosition)
+    }, [tempBoardPosition])
+
 
     function potentialMovementGetsClicked(clickedSquare){
-        let tempBoard = boardPosition
-        console.log(tempBoard)
+        ///This is already updated
+        // setTempBoardPosition(boardPosition)
         setMostRecentClickedPosition(clickedSquare)
         ///Checks if clicked square is in potentialMovement array
         for(let i = 0; i < potentialMovement.length; i++){
@@ -161,8 +170,14 @@ const Board = () =>{
                     }
                 }
                 
+                // ///Set a temp variable here for the board
+                // let tempBoard = boardPosition
+                // ///tempBoard is already at the new position
+                // console.log(tempBoard)
+
                 ///Resets potential movement and moves the piece to the proper location while deleting it from previous position
                 boardPosition[clickedSquare[0]][clickedSquare[1]] = boardPosition[lastClickedPosition[0]][lastClickedPosition[1]]
+                    ///Don't store the entire variable, just store the piece name and location. Switch it back like above if it's a check
                 boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] = ""
                 setPotentialMovement([])
 
@@ -172,8 +187,9 @@ const Board = () =>{
                 if(boardPosition[clickedSquare[0]][clickedSquare[1]].substring(0,1) === "b"){
                     if(checkForBlackCheck(boardPosition, kingPositions)){
                         ///Don't let black move
-                        console.log(tempBoard)
-                        setBoardPosition(tempBoard)
+                        console.log("Don't let black move")
+                        console.log(tempBoardPosition)
+                        setBoardPosition(tempBoardPosition)
                         alert("Illegal Move")
                     }else{
                         setWhiteMoveBoolean(prev => !prev)
@@ -183,9 +199,10 @@ const Board = () =>{
                 }else{
                     if(checkForWhiteCheck(boardPosition, kingPositions)){
                         ///Don't let white move   
-                        console.log(tempBoard)
                         ///tempBoard is the new board, keep it temporary 
-                        setBoardPosition(tempBoard)
+                        console.log("Don't let white move")
+                        console.log(tempBoardPosition)
+                        setBoardPosition(tempBoardPosition)
                         alert("Illegal Move")
                     }else{
                         setWhiteMoveBoolean(prev => !prev)
@@ -292,3 +309,4 @@ const Board = () =>{
 }
 
 export default Board
+///Whenever client user moves
