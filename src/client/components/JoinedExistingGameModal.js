@@ -10,7 +10,7 @@ export default function JoinedExistingGameModal(props){
     return(
         <div className="connection-failed-modal-container">
             <h3>Connected, begin playing</h3>
-            <button onClick={closeJoinedExistingGameModal}>Close</button>
+            <button id="close-join-exisiting-game-modal-button" onClick={closeJoinedExistingGameModal}>Close</button>
         </div>
     )
 }

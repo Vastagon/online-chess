@@ -1,4 +1,3 @@
-import { checkForBlackCheck, checkForWhiteCheck } from "./checkForCheckmate"
 let kingPositions = {blackKing: [0,4], whiteKing: [7,4]}
 let potentialMovement = []
 

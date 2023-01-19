@@ -69,7 +69,7 @@ io.on("connection", (socket)=>{
             let isWhite = true
             if(isWhite){
                 whiteSocketID = socketID
-            }else{
+            }else{ 
                 blackSocketID = socketID
             }
 
