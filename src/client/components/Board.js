@@ -65,6 +65,7 @@ const Board = () =>{
 
     useEffect(() =>{ 
         if(boardPosition){
+            console.log(boardPosition)
             updateBoard()
         }
     }, [potentialMovement, showPieceModal, JSON.stringify(boardPosition), socketIDs])
@@ -132,7 +133,6 @@ const Board = () =>{
             boardPosition[mostRecentClickedPosition[0]][mostRecentClickedPosition[1]] = "white" + piece
             setBlackOrWhitePromotion("white")
         }
-
         setPotentialMovement([]) 
         setShowPieceModal(false)
     }
@@ -141,13 +141,16 @@ const Board = () =>{
         setMostRecentClickedPosition(clickedSquare)
         ///Checks if clicked square is in potentialMovement array
         for(let i = 0; i < potentialMovement.length; i++){
-            console.log("How many times is this run")
-
             if(JSON.stringify(potentialMovement[i]) === JSON.stringify(clickedSquare) ){
 
                 ///Checks if pawn is near the end of the board / about to be promoted
                 if(boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] === "blackPawn" || "whitePawn"){
-                    if((lastClickedPosition[0] === 6 && boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] === "blackPawn") || (lastClickedPosition[0] === 1 && boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] === "whitePawn")){
+                    if(lastClickedPosition[0] === 6 && boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] === "blackPawn"){
+                        setBlackOrWhitePromotion("black")
+                        setShowPieceModal(true)
+                    }
+                    if(lastClickedPosition[0] === 1 && boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] === "whitePawn"){
+                        setBlackOrWhitePromotion("white")
                         setShowPieceModal(true)
                     }
                 }

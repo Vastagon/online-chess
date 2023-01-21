@@ -65,10 +65,9 @@ io.on("connection", (socket)=>{
             let blackSocketID
 
             ///Choose randomly if player is white or black
-            // let isWhite = Boolean(Math.round(Math.random() + 0.3))
-            let isWhite = true
+            let isWhite = Boolean(Math.round(Math.random() + 0.3))
             if(isWhite){
-                whiteSocketID = socketID
+                whiteSocketID = socketID 
             }else{ 
                 blackSocketID = socketID
             }
@@ -86,9 +85,7 @@ io.on("connection", (socket)=>{
         let tempBoardData = roomVariablesMap.get(data.room)
         
         tempBoardData.boardPosition = data.boardPosition
-        console.log(tempBoardData.whiteMoveBoolean)
         tempBoardData.whiteMoveBoolean = !tempBoardData.whiteMoveBoolean
-        console.log(tempBoardData.whiteMoveBoolean)
         tempBoardData.darkenedSquares = data.darkenedSquares
 
         roomVariablesMap.set(data.room, tempBoardData)

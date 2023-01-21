@@ -29,7 +29,7 @@ export function pawnLogic(position, piece, boardPosition){
                 temp.push([y+1,x])
             }            
             ///Two ahead
-            if((y === 6 || y === 1)){
+            if((y === 6 && piece.substring(0,1) === "w") || (y === 1 && piece.substring(0,1) === "b")){
                 if(boardPosition[y+2][x] === "" && boardPosition[y+1][x] === ""){
                     temp.push([y+2, x])
                 }                
@@ -56,13 +56,13 @@ export function pawnLogic(position, piece, boardPosition){
 
     if(piece === "whitePawn"){
         ///One ahead
-        if(y - 1 < 8){
+        if(y - 1 >= 0){
             if(boardPosition[y-1][x] === ""){
                 ///Allow the piece to move
                 temp.push([y-1, x])
             }            
             ///Two ahead
-            if((y === 6 || y === 1)){
+            if((y === 6 && piece.substring(0,1) === "w") || (y === 1 && piece.substring(0,1) === "b")){
                 if(boardPosition[y-2][x] === "" && boardPosition[y-1][x] === ""){
                     ///Allow the piece to move
                     temp.push([y-2, x])
