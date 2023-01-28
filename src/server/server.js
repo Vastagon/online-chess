@@ -93,6 +93,19 @@ io.on("connection", (socket)=>{
         ///Emiting only to other client
         socket.to(data.room).emit("update_client_board", tempBoardData);
     })
+
+    ///Whenever a piece gets promoted
+    socket.on("piece_promoted", (data)=>{
+        let tempBoardData = roomVariablesMap.get(data.room)
+        
+        tempBoardData.boardPosition = data.boardPosition
+        tempBoardData.darkenedSquares = data.darkenedSquares
+
+        roomVariablesMap.set(data.room, tempBoardData)
+
+        ///Emiting only to other client
+        socket.to(data.room).emit("update_client_board", tempBoardData);
+    })
 }) 
  
  

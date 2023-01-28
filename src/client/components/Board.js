@@ -65,7 +65,6 @@ const Board = () =>{
 
     useEffect(() =>{ 
         if(boardPosition){
-            console.log(boardPosition)
             updateBoard()
         }
     }, [potentialMovement, showPieceModal, JSON.stringify(boardPosition), socketIDs])
@@ -135,6 +134,7 @@ const Board = () =>{
         }
         setPotentialMovement([]) 
         setShowPieceModal(false)
+        socket.emit("piece_promoted", {boardPosition: boardPosition, room: room, darkenedSquares: [mostRecentClickedPosition, lastClickedPosition]});
     }
 
     function potentialMovementGetsClicked(clickedSquare){
