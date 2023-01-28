@@ -154,52 +154,24 @@ const Board = () =>{
                         setShowPieceModal(true)
                     }
                 }
-                
-                let previousPiece = boardPosition[lastClickedPosition[0]][lastClickedPosition[1]]
+                console.log(clickedSquare)
+                console.log(lastClickedPosition)
+                setDarkenedSquares([clickedSquare, lastClickedPosition])
 
-                ///Resets potential movement and moves the piece to the proper location while deleting it from previous position
+                ///Moves the piece to the proper location while deleting it from previous position
                 boardPosition[clickedSquare[0]][clickedSquare[1]] = boardPosition[lastClickedPosition[0]][lastClickedPosition[1]]
                 boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] = ""
+
+                ///Move piece
+                setWhiteMoveBoolean(prev => !prev)
+                setChangeSides(prev => !prev)
                 setPotentialMovement([])
-
-
-                if(boardPosition[clickedSquare[0]][clickedSquare[1]].substring(0,1) === "b"){
-                    if(checkForBlackCheck(boardPosition, kingPositions)){
-                        ///Don't let black move
-
-                        ///Change boardPosition back if their king is left in check
-                        boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] = previousPiece
-                        boardPosition[clickedSquare[0]][clickedSquare[1]] = ""
-                        alert("Illegal Move")
-                    }else{
-                        ///Move piece
-                        setWhiteMoveBoolean(prev => !prev)
-                        setChangeSides(prev => !prev)
-                    }                    
-                }else{
-                    if(checkForWhiteCheck(boardPosition, kingPositions)){
-                        ///Don't let white move   
-                        console.log("Don't let white move")
-
-                        ///Change boardPosition back if their king is left in check
-                        boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] = previousPiece
-                        boardPosition[clickedSquare[0]][clickedSquare[1]] = ""
-                        alert("Illegal Move")
-                    }else{
-                        ///Move piece
-                        setWhiteMoveBoolean(prev => !prev)
-                        setChangeSides(prev => !prev)
-                    }
-                }
             }
         }
     }
 
 
 
-
-
-    ///Shows squares it can move
     function updateBoard(){
         setBoardDiv(boardPosition.map((prev, rowIndex) =>{
             evenRow = !evenRow
@@ -243,7 +215,7 @@ const Board = () =>{
                         }                    
                     }                    
                 }
-
+                ///Determines classname for square
                 if(evenRow){
                     if(darkened){
                         squareClassName = "darkened board-square white-square"
@@ -290,4 +262,3 @@ const Board = () =>{
 }
 
 export default Board
-///Whenever client user moves
