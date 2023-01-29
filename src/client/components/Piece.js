@@ -10,6 +10,7 @@ import {
  
 const Piece = (props) =>{
     function clickPiece(){
+        console.log("clickPiece ran")
         ///Global state to save last clicked position
         props.setLastClickedPosition(props.position)
         props.setPotentialMovement([])

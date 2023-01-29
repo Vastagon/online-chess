@@ -30,3 +30,7 @@ Create a new build and serve it for heroku using their CLI
 
 ### `TODO`
 1. Check if the movement puts the person who moved it in check while checking through potentialMovement in movementLogicFunctions. If it puts them in check, don't push that position to the potentialMovement array.
+
+
+###  `General Info`
+- checkForWhiteCheck() determines if white puts black in check

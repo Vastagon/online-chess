@@ -2,7 +2,7 @@ import { checkForBlackCheck, checkForWhiteCheck } from "./checkForCheckmate"
 
 let kingPositions = {blackKing: [0,4], whiteKing: [7,4]}
 let potentialMovement = []
-
+let tempBoardCheck
 export function updateKingPositionsForMovementFunctions(color, newPosition){
     if(color === "white"){
         kingPositions.whiteKing = newPosition
@@ -19,31 +19,18 @@ export function updateKingPositionsForMovementFunctions(color, newPosition){
 //piece is the name of the selected piece
 
 export function pawnLogic(position, piece, boardPosition){
-    let tempBoardCheck = []
-
-    for(let i = 0; i < 8; i++){
-        let rowArray = []
-        for(let j = 0; j < 8; j++){
-            rowArray.push(boardPosition[i][j])
-        }
-        tempBoardCheck.push(rowArray)
-    }
-
+    tempBoardCheck = boardPosition
     let temp = []
     let x = position[1]
     let y = position[0]
-
 ///Check if near an edge before movement
 
     if(piece === "blackPawn"){
-        console.log(boardPosition)
-
         ///One ahead
         if(y + 1 < 8){
             if(boardPosition[y+1][x] === ""){
                 ///Update new potential position before checking for check
                 tempBoardCheck[y+1][x] = "blackPawn"
-
                 if(!checkForWhiteCheck(tempBoardCheck, kingPositions.blackKing)){
                     temp.push([y+1,x])
                 }
@@ -79,7 +66,6 @@ export function pawnLogic(position, piece, boardPosition){
 
 
     if(piece === "whitePawn"){
-        console.log("HERE")
         ///One ahead
         if(y - 1 >= 0){
             if(boardPosition[y-1][x] === ""){
@@ -93,7 +79,7 @@ export function pawnLogic(position, piece, boardPosition){
             if((y === 6 && piece.substring(0,1) === "w") || (y === 1 && piece.substring(0,1) === "b")){
                 if(boardPosition[y-2][x] === "" && boardPosition[y-1][x] === ""){
                     tempBoardCheck[y-2][x] = "whitePawn"
-                    
+
                     if(!checkForBlackCheck(tempBoardCheck, kingPositions.blackKing)){
                         temp.push([y-2, x])
                     }
@@ -116,7 +102,7 @@ export function pawnLogic(position, piece, boardPosition){
     }
 
 
-    return temp 
+    // return temp 
 }
 
 
@@ -228,7 +214,7 @@ export function rookLogic(position, piece, boardPosition){
                 temp.push([y, x+j])
             }
             // potentialMovement = temp
-            return temp
+            // return temp
         }
         j++
     }
@@ -349,7 +335,7 @@ export function rookLogic(position, piece, boardPosition){
         i++
     }
    
-    return temp 
+    // return temp 
    }
 
 
@@ -357,7 +343,7 @@ export function rookLogic(position, piece, boardPosition){
 export function queenLogic(position, piece, boardPosition){
     let rookAndBishop = bishopLogic(position, piece, boardPosition).concat(rookLogic(position, piece, boardPosition))
     potentialMovement = rookAndBishop
-    return potentialMovement
+    // return potentialMovement
 }
 
 

@@ -72,8 +72,8 @@ const Board = () =>{
     useEffect(() =>{
         if(boardPosition){
             updateBoard()
-            if(checkForBlackCheck(boardPosition, kingPositions)) console.log("Black Checks white")
-            if(checkForWhiteCheck(boardPosition, kingPositions)) console.log("White Checks black")
+            // if(checkForBlackCheck(boardPosition, kingPositions)) console.log("Black Checks white")
+            // if(checkForWhiteCheck(boardPosition, kingPositions)) console.log("White Checks black")
         }
     }, [whiteMoveBoolean])
 
@@ -169,6 +169,10 @@ const Board = () =>{
         }
     }
 
+///Doesn't notice boardPosition changing here
+    useEffect(() =>{
+        console.log(boardPosition)
+    }, [boardPosition])
 
 
     function updateBoard(){

@@ -26,8 +26,8 @@ const io = new Server(server, {
         origin: originUrl,
         methods: ["GET", "POST"]
     }
-}) 
-
+})
+ 
  
 
 io.on("connection", (socket)=>{
@@ -51,7 +51,7 @@ io.on("connection", (socket)=>{
             console.log("Too many existing connections in room or room doesn't exist")
             io.to(roomData.socketid).emit("existing_connection_failed")
         }
-    })
+    }) 
 
     ///Whenever new game button is clicked
     socket.on("create_new_game", async (socketID) =>{
@@ -107,7 +107,7 @@ io.on("connection", (socket)=>{
         socket.to(data.room).emit("update_client_board", tempBoardData);
     })
 }) 
- 
+
  
 //process.env.NODE_ENV
 if (process.env.NODE_ENV === "production"){

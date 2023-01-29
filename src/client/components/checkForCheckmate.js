@@ -9,7 +9,7 @@ import {
 } from "./movementLogicFunctions"
 
 
-///Function that runs through every piece on the board and check if it's potential movement overlaps with king's position
+///White Puts black in check
 export function checkForBlackCheck(boardPosition, oppositeKingPosition){
     console.log("Checking for black check")
     for(let i = 0; i < boardPosition.length; i++){
@@ -17,41 +17,42 @@ export function checkForBlackCheck(boardPosition, oppositeKingPosition){
         for(let j = 0; j < boardPosition[i].length; j++){
             let piece = boardPosition[i][j]
             let position = [i, j]
-            let potentialMovement = []
+            let checkPotentialMovement = []
     
-            ///PAWN LOGIC
+            ///Pawn Logic
             if(piece === "blackPawn"){
-                potentialMovement = pawnLogic(position, piece, boardPosition)
+                ///This is causing a loop
+                checkPotentialMovement = pawnLogic(position, piece, boardPosition)
             }
     
-            ///ROOK LOGIC
+            ///Rook Logic
             if(piece === "blackRook"){
-                potentialMovement = rookLogic(position, piece, boardPosition)
+                checkPotentialMovement = rookLogic(position, piece, boardPosition)
             }
     
             ///Bishop Logic
             if(piece === "blackBishop"){
-                potentialMovement = bishopLogic(position, piece, boardPosition) 
+                checkPotentialMovement = bishopLogic(position, piece, boardPosition) 
             }
     
             ///Queen Logic
             if(piece === "blackQueen"){
-                potentialMovement = queenLogic(position, piece, boardPosition)
+                checkPotentialMovement = queenLogic(position, piece, boardPosition)
     
             }
     
-            ///King logic
+            ///King Logic
             if(piece === "blackKing"){
-                potentialMovement = kingLogic(position, piece, boardPosition)
+                checkPotentialMovement = kingLogic(position, piece, boardPosition)
             }
     
             ///Knight Logic
             if(piece === "blackKnight"){
-                potentialMovement = knightLogic(position, piece, boardPosition)
+                checkPotentialMovement = knightLogic(position, piece, boardPosition)
             }
     
-            for(let i = 0; i < potentialMovement.length; i++){
-                if(JSON.stringify(oppositeKingPosition.whiteKing) === JSON.stringify(potentialMovement[i])){
+            for(let i = 0; i < checkPotentialMovement.length; i++){
+                if(JSON.stringify(oppositeKingPosition.whiteKing) === JSON.stringify(checkPotentialMovement[i])){
                     return true
                 }
             }
@@ -62,7 +63,7 @@ export function checkForBlackCheck(boardPosition, oppositeKingPosition){
 
 
 
-
+///White Puts black in check
 export function checkForWhiteCheck(boardPosition, oppositeKingPosition){
     for(let i = 0; i < boardPosition.length; i++){
 
