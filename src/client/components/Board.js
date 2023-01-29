@@ -154,8 +154,7 @@ const Board = () =>{
                         setShowPieceModal(true)
                     }
                 }
-                console.log(clickedSquare)
-                console.log(lastClickedPosition)
+
                 setDarkenedSquares([clickedSquare, lastClickedPosition])
 
                 ///Moves the piece to the proper location while deleting it from previous position

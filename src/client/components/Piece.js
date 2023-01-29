@@ -54,9 +54,6 @@ const Piece = (props) =>{
 
     ///Function that runs after click to see if it's white or black's turn
     function canIMovePiece(){
-        // console.log("If this is true: " + props.whiteMoveBoolean)
-        // console.log("Color is: " + props.piece.substring(0,5))
-        // console.log(props.socket.id, props.socketIDs.whiteSocketID)
         if((props.whiteMoveBoolean && props.piece.substring(0,5) === "white" && props.socket.id === props.socketIDs.whiteSocketID) || (!props.whiteMoveBoolean && props.piece.substring(0,5) === "black" && props.socket.id === props.socketIDs.blackSocketID)){
             props.setPotentialMovement([]) 
 

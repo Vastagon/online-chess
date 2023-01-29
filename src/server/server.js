@@ -104,11 +104,11 @@ io.on("connection", (socket)=>{
         roomVariablesMap.set(data.room, tempBoardData)
 
         ///Emiting only to other client
-        io.in(data.room).emit("update_client_board", tempBoardData); 
+        socket.to(data.room).emit("update_client_board", tempBoardData);
     })
-})
-
-
+}) 
+ 
+ 
 //process.env.NODE_ENV
 if (process.env.NODE_ENV === "production"){
     console.log(path.join(__dirname, "../../build"))
@@ -126,4 +126,4 @@ if (process.env.NODE_ENV === "production"){
 
 server.listen(process.env.PORT || 3001, () =>{
     console.log(`Server is running on: ${process.env.PORT || 3001}`)
-}) 
+})
