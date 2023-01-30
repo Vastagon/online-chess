@@ -33,7 +33,6 @@ export function pawnLogic(position, piece, boardPosition){
     let x = position[1]
     let y = position[0]
 
-///Check if near an edge before movement
 
     if(piece === "blackPawn"){
         console.log(boardPosition)

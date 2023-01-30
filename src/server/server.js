@@ -3,7 +3,7 @@ const app = express()
 const http = require('http')
 const {Server} = require('socket.io')
 const cors = require('cors')
-let initialBoardPositions = require('./boardpositions.json')
+let initialBoardPositions = require('../boardpositions.json')
 const path = require('path')
 
 app.use(cors())
@@ -25,7 +25,7 @@ const io = new Server(server, {
     cors: { 
         origin: originUrl,
         methods: ["GET", "POST"]
-    }
+    }  
 })
  
  

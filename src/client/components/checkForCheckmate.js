@@ -76,7 +76,7 @@ export function checkForWhiteCheck(boardPosition, oppositeKingPosition){
             if(piece === "whitePawn"){
                 potentialMovement = pawnLogic(position, piece, boardPosition)
             }
-    
+
             ///ROOK LOGIC
             if(piece === "whiteRook"){
                 potentialMovement = rookLogic(position, piece, boardPosition)
@@ -111,3 +111,24 @@ export function checkForWhiteCheck(boardPosition, oppositeKingPosition){
         }
     }
 }
+
+
+// function checkPushPotentialMovement(position){
+//     tempBoardCheck[position[0]][position[1]] = "black"
+//     if(isWhite){
+//         tempBoardCheck[position[0]][position[1]] = "whiteBishop"
+//         tempBoardCheck[y, x] = ""
+
+//         if(!checkForBlackCheck(tempBoardCheck, kingPositions.whiteKing)){
+//             temp.push(position)
+//         }
+//     }
+//     if(!isWhite){
+//         tempBoardCheck[position[0]][position[1]] = "blackBishop"
+//         tempBoardCheck[y, x] = ""
+
+//         if(!checkForWhiteCheck(tempBoardCheck, kingPositions.blackKing)){
+//             temp.push(position)
+//         }
+//     }
+// }
