@@ -169,10 +169,6 @@ const Board = () =>{
         }
     }
 
-///Doesn't notice boardPosition changing here
-    useEffect(() =>{
-        console.log(boardPosition)
-    }, [boardPosition])
 
 
     function updateBoard(){
@@ -237,9 +233,9 @@ const Board = () =>{
         return (
         <div key={uuid()} className={squareClassName}>
             <div onClick={() => potentialMovementGetsClicked([rowIndex,index])} className={hasDot ? "has-dot" : null} />
-                <Piece socket={socket} socketIDs={socketIDs} whiteMoveBoolean={whiteMoveBoolean} setLastClickedPosition={setLastClickedPosition} 
+                <Piece socket={socket} socketIDs={socketIDs} whiteMoveBoolean={whiteMoveBoolean} lastClickedPosition={lastClickedPosition} setLastClickedPosition={setLastClickedPosition} 
                 potentialMovement={potentialMovement} setPotentialMovement={setPotentialMovement} boardPosition={boardPosition} key={uuid()} pieceClicked={pieceClicked} 
-                setPieceClicked={setPieceClicked} position={[rowIndex,index]} piece={boardPosition[rowIndex][index]} />
+                setPieceClicked={setPieceClicked} position={[rowIndex,index]} piece={boardPosition[rowIndex][index]} kingPositions={kingPositions} />
             </div>)
             })}
         </div>) 

@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react"
 import "../styles/board.css"
+import { checkForExisitingCheckmates } from "./checkForExistingCheckmates"
 import {
     pawnLogic,
     rookLogic,
@@ -9,6 +11,8 @@ import {
 } from "./movementLogicFunctions"
  
 const Piece = (props) =>{
+    const [endPieceLogic, setEndPieceLogic] = useState(true)
+
     function clickPiece(){
         console.log("clickPiece ran")
         ///Global state to save last clicked position
@@ -48,9 +52,13 @@ const Piece = (props) =>{
             props.setPotentialMovement(knightLogic(props.position, props.piece, props.boardPosition))
         }
 
-
+        setEndPieceLogic(prev => !prev)
+        // console.log(checkForExisitingCheckmates(props.boardPosition, props.potentialMovement, props.piece, props.kingPositions, props.lastClickedPosition))
     }///End of piece movement logic
 
+    // useEffect(() =>{
+    //     console.log(checkForExisitingCheckmates(props.boardPosition, props.potentialMovement, props.piece, props.kingPositions, props.lastClickedPosition))
+    // }, [endPieceLogic])
 
 
     ///Function that runs after click to see if it's white or black's turn

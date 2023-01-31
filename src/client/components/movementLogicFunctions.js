@@ -19,15 +19,14 @@ export function updateKingPositionsForMovementFunctions(color, newPosition){
 //piece is the name of the selected piece
 
 export function pawnLogic(position, piece, boardPosition){
-    let tempBoardCheck = []
 
-    for(let i = 0; i < 8; i++){
-        let rowArray = []
-        for(let j = 0; j < 8; j++){
-            rowArray.push(boardPosition[i][j])
-        }
-        tempBoardCheck.push(rowArray)
-    }
+    // for(let i = 0; i < 8; i++){
+    //     let rowArray = []
+    //     for(let j = 0; j < 8; j++){
+    //         rowArray.push(boardPosition[i][j])
+    //     }
+    //     tempBoardCheck.push(rowArray)
+    // }
 
     let temp = []
     let x = position[1]
@@ -35,26 +34,18 @@ export function pawnLogic(position, piece, boardPosition){
 
 
     if(piece === "blackPawn"){
-        console.log(boardPosition)
+        // console.log(boardPosition)
 
         ///One ahead
         if(y + 1 < 8){
             if(boardPosition[y+1][x] === ""){
                 ///Update new potential position before checking for check
-                tempBoardCheck[y+1][x] = "blackPawn"
-
-                if(!checkForWhiteCheck(tempBoardCheck, kingPositions.blackKing)){
-                    temp.push([y+1,x])
-                }
+                temp.push([y+1,x])
             }            
             ///Two ahead
             if((y === 6 && piece.substring(0,1) === "w") || (y === 1 && piece.substring(0,1) === "b")){
                 if(boardPosition[y+2][x] === "" && boardPosition[y+1][x] === ""){
-                    tempBoardCheck[y+2][x] = "blackPawn"
-
-                    if(!checkForWhiteCheck(tempBoardCheck, kingPositions.blackKing)){
-                        temp.push([y+2, x])
-                    }
+                    temp.push([y+2, x])
                 }                
             }        
         }
@@ -78,24 +69,15 @@ export function pawnLogic(position, piece, boardPosition){
 
 
     if(piece === "whitePawn"){
-        console.log("HERE")
         ///One ahead
         if(y - 1 >= 0){
             if(boardPosition[y-1][x] === ""){
-                tempBoardCheck[y-1][x] = "whitePawn"
-
-                if(!checkForBlackCheck(tempBoardCheck, kingPositions.blackKing)){
-                    temp.push([y-1, x])
-                }
+                temp.push([y-1, x])
             }            
             ///Two ahead
             if((y === 6 && piece.substring(0,1) === "w") || (y === 1 && piece.substring(0,1) === "b")){
-                if(boardPosition[y-2][x] === "" && boardPosition[y-1][x] === ""){
-                    tempBoardCheck[y-2][x] = "whitePawn"
-                    
-                    if(!checkForBlackCheck(tempBoardCheck, kingPositions.blackKing)){
-                        temp.push([y-2, x])
-                    }
+                if(boardPosition[y-2][x] === "" && boardPosition[y-1][x] === ""){                    
+                    temp.push([y-2, x])
                 }                
             }        
         }
