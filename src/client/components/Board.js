@@ -69,6 +69,12 @@ const Board = () =>{
         }
     }, [potentialMovement, showPieceModal, JSON.stringify(boardPosition), socketIDs])
 
+    // useEffect(() =>{
+    //     if(boardPosition){
+    //         updateBoard()
+    //     }
+    // }, [potentialMovement])
+
     useEffect(() =>{
         if(boardPosition){
             updateBoard()

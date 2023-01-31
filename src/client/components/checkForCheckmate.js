@@ -11,6 +11,8 @@ import {
 
 ///White Puts black in check
 export function checkForBlackCheck(boardPosition, oppositeKingPosition){
+    // console.log(boardPosition)
+    // console.log(oppositeKingPosition)
     console.log("Checking for black check")
     for(let i = 0; i < boardPosition.length; i++){
 
@@ -50,11 +52,11 @@ export function checkForBlackCheck(boardPosition, oppositeKingPosition){
             if(piece === "blackKnight"){
                 checkPotentialMovement = knightLogic(position, piece, boardPosition)
             }
-    
-            console.log(checkPotentialMovement)
-            
+            // console.log("TEST")
+            // // console.log({potentialMovement: checkPotentialMovement, position: position})
+            // console.log(checkPotentialMovement)
             for(let i = 0; i < checkPotentialMovement.length; i++){
-                if(JSON.stringify(oppositeKingPosition.whiteKing) === JSON.stringify(checkPotentialMovement[i])){
+                if(JSON.stringify(oppositeKingPosition) === JSON.stringify(checkPotentialMovement[i])){
                     return true
                 }
             }
@@ -74,12 +76,12 @@ export function checkForWhiteCheck(boardPosition, oppositeKingPosition){
             let position = [i, j]
             let potentialMovement = []
     
-            ///PAWN LOGIC
+            ///Pawn Logic
             if(piece === "whitePawn"){
                 potentialMovement = pawnLogic(position, piece, boardPosition)
             }
 
-            ///ROOK LOGIC
+            ///Rook Logic
             if(piece === "whiteRook"){
                 potentialMovement = rookLogic(position, piece, boardPosition)
             }
@@ -107,7 +109,6 @@ export function checkForWhiteCheck(boardPosition, oppositeKingPosition){
 
 
             ///Check each potential movement and determine if it's in check
-    
             for(let i = 0; i < potentialMovement.length; i++){
                 if(JSON.stringify(oppositeKingPosition.blackKing) === JSON.stringify(potentialMovement[i])){
                     return true
@@ -116,24 +117,3 @@ export function checkForWhiteCheck(boardPosition, oppositeKingPosition){
         }
     }
 }
-
-
-// function checkPushPotentialMovement(position){
-//     tempBoardCheck[position[0]][position[1]] = "black"
-//     if(isWhite){
-//         tempBoardCheck[position[0]][position[1]] = "whiteBishop"
-//         tempBoardCheck[y, x] = ""
-
-//         if(!checkForBlackCheck(tempBoardCheck, kingPositions.whiteKing)){
-//             temp.push(position)
-//         }
-//     }
-//     if(!isWhite){
-//         tempBoardCheck[position[0]][position[1]] = "blackBishop"
-//         tempBoardCheck[y, x] = ""
-
-//         if(!checkForWhiteCheck(tempBoardCheck, kingPositions.blackKing)){
-//             temp.push(position)
-//         }
-//     }
-// }

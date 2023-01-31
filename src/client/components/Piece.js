@@ -12,6 +12,7 @@ import {
  
 const Piece = (props) =>{
     const [endPieceLogic, setEndPieceLogic] = useState(true)
+    let tempPotential = []
 
     function clickPiece(){
         console.log("clickPiece ran")
@@ -23,37 +24,36 @@ const Piece = (props) =>{
         ///This is logging proper piece and isn't changing
         ///PAWN LOGIC
         if(props.piece === "blackPawn" || props.piece === "whitePawn"){
-            props.setPotentialMovement(pawnLogic(props.position, props.piece, props.boardPosition))
+            tempPotential = pawnLogic(props.position, props.piece, props.boardPosition)
         }
   
         ///ROOK LOGIC
         if(props.piece === "blackRook" || props.piece === "whiteRook"){
-            props.setPotentialMovement(rookLogic(props.position, props.piece, props.boardPosition))
+            tempPotential = rookLogic(props.position, props.piece, props.boardPosition)
         }
 
         ///Bishop Logic
         if(props.piece === "blackBishop" || props.piece === "whiteBishop"){
-            props.setPotentialMovement(bishopLogic(props.position, props.piece, props.boardPosition))
+            tempPotential = bishopLogic(props.position, props.piece, props.boardPosition)
         }
 
         ///Queen Logic
         if(props.piece === "blackQueen" || props.piece === "whiteQueen"){
-            props.setPotentialMovement(queenLogic(props.position, props.piece, props.boardPosition))
+            tempPotential = queenLogic(props.position, props.piece, props.boardPosition)
 
         }
  
         ///King logic
         if(props.piece === "blackKing" || props.piece === "whiteKing"){
-            props.setPotentialMovement(kingLogic(props.position, props.piece, props.boardPosition))
+            tempPotential = kingLogic(props.position, props.piece, props.boardPosition)
         }
 
         ///Knight Logic
         if(props.piece === "blackKnight" || props.piece === "whiteKnight"){
-            props.setPotentialMovement(knightLogic(props.position, props.piece, props.boardPosition))
+            tempPotential = knightLogic(props.position, props.piece, props.boardPosition)
         }
-
-        setEndPieceLogic(prev => !prev)
-        // console.log(checkForExisitingCheckmates(props.boardPosition, props.potentialMovement, props.piece, props.kingPositions, props.lastClickedPosition))
+        // console.log(tempPotential)
+        props.setPotentialMovement(checkForExisitingCheckmates(props.boardPosition, tempPotential, props.piece, props.kingPositions, props.position))
     }///End of piece movement logic
 
     // useEffect(() =>{
