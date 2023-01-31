@@ -11,9 +11,7 @@ import {
 
 ///White Puts black in check
 export function checkForBlackCheck(boardPosition, oppositeKingPosition){
-    // console.log(boardPosition)
-    // console.log(oppositeKingPosition)
-    console.log("Checking for black check")
+    console.log("Checking if white is in check")
     for(let i = 0; i < boardPosition.length; i++){
 
         for(let j = 0; j < boardPosition[i].length; j++){
@@ -52,9 +50,8 @@ export function checkForBlackCheck(boardPosition, oppositeKingPosition){
             if(piece === "blackKnight"){
                 checkPotentialMovement = knightLogic(position, piece, boardPosition)
             }
-            // console.log("TEST")
-            // // console.log({potentialMovement: checkPotentialMovement, position: position})
-            // console.log(checkPotentialMovement)
+
+
             for(let i = 0; i < checkPotentialMovement.length; i++){
                 if(JSON.stringify(oppositeKingPosition) === JSON.stringify(checkPotentialMovement[i])){
                     return true
@@ -69,6 +66,7 @@ export function checkForBlackCheck(boardPosition, oppositeKingPosition){
 
 ///White Puts black in check
 export function checkForWhiteCheck(boardPosition, oppositeKingPosition){
+    console.log("Checking if black is in check")
     for(let i = 0; i < boardPosition.length; i++){
 
         for(let j = 0; j < boardPosition[i].length; j++){

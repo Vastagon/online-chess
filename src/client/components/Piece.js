@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react"
 import "../styles/board.css"
 import { checkForExisitingCheckmates } from "./checkForExistingCheckmates"
 import {
@@ -11,23 +10,18 @@ import {
 } from "./movementLogicFunctions"
  
 const Piece = (props) =>{
-    const [endPieceLogic, setEndPieceLogic] = useState(true)
     let tempPotential = []
 
     function clickPiece(){
-        console.log("clickPiece ran")
-        ///Global state to save last clicked position
         props.setLastClickedPosition(props.position)
         props.setPotentialMovement([])
  
-        // console.log("Clicked piece position: " + props.position)
-        ///This is logging proper piece and isn't changing
-        ///PAWN LOGIC
+        ///Pawn Logic
         if(props.piece === "blackPawn" || props.piece === "whitePawn"){
             tempPotential = pawnLogic(props.position, props.piece, props.boardPosition)
         }
   
-        ///ROOK LOGIC
+        ///Rook Logic
         if(props.piece === "blackRook" || props.piece === "whiteRook"){
             tempPotential = rookLogic(props.position, props.piece, props.boardPosition)
         }
@@ -43,7 +37,7 @@ const Piece = (props) =>{
 
         }
  
-        ///King logic
+        ///King Logic
         if(props.piece === "blackKing" || props.piece === "whiteKing"){
             tempPotential = kingLogic(props.position, props.piece, props.boardPosition)
         }
@@ -52,13 +46,10 @@ const Piece = (props) =>{
         if(props.piece === "blackKnight" || props.piece === "whiteKnight"){
             tempPotential = knightLogic(props.position, props.piece, props.boardPosition)
         }
-        // console.log(tempPotential)
+
         props.setPotentialMovement(checkForExisitingCheckmates(props.boardPosition, tempPotential, props.piece, props.kingPositions, props.position))
     }///End of piece movement logic
 
-    // useEffect(() =>{
-    //     console.log(checkForExisitingCheckmates(props.boardPosition, props.potentialMovement, props.piece, props.kingPositions, props.lastClickedPosition))
-    // }, [endPieceLogic])
 
 
     ///Function that runs after click to see if it's white or black's turn
