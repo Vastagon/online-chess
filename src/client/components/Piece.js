@@ -47,6 +47,7 @@ const Piece = (props) =>{
             tempPotential = knightLogic(props.position, props.piece, props.boardPosition)
         }
 
+        ///Doesn't allow the player to put themselves into check. Needs to force them to stop a check when it happens
         props.setPotentialMovement(checkForExisitingCheckmates(props.boardPosition, tempPotential, props.piece, props.kingPositions, props.position))
     }///End of piece movement logic
 

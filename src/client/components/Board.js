@@ -5,7 +5,6 @@ import boardpositions from "../../boardpositions.json"
 import {v4 as uuid} from "uuid"
 import ChooseNewPiece from "./ChooseNewPiece"
 import io from "socket.io-client"
-import {checkForBlackCheck, checkForWhiteCheck} from "./checkForCheckmate"
 import {updateKingPositionsForMovementFunctions} from "./movementLogicFunctions"
 import WaitingOnSecondPlayer from "./WaitingOnSecondPlayer"
 import JoinGameModal from "./JoinGameModal"
@@ -31,7 +30,7 @@ const Board = () =>{
     const [blackOrWhitePromotion, setBlackOrWhitePromotion] = useState("")
     const [room, setRoom] = useState("")
 
-    const [kingPositions, setKingPositions] = useState({blackKing: [0,4], whiteKing: [7,4]})
+    const [kingPositions, setKingPositions] = useState({blackKing: [0,5], whiteKing: [7,4]})
     const [darkenedSquares, setDarkenedSquares] = useState([])
 
     const [whiteMoveBoolean, setWhiteMoveBoolean] = useState(true)
@@ -50,7 +49,6 @@ const Board = () =>{
     const [boardDiv, setBoardDiv] = useState()
     const [socketIDs, setSocketIDs] = useState({})
     let evenRow = true
-
 
     ///Runs when a piece is moved
     useEffect(() =>{

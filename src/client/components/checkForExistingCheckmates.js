@@ -2,6 +2,7 @@ import { checkForBlackCheck, checkForWhiteCheck } from "./checkForCheckmate"
 
 export function checkForExisitingCheckmates(boardPosition, potentialMovement, piece, kingPositions, lastClickedPosition){
     let tempBoardCheck
+    let tempKingPosition
 
     function createNewArray(){
         let tempNewBoard = []
@@ -22,24 +23,37 @@ export function checkForExisitingCheckmates(boardPosition, potentialMovement, pi
 
         for(let i = 0; i < potentialMovement.length; i++){
             tempBoardCheck = createNewArray()
+            if(piece === "whiteKing"){
+                tempKingPosition = [potentialMovement[i][0], potentialMovement[i][1]]
+            }else{
+                tempKingPosition = kingPositions.whiteKing
+            }
+
             tempBoardCheck[potentialMovement[i][0]][potentialMovement[i][1]] = piece
             tempBoardCheck[lastClickedPosition[0]][lastClickedPosition[1]] = ""
 
-            if(checkForBlackCheck(tempBoardCheck, kingPositions.whiteKing)){
+            if(checkForBlackCheck(tempBoardCheck, tempKingPosition)){
                 potentialMovement.splice(i, 1)
                 i--
             }
         }
 
-        // console.log(potentialMovement)
         return potentialMovement        
     }else{
+        console.log("Checking if black is in check")
+
         for(let i = 0; i < potentialMovement.length; i++){
             tempBoardCheck = createNewArray()
+            if(piece === "blackKing"){
+                tempKingPosition = [potentialMovement[i][0], potentialMovement[i][1]]
+            }else{
+                tempKingPosition = kingPositions.blackKing
+            }
+
             tempBoardCheck[potentialMovement[i][0]][potentialMovement[i][1]] = piece
             tempBoardCheck[lastClickedPosition[0]][lastClickedPosition[1]] = ""
 
-            if(checkForWhiteCheck(tempBoardCheck, kingPositions.blackKing)){
+            if(checkForWhiteCheck(tempBoardCheck, tempKingPosition)){
                 potentialMovement.splice(i, 1)
                 i--
             }

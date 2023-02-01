@@ -72,43 +72,43 @@ export function checkForWhiteCheck(boardPosition, oppositeKingPosition){
         for(let j = 0; j < boardPosition[i].length; j++){
             let piece = boardPosition[i][j]
             let position = [i, j]
-            let potentialMovement = []
+            let checkPotentialMovement = []
     
             ///Pawn Logic
             if(piece === "whitePawn"){
-                potentialMovement = pawnLogic(position, piece, boardPosition)
+                checkPotentialMovement = pawnLogic(position, piece, boardPosition)
             }
 
             ///Rook Logic
             if(piece === "whiteRook"){
-                potentialMovement = rookLogic(position, piece, boardPosition)
+                checkPotentialMovement = rookLogic(position, piece, boardPosition)
             }
     
             ///Bishop Logic
             if(piece === "whiteBishop"){
-                potentialMovement = bishopLogic(position, piece, boardPosition) 
+                checkPotentialMovement = bishopLogic(position, piece, boardPosition) 
             }
     
             ///Queen Logic
             if(piece === "whiteQueen"){
-                potentialMovement = queenLogic(position, piece, boardPosition)
+                checkPotentialMovement = queenLogic(position, piece, boardPosition)
     
             }
     
             ///King logic
             if(piece === "whiteKing"){
-                potentialMovement = kingLogic(position, piece, boardPosition)
+                checkPotentialMovement = kingLogic(position, piece, boardPosition)
             }
     
             ///Knight Logic
             if(piece === "whiteKnight"){
-                potentialMovement = knightLogic(position, piece, boardPosition)
+                checkPotentialMovement = knightLogic(position, piece, boardPosition)
             }
 
 
             ///Check each potential movement and determine if it's in check
-            for(let i = 0; i < potentialMovement.length; i++){
-                if(JSON.stringify(oppositeKingPosition.blackKing) === JSON.stringify(potentialMovement[i])){
+            for(let i = 0; i < checkPotentialMovement.length; i++){
+                if(JSON.stringify(oppositeKingPosition) === JSON.stringify(checkPotentialMovement[i])){
                     return true
                 }
             }

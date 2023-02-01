@@ -1,6 +1,4 @@
-import { checkForBlackCheck, checkForWhiteCheck } from "./checkForCheckmate"
-
-let kingPositions = {blackKing: [0,4], whiteKing: [7,4]}
+let kingPositions = {blackKing: [0,5], whiteKing: [7,4]}
 let potentialMovement = []
 
 export function updateKingPositionsForMovementFunctions(color, newPosition){
@@ -19,15 +17,6 @@ export function updateKingPositionsForMovementFunctions(color, newPosition){
 //piece is the name of the selected piece
 
 export function pawnLogic(position, piece, boardPosition){
-
-    // for(let i = 0; i < 8; i++){
-    //     let rowArray = []
-    //     for(let j = 0; j < 8; j++){
-    //         rowArray.push(boardPosition[i][j])
-    //     }
-    //     tempBoardCheck.push(rowArray)
-    // }
-
     let temp = []
     let x = position[1]
     let y = position[0]
