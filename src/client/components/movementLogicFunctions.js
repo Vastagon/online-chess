@@ -23,8 +23,6 @@ export function pawnLogic(position, piece, boardPosition){
 
 
     if(piece === "blackPawn"){
-        // console.log(boardPosition)
-
         ///One ahead
         if(y + 1 < 8){
             if(boardPosition[y+1][x] === ""){

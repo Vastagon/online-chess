@@ -1,14 +1,20 @@
 import "../styles/board.css"
-import { useEffect, useState } from "react"
-import Piece from "./Piece"
-import boardpositions from "../../boardpositions.json"
-import {v4 as uuid} from "uuid"
-import ChooseNewPiece from "./ChooseNewPiece"
 import io from "socket.io-client"
-import {updateKingPositionsForMovementFunctions} from "./movementLogicFunctions"
+import {useEffect, useState} from "react"
+import {v4 as uuid} from "uuid"
+
+import boardpositions from "../../boardpositions.json"
+import { updateKingPositionsForMovementFunctions } from "./movementLogicFunctions"
+import { checkForMate } from "./checkForMate"
+import { checkForBlackCheck, checkForWhiteCheck } from "./checkForCheck"
+
 import WaitingOnSecondPlayer from "./WaitingOnSecondPlayer"
 import JoinGameModal from "./JoinGameModal"
 import JoinedExistingGameModal from "./JoinedExistingGameModal"
+import WinScreen from "./WinScreen"
+import ChooseNewPiece from "./ChooseNewPiece"
+import Piece from "./Piece"
+
 
 let socketUrl
 
@@ -37,6 +43,7 @@ const Board = () =>{
     const [pieceClicked, setPieceClicked] = useState(false)
     const [isConnectedToRoom, setIsConnectedToRoom] = useState(false)
     const [changeSides, setChangeSides] = useState(false)
+    const [checkOrStale, setCheckOrStale] = useState()
 
     ///States for displaying modals
     const [showJoinGame, setShowJoinGame] = useState(true)
@@ -44,22 +51,46 @@ const Board = () =>{
     const [showWaitingOnSecondPlayer, setShowWaitingOnSecondPlayer] = useState(false)
     const [showJoinedExistingGameModal, setShowJoinedExistingGameModal] = useState(false)
     const [showPieceModal, setShowPieceModal] = useState(false)
+    const [showWinScreen, setShowWinScreen] = useState(false)
 
 
     const [boardDiv, setBoardDiv] = useState()
     const [socketIDs, setSocketIDs] = useState({})
     let evenRow = true
 
+    function checkForMateOrStalemate(boardPosition, kingPositions, whiteMoveBoolean){
+        if(!whiteMoveBoolean){
+            if(checkForBlackCheck(boardPosition, kingPositions.whiteKing)){
+                alert("Stalemate")
+                return "stalemate"
+            }else{
+                alert("White checkmates black")
+                return "checkmate"
+            }
+        }else{
+            if(checkForWhiteCheck(boardPosition, kingPositions.blackKing)){
+                alert("Stalemate")
+                return "stalemate"
+            }else{
+                alert("Black checkmates white")
+                return "checkmate"
+            }        
+        }
+    }
+
     ///Runs when a piece is moved
     useEffect(() =>{
         if(isConnectedToRoom){
             // console.log(mostRecentClickedPosition)///Where the piece moved from
             // console.log(lastClickedPosition)///Where the piece moved to
+            if(checkForMate(boardPosition, kingPositions, whiteMoveBoolean)){
+                setCheckOrStale(checkForMateOrStalemate(boardPosition, kingPositions, whiteMoveBoolean))
+                setShowWinScreen(true)
+            }
             socket.emit("piece_moved", {boardPosition: boardPosition, room: room, darkenedSquares: [mostRecentClickedPosition, lastClickedPosition]});
             setPotentialMovement([]) 
         }
     }, [changeSides])
-
 
     useEffect(() =>{ 
         if(boardPosition){
@@ -67,11 +98,6 @@ const Board = () =>{
         }
     }, [potentialMovement, showPieceModal, JSON.stringify(boardPosition), socketIDs])
 
-    // useEffect(() =>{
-    //     if(boardPosition){
-    //         updateBoard()
-    //     }
-    // }, [potentialMovement])
 
     useEffect(() =>{
         if(boardPosition){
@@ -255,6 +281,7 @@ const Board = () =>{
 
             {showJoinGame ? <JoinGameModal setShowFailedConnectionModal={setShowFailedConnectionModal} showFailedConnectionModal={showFailedConnectionModal} socket={socket} room={room} setRoom={setRoom} showJoinGame={showJoinGame}/> : null}
 
+            {showWinScreen ? <WinScreen /> : null}
             {showWaitingOnSecondPlayer ? <WaitingOnSecondPlayer room={room} /> : null}
             {showJoinedExistingGameModal ? <JoinedExistingGameModal setShowJoinedExistingGameModal={setShowJoinedExistingGameModal} /> : null}
         </>

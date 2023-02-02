@@ -1,4 +1,3 @@
-///Go through every piece and check if the potential movement === the position of the opposite king
 import {
     pawnLogic,
     rookLogic,
@@ -11,7 +10,6 @@ import {
 
 ///White Puts black in check
 export function checkForBlackCheck(boardPosition, oppositeKingPosition){
-    console.log("Checking if white is in check")
     for(let i = 0; i < boardPosition.length; i++){
 
         for(let j = 0; j < boardPosition[i].length; j++){
@@ -21,7 +19,6 @@ export function checkForBlackCheck(boardPosition, oppositeKingPosition){
     
             ///Pawn Logic
             if(piece === "blackPawn"){
-                ///This is causing a loop
                 checkPotentialMovement = pawnLogic(position, piece, boardPosition)
             }
     
@@ -66,7 +63,6 @@ export function checkForBlackCheck(boardPosition, oppositeKingPosition){
 
 ///White Puts black in check
 export function checkForWhiteCheck(boardPosition, oppositeKingPosition){
-    console.log("Checking if black is in check")
     for(let i = 0; i < boardPosition.length; i++){
 
         for(let j = 0; j < boardPosition[i].length; j++){

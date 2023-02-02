@@ -1,4 +1,4 @@
-import { checkForBlackCheck, checkForWhiteCheck } from "./checkForCheckmate"
+import { checkForBlackCheck, checkForWhiteCheck } from "./checkForCheck"
 
 export function checkForExisitingCheckmates(boardPosition, potentialMovement, piece, kingPositions, lastClickedPosition){
     let tempBoardCheck
@@ -19,8 +19,6 @@ export function checkForExisitingCheckmates(boardPosition, potentialMovement, pi
     }
 
     if(piece.substring(0,1) === "w"){
-        console.log("Checking if white is in check")
-
         for(let i = 0; i < potentialMovement.length; i++){
             tempBoardCheck = createNewArray()
             if(piece === "whiteKing"){
@@ -40,9 +38,7 @@ export function checkForExisitingCheckmates(boardPosition, potentialMovement, pi
 
         return potentialMovement        
     }else{
-        console.log("Checking if black is in check")
-
-        for(let i = 0; i < potentialMovement.length; i++){
+        for(let i = 0; i < potentialMovement?.length; i++){
             tempBoardCheck = createNewArray()
             if(piece === "blackKing"){
                 tempKingPosition = [potentialMovement[i][0], potentialMovement[i][1]]

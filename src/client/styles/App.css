@@ -40,8 +40,15 @@ h3{
   left: 30vw;
   background-color: green;
 }
-.join-game-form{
-
+.win-screen{
+  width: 30vw;
+  height: 30vh;
+  background-color: royalblue;
+  color: white;
+  z-index: 20;
+  position: fixed;
+  top: 35vh;
+  left: 35vh;
 }
 
 .connection-failed-modal-container{
