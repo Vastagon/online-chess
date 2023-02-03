@@ -1,6 +1,6 @@
-import { checkForBlackCheck, checkForWhiteCheck } from "./checkForCheck"
+import { checkForCheck } from "./checkForCheck"
 
-export function checkForExisitingCheckmates(boardPosition, potentialMovement, piece, kingPositions, lastClickedPosition){
+export function removeIllegalMoves(boardPosition, potentialMovement, piece, kingPositions, lastClickedPosition){
     let tempBoardCheck
     let tempKingPosition
 
@@ -18,8 +18,11 @@ export function checkForExisitingCheckmates(boardPosition, potentialMovement, pi
         return tempNewBoard
     }
 
+
+
+
     if(piece.substring(0,1) === "w"){
-        for(let i = 0; i < potentialMovement.length; i++){
+        for(let i = 0; i < potentialMovement?.length; i++){
             tempBoardCheck = createNewArray()
             if(piece === "whiteKing"){
                 tempKingPosition = [potentialMovement[i][0], potentialMovement[i][1]]
@@ -30,7 +33,7 @@ export function checkForExisitingCheckmates(boardPosition, potentialMovement, pi
             tempBoardCheck[potentialMovement[i][0]][potentialMovement[i][1]] = piece
             tempBoardCheck[lastClickedPosition[0]][lastClickedPosition[1]] = ""
 
-            if(checkForBlackCheck(tempBoardCheck, tempKingPosition)){
+            if(checkForCheck(tempBoardCheck, tempKingPosition, "black")){
                 potentialMovement.splice(i, 1)
                 i--
             }
@@ -49,7 +52,7 @@ export function checkForExisitingCheckmates(boardPosition, potentialMovement, pi
             tempBoardCheck[potentialMovement[i][0]][potentialMovement[i][1]] = piece
             tempBoardCheck[lastClickedPosition[0]][lastClickedPosition[1]] = ""
 
-            if(checkForWhiteCheck(tempBoardCheck, tempKingPosition)){
+            if(checkForCheck(tempBoardCheck, tempKingPosition, "white")){
                 potentialMovement.splice(i, 1)
                 i--
             }
@@ -57,4 +60,4 @@ export function checkForExisitingCheckmates(boardPosition, potentialMovement, pi
 
         return potentialMovement        
     }
-} 
+}

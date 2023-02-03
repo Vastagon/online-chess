@@ -1,13 +1,13 @@
-import "../styles/board.css"
 import io from "socket.io-client"
 import {useEffect, useState} from "react"
 import {v4 as uuid} from "uuid"
 
+import "../styles/board.css"
 import boardpositions from "../../boardpositions.json"
-import moveSound from "./move-piece.mp3"
+import moveSound from "../styles/move-piece.mp3"
 import { updateKingPositionsForMovementFunctions } from "./movementLogicFunctions"
 import { checkForMate } from "./checkForMate"
-import { checkForBlackCheck, checkForWhiteCheck } from "./checkForCheck"
+import { checkForCheck } from "./checkForCheck"
 
 import WaitingOnSecondPlayer from "./WaitingOnSecondPlayer"
 import JoinGameModal from "./JoinGameModal"
@@ -15,7 +15,6 @@ import JoinedExistingGameModal from "./JoinedExistingGameModal"
 import WinScreen from "./WinScreen"
 import ChooseNewPiece from "./ChooseNewPiece"
 import Piece from "./Piece"
-
 
 let socketUrl
 
@@ -32,8 +31,8 @@ const Board = () =>{
     const [boardPosition, setBoardPosition] = useState(boardpositions)
 
     const [potentialMovement, setPotentialMovement] = useState([])
-    const [lastClickedPosition, setLastClickedPosition] = useState()
-    const [mostRecentClickedPosition, setMostRecentClickedPosition] = useState()
+    const [lastClickedPosition, setLastClickedPosition] = useState()///Where the piece moved to
+    const [mostRecentClickedPosition, setMostRecentClickedPosition] = useState()///Where the piece moved from
     const [blackOrWhitePromotion, setBlackOrWhitePromotion] = useState("")
     const [room, setRoom] = useState("")
 
@@ -46,7 +45,6 @@ const Board = () =>{
     const [changeSides, setChangeSides] = useState(false)
     const [checkOrStale, setCheckOrStale] = useState()
 
-    // const [moveSound, setMoveSound] = useState(new Audio("move-piece.mp3"))
 
     ///States for displaying modals
     const [showJoinGame, setShowJoinGame] = useState(true)
@@ -63,7 +61,7 @@ const Board = () =>{
 
     function checkForMateOrStalemate(boardPosition, kingPositions, whiteMoveBoolean){
         if(!whiteMoveBoolean){
-            if(checkForBlackCheck(boardPosition, kingPositions.whiteKing)){
+            if(checkForCheck(boardPosition, kingPositions.whiteKing, "black")){
                 alert("Stalemate")
                 return "stalemate"
             }else{
@@ -71,7 +69,7 @@ const Board = () =>{
                 return "checkmate"
             }
         }else{
-            if(checkForWhiteCheck(boardPosition, kingPositions.blackKing)){
+            if(checkForCheck(boardPosition, kingPositions.blackKing, "white")){
                 alert("Stalemate")
                 return "stalemate"
             }else{
@@ -84,8 +82,6 @@ const Board = () =>{
     ///Runs when a piece is moved
     useEffect(() =>{
         if(isConnectedToRoom){
-            // console.log(mostRecentClickedPosition)///Where the piece moved from
-            // console.log(lastClickedPosition)///Where the piece moved to
             if(checkForMate(boardPosition, kingPositions, whiteMoveBoolean)){
                 setCheckOrStale(checkForMateOrStalemate(boardPosition, kingPositions, whiteMoveBoolean))
                 setShowWinScreen(true)
@@ -101,15 +97,7 @@ const Board = () =>{
         if(boardPosition){
             updateBoard()
         }
-    }, [potentialMovement, showPieceModal, JSON.stringify(boardPosition), socketIDs])
-
-
-    useEffect(() =>{
-        if(boardPosition){
-            updateBoard()
-        }
-    }, [whiteMoveBoolean])
-
+    }, [whiteMoveBoolean, potentialMovement, showPieceModal, JSON.stringify(boardPosition), socketIDs])
 
 
     ///Where all socket changes take place
@@ -127,7 +115,7 @@ const Board = () =>{
             setRoom(data.room)
         })
 
-        ///When piece gets moved
+        ///When piece gets moved on other player's board
         socket.on("update_client_board", (tempBoardData) =>{
             console.log("Update Client Board")
             setBoardPosition(tempBoardData.boardPosition)
@@ -139,7 +127,6 @@ const Board = () =>{
 
         ///Joining existing game failed
         socket.on("existing_connection_failed", () =>{
-            ///Show that the connection failed visually, set room back to ""
             setShowFailedConnectionModal(true)
             setRoom("")
         })
@@ -203,6 +190,38 @@ const Board = () =>{
         }
     }
 
+    function chooseSquareClassName(evenRow, darkened){
+        if(evenRow){
+            if(darkened){
+                return "darkened board-square white-square"
+            }else{
+                return "board-square white-square"
+            }
+        }else{
+            if(darkened){
+                return "darkened board-square green-square"
+            }else{
+                return "board-square green-square"
+            }
+        }
+    }
+
+    function updateKingPositions(piece, position){
+        if(piece === "blackKing"){
+            setKingPositions(prev => ({
+                ...prev,
+                blackKing: position
+            }))
+            updateKingPositionsForMovementFunctions("black", position)
+        }
+        if(piece === "whiteKing"){
+            setKingPositions(prev => ({
+                ...prev,
+                whiteKing: position
+            }))
+            updateKingPositionsForMovementFunctions("white", position)
+        }
+    }
 
 
     function updateBoard(){
@@ -222,21 +241,7 @@ const Board = () =>{
                     }
                 }
 
-                ///Updates state that holds position of kings
-                if(prev === "blackKing"){
-                    setKingPositions(prev => ({
-                        ...prev,
-                        blackKing: [rowIndex, index]
-                    }))
-                    updateKingPositionsForMovementFunctions("black", [rowIndex, index])
-                }
-                if(prev === "whiteKing"){
-                    setKingPositions(prev => ({
-                        ...prev,
-                        whiteKing: [rowIndex, index]
-                    }))
-                    updateKingPositionsForMovementFunctions("white", [rowIndex, index])
-                }
+                updateKingPositions(prev, [rowIndex, index])
 
                 ///Decides if this square should be a different color
                 if(darkenedSquares?.length > 1){
@@ -248,36 +253,26 @@ const Board = () =>{
                     }                    
                 }
                 ///Determines classname for square
-                if(evenRow){
-                    if(darkened){
-                        squareClassName = "darkened board-square white-square"
-                    }else{
-                        squareClassName = "board-square white-square"
-                    }
-                }else{
-                    if(darkened){
-                        squareClassName = "darkened board-square green-square"
-                    }else{
-                        squareClassName = "board-square green-square"
-                    }
-                }
+                squareClassName = chooseSquareClassName(evenRow, darkened)
 
-        ///Returns individual square 64 times
-        return (
-        <div key={uuid()} className={squareClassName}>
-            <div onClick={() => potentialMovementGetsClicked([rowIndex,index])} className={hasDot ? "has-dot" : null} />
-                <Piece socket={socket} socketIDs={socketIDs} whiteMoveBoolean={whiteMoveBoolean} lastClickedPosition={lastClickedPosition} setLastClickedPosition={setLastClickedPosition} 
-                potentialMovement={potentialMovement} setPotentialMovement={setPotentialMovement} boardPosition={boardPosition} key={uuid()} pieceClicked={pieceClicked} 
-                setPieceClicked={setPieceClicked} position={[rowIndex,index]} piece={boardPosition[rowIndex][index]} kingPositions={kingPositions} />
-            </div>)
-            })}
-        </div>) 
+
+                ///Returns individual square 64 times
+                return (
+                <div key={uuid()} className={squareClassName}>
+                    {/* Determines if square should have a dot */}
+                    <div onClick={() => potentialMovementGetsClicked([rowIndex,index])} className={hasDot ? "has-dot" : null} />
+
+                    <Piece socket={socket} socketIDs={socketIDs} whiteMoveBoolean={whiteMoveBoolean} lastClickedPosition={lastClickedPosition} setLastClickedPosition={setLastClickedPosition} 
+                    potentialMovement={potentialMovement} setPotentialMovement={setPotentialMovement} boardPosition={boardPosition} key={uuid()} pieceClicked={pieceClicked} 
+                    setPieceClicked={setPieceClicked} position={[rowIndex,index]} piece={boardPosition[rowIndex][index]} kingPositions={kingPositions} />
+                </div>)
+                })}
+            </div>) 
         }))
     }
 
     if(!boardDiv || !boardPosition) return null
-///Vanguard
-//Vu
+
     return(
         <>
             <div className={socket.id === socketIDs.blackSocketID && isConnectedToRoom ? "black-board board" : "board"}>

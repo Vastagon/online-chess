@@ -1,4 +1,4 @@
-import { checkForExisitingCheckmates } from "./checkForExistingCheckmates";
+import { removeIllegalMoves } from "./removeIllegalMoves";
 import {
     pawnLogic,
     rookLogic,
@@ -55,7 +55,7 @@ export function checkForMate(boardPosition, kingPositions, whiteMoveBoolean){
             }
 
 
-            let legalMoves = checkForExisitingCheckmates(boardPosition, potentialMovement, piece, kingPositions, [i, j])
+            let legalMoves = removeIllegalMoves(boardPosition, potentialMovement, piece, kingPositions, [i, j])
             if(legalMoves?.length > 0){
                 moveExists = true
                 break;

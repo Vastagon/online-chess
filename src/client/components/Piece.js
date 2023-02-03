@@ -1,5 +1,5 @@
 import "../styles/board.css"
-import { checkForExisitingCheckmates } from "./checkForExistingCheckmates"
+import { removeIllegalMoves } from "./removeIllegalMoves"
 import {
     pawnLogic,
     rookLogic,
@@ -12,7 +12,7 @@ import {
 const Piece = (props) =>{
     let tempPotential = []
 
-    function clickPiece(){
+    function findPotentialMovement(){
         props.setLastClickedPosition(props.position)
         props.setPotentialMovement([])
  
@@ -48,17 +48,17 @@ const Piece = (props) =>{
         }
 
         ///Doesn't allow the player to put themselves into check. Needs to force them to stop a check when it happens
-        props.setPotentialMovement(checkForExisitingCheckmates(props.boardPosition, tempPotential, props.piece, props.kingPositions, props.position))
+        props.setPotentialMovement(removeIllegalMoves(props.boardPosition, tempPotential, props.piece, props.kingPositions, props.position))
     }///End of piece movement logic
 
 
 
-    ///Function that runs after click to see if it's white or black's turn
-    function canIMovePiece(){
+    ///Function that runs after click to see if it's their turn to move
+    function IsItMyTurn(){
         if((props.whiteMoveBoolean && props.piece.substring(0,5) === "white" && props.socket.id === props.socketIDs.whiteSocketID) || (!props.whiteMoveBoolean && props.piece.substring(0,5) === "black" && props.socket.id === props.socketIDs.blackSocketID)){
             props.setPotentialMovement([]) 
 
-            clickPiece()
+            findPotentialMovement()
         }
     }
  
@@ -66,7 +66,7 @@ const Piece = (props) =>{
     if(props.piece !== undefined){
         ///Displays piece
         return(
-            <div onClick={canIMovePiece} className={props.socket.id === props.socketIDs.whiteSocketID ? "piece" : "black-piece piece"}>
+            <div onClick={IsItMyTurn} className={props.socket.id === props.socketIDs.whiteSocketID ? "piece" : "black-piece piece"}>
                 {props.piece ? <img className={props.piece !== undefined ? "chess-piece" : "piece"}
                 src={require(`../images/${props.piece}.png`)}
                 alt="Not here"

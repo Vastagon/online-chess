@@ -1,4 +1,4 @@
-let kingPositions = {blackKing: [0,5], whiteKing: [7,4]}
+let kingPositions = {blackKing: [0,4], whiteKing: [7,4]}
 let potentialMovement = []
 
 export function updateKingPositionsForMovementFunctions(color, newPosition){
@@ -111,7 +111,6 @@ export function rookLogic(position, piece, boardPosition){
 
     ///Checks bottom
     while(notBlocked){
-        ///Checks for positions below
         if(y + j < 8){
             if(boardPosition[y+j][x] === ""){
                 temp.push([y+j, x])
@@ -136,7 +135,6 @@ export function rookLogic(position, piece, boardPosition){
     
     ///Checks top
     while(notBlocked){
-        ///Checks for positions below
         if(y - j > 0){
             if(boardPosition[y-j][x] === ""){
                 temp.push([y-j, x])
@@ -319,6 +317,10 @@ export function rookLogic(position, piece, boardPosition){
    
     return temp 
    }
+
+
+
+
 
 
 
