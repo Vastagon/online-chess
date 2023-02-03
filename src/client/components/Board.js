@@ -4,6 +4,7 @@ import {useEffect, useState} from "react"
 import {v4 as uuid} from "uuid"
 
 import boardpositions from "../../boardpositions.json"
+import moveSound from "./move-piece.mp3"
 import { updateKingPositionsForMovementFunctions } from "./movementLogicFunctions"
 import { checkForMate } from "./checkForMate"
 import { checkForBlackCheck, checkForWhiteCheck } from "./checkForCheck"
@@ -44,6 +45,8 @@ const Board = () =>{
     const [isConnectedToRoom, setIsConnectedToRoom] = useState(false)
     const [changeSides, setChangeSides] = useState(false)
     const [checkOrStale, setCheckOrStale] = useState()
+
+    // const [moveSound, setMoveSound] = useState(new Audio("move-piece.mp3"))
 
     ///States for displaying modals
     const [showJoinGame, setShowJoinGame] = useState(true)
@@ -89,6 +92,8 @@ const Board = () =>{
             }
             socket.emit("piece_moved", {boardPosition: boardPosition, room: room, darkenedSquares: [mostRecentClickedPosition, lastClickedPosition]});
             setPotentialMovement([]) 
+
+            new Audio(moveSound).play()
         }
     }, [changeSides])
 
@@ -129,6 +134,7 @@ const Board = () =>{
             setWhiteMoveBoolean(tempBoardData.whiteMoveBoolean)
             setPotentialMovement([]) 
             setDarkenedSquares(tempBoardData.darkenedSquares)
+            new Audio(moveSound).play()
         }) 
 
         ///Joining existing game failed
