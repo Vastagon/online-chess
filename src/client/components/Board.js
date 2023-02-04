@@ -7,7 +7,7 @@ import "../styles/modals.css"
 import boardpositions from "../../boardpositions.json"
 import moveSound from "../styles/move-piece.mp3"
 import { updateKingPositionsForMovementFunctions } from "./helperFunctions/movementLogicFunctions"
-import { checkForMate } from "./checkForMate"
+import { checkForMate } from "./helperFunctions/checkForMate"
 import { checkForCheck } from "./helperFunctions/checkForCheck"
 
 import WaitingOnSecondPlayer from "./modals/WaitingOnSecondPlayer"

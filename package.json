@@ -54,5 +54,8 @@
     "description": "npm run client",
     "resolutions": {
         "react-error-overlay": "6.0.9"
+    },
+    "engines": {
+        "node": "16.18.0"
     }
 }
