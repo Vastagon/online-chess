@@ -10,6 +10,11 @@
     background-color: #2B2E31;
     color: white;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10%;
 }
 .modal-button{
     background-color: #D9D9D9;
@@ -32,9 +37,7 @@
     position: fixed;
     width: 40vw;
     height: 40vh;
-    top: 30vh;
-    left: 30vw;
-  }
+}
 .enter-code-form-label{
     text-align: center;
 }
@@ -52,13 +55,19 @@
     position: fixed;
     width: 30vw;
     height: 30vh;
-    top: 35vh;
-    left: 35vw;
+    /* top: 35vh;
+    left: 35vw; */
     text-align: center;
 }
 
 
-
+.connected-modal{
+    width: 30vw;
+    height: 30vh;
+}
+.connected-modal > button{
+    width: 80%;
+}
 
 
 
@@ -79,9 +88,67 @@
       align-items: center;
       justify-content: center;
       position: fixed;
-      width: 70vw;
-      height: 60vh;
-      top: 15vh;
-      left: 15vw;
+      width: 60vw !important;
+      height: 50vh !important;
+    }
+    .enter-code-form > input{
+        width: 85%;
+        font-size: 2rem;
+        padding: 1em;
+    }
+    .enter-code-form-label{
+        font-size: 2rem;
+    }
+    .new-game-modal{
+        padding: 5em 3em;
+    }
+    .modal{
+        height: 20vh;
+        width: 50%;
+    }
+    .modal-button{
+        width: 100%;
+        padding: 2em;
+        font-size: 1.5rem;
+    }
+    .waiting-modal-container{
+        font-size: 2rem;
+        margin: 0;
+        gap: 0;
+        padding: 10%;
+    }
+}
+
+
+
+
+@media screen and (max-width: 500px) {
+    .new-game-modal{
+        padding: 5em 3em;
+    }
+    .modal{
+        height: 20vh;
+        width: 50%;
+    }
+    .modal-button{
+        width: 100%;
+        padding: 2em;
+        font-size: 1rem;
+    }
+    .enter-code-form > input{
+        width: 80%;
+        font-size: 1rem;
+        padding: 1em;
+    }
+    .waiting-modal-container{
+        height: 40vh;
+        width: 70%;
+    }
+    .connected-modal{
+        height: 50vh;
+        width: 70%;
+    }
+    .connected-modal-button{
+        width: 80%;
     }
 }

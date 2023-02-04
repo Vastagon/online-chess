@@ -4,6 +4,10 @@
   left: 0;
   top: 0;
 }
+button:hover{
+  cursor: pointer;
+  opacity: .8;
+}
 
 .choose-piece-modal{
   position: absolute;
