@@ -3,18 +3,20 @@ import {useEffect, useState} from "react"
 import {v4 as uuid} from "uuid"
 
 import "../styles/board.css"
+import "../styles/modals.css"
 import boardpositions from "../../boardpositions.json"
 import moveSound from "../styles/move-piece.mp3"
-import { updateKingPositionsForMovementFunctions } from "./movementLogicFunctions"
+import { updateKingPositionsForMovementFunctions } from "./helperFunctions/movementLogicFunctions"
 import { checkForMate } from "./checkForMate"
-import { checkForCheck } from "./checkForCheck"
+import { checkForCheck } from "./helperFunctions/checkForCheck"
 
-import WaitingOnSecondPlayer from "./WaitingOnSecondPlayer"
-import JoinGameModal from "./JoinGameModal"
-import JoinedExistingGameModal from "./JoinedExistingGameModal"
-import WinScreen from "./WinScreen"
-import ChooseNewPiece from "./ChooseNewPiece"
+import WaitingOnSecondPlayer from "./modals/WaitingOnSecondPlayer"
+import EnterCodeModal from "./modals/EnterCodeModal"
+import JoinedExistingGameModal from "./modals/JoinedExistingGameModal"
+import WinScreen from "./modals/WinScreen"
+import ChooseNewPiece from "./modals/ChooseNewPiece"
 import Piece from "./Piece"
+import NewGameModal from "./modals/NewGameModal"
 
 let socketUrl
 
@@ -47,12 +49,13 @@ const Board = () =>{
 
 
     ///States for displaying modals
-    const [showJoinGame, setShowJoinGame] = useState(true)
+    const [showEnterCodeModal, setShowEnterCodeModal] = useState(false)
     const [showFailedConnectionModal, setShowFailedConnectionModal] = useState(false)
     const [showWaitingOnSecondPlayer, setShowWaitingOnSecondPlayer] = useState(false)
     const [showJoinedExistingGameModal, setShowJoinedExistingGameModal] = useState(false)
     const [showPieceModal, setShowPieceModal] = useState(false)
     const [showWinScreen, setShowWinScreen] = useState(false)
+    const [showNewGameModal, setShowNewGameModal] = useState(true)
 
 
     const [boardDiv, setBoardDiv] = useState()
@@ -104,7 +107,6 @@ const Board = () =>{
     useEffect(() =>{
         ///When create new game button clicked
         socket.on("start_client_board", (data) =>{
-            console.log("Start client board")
             setBoardPosition(data.boardPosition)
             setWhiteMoveBoolean(data.whiteMoveBoolean)
             setShowWaitingOnSecondPlayer(true)
@@ -117,7 +119,6 @@ const Board = () =>{
 
         ///When piece gets moved on other player's board
         socket.on("update_client_board", (tempBoardData) =>{
-            console.log("Update Client Board")
             setBoardPosition(tempBoardData.boardPosition)
             setWhiteMoveBoolean(tempBoardData.whiteMoveBoolean)
             setPotentialMovement([]) 
@@ -133,7 +134,7 @@ const Board = () =>{
 
         ///Joining existing game succeeded
         socket.on("existing_connection_successful", (serverSocketIDs) =>{
-            setShowJoinGame(false)
+            setShowEnterCodeModal(false)
             setShowWaitingOnSecondPlayer(false)
             setIsConnectedToRoom(true)
             setSocketIDs({whiteSocketID: serverSocketIDs.whiteSocketID, blackSocketID: serverSocketIDs.blackSocketID})
@@ -274,18 +275,22 @@ const Board = () =>{
     if(!boardDiv || !boardPosition) return null
 
     return(
-        <>
+        <div className="center-board-container">
             <div className={socket.id === socketIDs.blackSocketID && isConnectedToRoom ? "black-board board" : "board"}>
                 {boardDiv}
                 {showPieceModal ? <ChooseNewPiece blackOrWhitePromotion={blackOrWhitePromotion} changePawn={changePawn}/> : null}
             </div>     
 
-            {showJoinGame ? <JoinGameModal setShowFailedConnectionModal={setShowFailedConnectionModal} showFailedConnectionModal={showFailedConnectionModal} socket={socket} room={room} setRoom={setRoom} showJoinGame={showJoinGame}/> : null}
+            {showEnterCodeModal ? <EnterCodeModal setShowFailedConnectionModal={setShowFailedConnectionModal} 
+            showFailedConnectionModal={showFailedConnectionModal} socket={socket} room={room} setRoom={setRoom} 
+            showEnterCodeModal={showEnterCodeModal} setShowEnterCodeModal={setShowEnterCodeModal}
+            setShowNewGameModal={setShowNewGameModal} /> : null}
 
+            {showNewGameModal ? <NewGameModal socket={socket} room={room} setShowNewGameModal={setShowNewGameModal} setShowEnterCodeModal={setShowEnterCodeModal} /> : null}
             {showWinScreen ? <WinScreen /> : null}
-            {showWaitingOnSecondPlayer ? <WaitingOnSecondPlayer room={room} /> : null}
+            {showWaitingOnSecondPlayer ? <WaitingOnSecondPlayer setRoom={setRoom} setShowNewGameModal={setShowNewGameModal} setShowWaitingOnSecondPlayer={setShowWaitingOnSecondPlayer} room={room} /> : null}
             {showJoinedExistingGameModal ? <JoinedExistingGameModal setShowJoinedExistingGameModal={setShowJoinedExistingGameModal} /> : null}
-        </>
+        </div>
     )
 }
 

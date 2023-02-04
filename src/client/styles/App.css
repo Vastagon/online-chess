@@ -29,58 +29,15 @@ h3{
 }
 
 
-.join-game-modal-container{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  width: 40vw;
-  height: 40vh;
-  top: 30vh;
-  left: 30vw;
-  background-color: green;
-}
+
 .win-screen{
   width: 30vw;
   height: 30vh;
-  background-color: royalblue;
   color: white;
   z-index: 20;
-  position: fixed;
-  top: 35vh;
-  left: 35vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.connection-failed-modal-container{
-  position: fixed;
-  width: 20vw;
-  height: 20vh;
-  top: 40vh;
-  left: 40vw;
-  background-color: cadetblue;
-}
 
-.waiting-modal-container{
-  position: fixed;
-  width: 30vw;
-  height: 30vh;
-  top: 35vh;
-  left: 35vw;
-  background-color: whitesmoke;
-  color: black;
-}
-
-@media screen and (max-width: 950px) {
-  .join-game-modal-container{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    width: 70vw;
-    height: 60vh;
-    top: 15vh;
-    left: 15vw;
-    background-color: green;
-  }
-
-}

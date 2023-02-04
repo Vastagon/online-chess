@@ -2,33 +2,39 @@ import ConnectionFailedModal from './ConnectionFailedModal'
 
 export default function JoinGameModal(props){
 
-    function changeCodeInput(e){
+    function changeRoomInput(e){
         props.setRoom(e.target.value)
     }
 
     async function joinGameClicked(e){
         e.preventDefault()
-
-
         props.socket.emit("join_existing_game", {room: props.room, socketID: props.socket.id})
     }
 
-    function createGameClicked(e){
-        e.preventDefault()
+    // function createGameClicked(e){
+    //     e.preventDefault()
 
-        props.socket.emit("create_new_game", props.socket.id)
+    //     props.socket.emit("create_new_game", props.socket.id)
+    // }
+
+    function openNewGameModal(e){
+        e.preventDefault()
+        props.setRoom()
+        props.setShowEnterCodeModal(false)
+        props.setShowNewGameModal(true)
     }
 
     return(
         <>        
-        <div className="join-game-modal-container">
-            <form className='join-game-form'>
-                <label>Enter code to join an existing game</label>
+        <div className="modal enter-code-modal-container">
+            <form className='enter-code-form'>
+                <label className="enter-code-form-label">Enter Code</label>
                 <br></br>
-                <input onChange={changeCodeInput}></input>
-                <button onClick={joinGameClicked}>Join Game</button>
+                <input onChange={changeRoomInput} />
                 <br></br>
-                <button onClick={createGameClicked}>Create Game</button>
+                <button className="modal-button" onClick={joinGameClicked}>Join Game</button>
+                <br></br>
+                <button className="modal-button" onClick={openNewGameModal}>Back</button>
             </form>
         </div>
         {props.showFailedConnectionModal ? <ConnectionFailedModal showFailedConnectionModal={props.showFailedConnectionModal} setShowFailedConnectionModal={props.setShowFailedConnectionModal}/> : null}

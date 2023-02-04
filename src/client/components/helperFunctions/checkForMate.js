@@ -1,4 +1,4 @@
-import { removeIllegalMoves } from "./removeIllegalMoves";
+import { removeIllegalMoves } from "./helperFunctions/removeIllegalMoves";
 import {
     pawnLogic,
     rookLogic,
@@ -6,7 +6,7 @@ import {
     bishopLogic,
     kingLogic,
     queenLogic
-} from "./movementLogicFunctions"
+} from "./helperFunctions/movementLogicFunctions"
 
 
 export function checkForMate(boardPosition, kingPositions, whiteMoveBoolean){
