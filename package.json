@@ -20,9 +20,9 @@
         "server": "nodemon ./src/server/server.js",
         "client": "concurrently \"serve -s build\" \"npm run server\"",
         "build": "react-scripts build",
-        "clientStart": "react-scripts start",
+        "clientStart": "react-scripts start FAST_REFRESH=false",
         "start": "node ./src/server/server.js",
-        "dev": "concurrently \"npm run server\" \"react-scripts start\"",
+        "dev": "concurrently \"npm run server\" \"react-scripts start FAST_REFRESH=false\"",
         "test": "jest"
     },
     "eslintConfig": {

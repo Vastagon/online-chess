@@ -1,5 +1,5 @@
 import io from "socket.io-client"
-import {useEffect, useState} from "react"
+import {useEffect, useState, useContext} from "react"
 import {v4 as uuid} from "uuid"
 
 import "../styles/board.css"
@@ -17,6 +17,7 @@ import WinScreen from "./modals/WinScreen"
 import ChooseNewPiece from "./modals/ChooseNewPiece"
 import Piece from "./Piece"
 import NewGameModal from "./modals/NewGameModal"
+import { UserContext } from "./UserContext"
 
 let socketUrl
 
@@ -30,6 +31,7 @@ const socket = io.connect(socketUrl)
 
 
 const Board = () =>{
+
     const [boardPosition, setBoardPosition] = useState(boardpositions)
 
     const [potentialMovement, setPotentialMovement] = useState([])
@@ -263,9 +265,7 @@ const Board = () =>{
                     {/* Determines if square should have a dot */}
                     <div onClick={() => potentialMovementGetsClicked([rowIndex,index])} className={hasDot ? "has-dot" : null} />
 
-                    <Piece socket={socket} socketIDs={socketIDs} whiteMoveBoolean={whiteMoveBoolean} lastClickedPosition={lastClickedPosition} setLastClickedPosition={setLastClickedPosition} 
-                    potentialMovement={potentialMovement} setPotentialMovement={setPotentialMovement} boardPosition={boardPosition} key={uuid()} pieceClicked={pieceClicked} 
-                    setPieceClicked={setPieceClicked} position={[rowIndex,index]} piece={boardPosition[rowIndex][index]} kingPositions={kingPositions} />
+                    <Piece key={uuid()} position={[rowIndex,index]} piece={boardPosition[rowIndex][index]}  />
                 </div>)
                 })}
             </div>) 
@@ -275,23 +275,27 @@ const Board = () =>{
     if(!boardDiv || !boardPosition) return null
 
     return(
-        <div className="center-board-container">
-            <div className={socket.id === socketIDs.blackSocketID && isConnectedToRoom ? "black-board board" : "board"}>
-                {boardDiv}
-                {showPieceModal ? <ChooseNewPiece blackOrWhitePromotion={blackOrWhitePromotion} changePawn={changePawn}/> : null}
-            </div>     
+        <UserContext.Provider value={{
+            socket, room, setRoom, setShowEnterCodeModal, kingPositions, setShowNewGameModal,
+            whiteMoveBoolean, socketIDs, lastClickedPosition, setLastClickedPosition, 
+            potentialMovement, setPotentialMovement, boardPosition, pieceClicked, setPieceClicked
+        }}>
+            <div className="center-board-container">
+                <div className={socket.id === socketIDs.blackSocketID && isConnectedToRoom ? "black-board board" : "board"}>
+                    {boardDiv}
+                    {showPieceModal ? <ChooseNewPiece blackOrWhitePromotion={blackOrWhitePromotion} changePawn={changePawn}/> : null}
+                </div>     
 
-            {showEnterCodeModal ? <EnterCodeModal setShowFailedConnectionModal={setShowFailedConnectionModal} 
-            showFailedConnectionModal={showFailedConnectionModal} socket={socket} room={room} setRoom={setRoom} 
-            showEnterCodeModal={showEnterCodeModal} setShowEnterCodeModal={setShowEnterCodeModal}
-            setShowNewGameModal={setShowNewGameModal} /> : null}
+                {showEnterCodeModal ? <EnterCodeModal setShowFailedConnectionModal={setShowFailedConnectionModal} 
+                showFailedConnectionModal={showFailedConnectionModal}  showEnterCodeModal={showEnterCodeModal} /> : null}
 
-            {showNewGameModal ? <NewGameModal socket={socket} room={room} setShowNewGameModal={setShowNewGameModal} setShowEnterCodeModal={setShowEnterCodeModal} /> : null}
-            {showWinScreen ? <WinScreen /> : null}
-            {showWaitingOnSecondPlayer ? <WaitingOnSecondPlayer setRoom={setRoom} setShowNewGameModal={setShowNewGameModal} setShowWaitingOnSecondPlayer={setShowWaitingOnSecondPlayer} room={room} /> : null}
-            {showJoinedExistingGameModal ? <JoinedExistingGameModal setShowJoinedExistingGameModal={setShowJoinedExistingGameModal} /> : null}
-        </div>
+                {showNewGameModal ? <NewGameModal setShowEnterCodeModal={setShowEnterCodeModal} /> : null}
+                {showWinScreen ? <WinScreen /> : null}
+                {showWaitingOnSecondPlayer ? <WaitingOnSecondPlayer setShowWaitingOnSecondPlayer={setShowWaitingOnSecondPlayer} /> : null}
+                {showJoinedExistingGameModal ? <JoinedExistingGameModal setShowJoinedExistingGameModal={setShowJoinedExistingGameModal} /> : null}
+            </div>
+        </UserContext.Provider>
     )
 }
-
+ 
 export default Board

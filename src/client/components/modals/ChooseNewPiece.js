@@ -1,6 +1,6 @@
 
-
 const ChooseNewPiece = (props) =>{
+
     return (
         <div className={props.blackOrWhitePromotion === "white" ? "choose-piece-modal" : "black-board choose-piece-modal"}>
             <h3>Pick a new piece</h3>
