@@ -72,7 +72,11 @@
 
 
 
-
+.reconnect-modal{
+    padding: 10%;
+    padding-top: 7%;
+    padding-bottom: 7%;
+}
 
 
 
@@ -92,9 +96,12 @@
       height: 50vh !important;
     }
     .enter-code-form > input{
-        width: 85%;
+        width: 80%;
         font-size: 2rem;
-        padding: 1em;
+        padding: 0em;
+    }
+    .enter-code-form > button{
+        width: 80%;
     }
     .enter-code-form-label{
         font-size: 2rem;
@@ -102,14 +109,17 @@
     .new-game-modal{
         padding: 5em 3em;
     }
+    .reconnect-modal{
+        padding-bottom: 15%;
+    }
     .modal{
         height: 20vh;
         width: 50%;
     }
     .modal-button{
         width: 100%;
-        padding: 2em;
-        font-size: 1.5rem;
+        padding: 1.6em;
+        font-size: 1.2rem;
     }
     .waiting-modal-container{
         font-size: 2rem;
@@ -132,13 +142,16 @@
     }
     .modal-button{
         width: 100%;
-        padding: 2em;
+        padding: 1.5em;
         font-size: 1rem;
     }
-    .enter-code-form > input{
+    /* .enter-code-form > input{
         width: 80%;
         font-size: 1rem;
         padding: 1em;
+    } */
+    .reconnect-modal{
+        padding-bottom: 15%;
     }
     .waiting-modal-container{
         height: 40vh;

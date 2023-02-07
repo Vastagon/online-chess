@@ -106,6 +106,10 @@ io.on("connection", (socket)=>{
         ///Emiting only to other client
         socket.to(data.room).emit("update_client_board", tempBoardData);
     })
+
+    socket.on("disconnect", () =>{
+        io.emit("userLeft")
+    })
 }) 
 
  

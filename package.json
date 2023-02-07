@@ -20,7 +20,7 @@
         "server": "nodemon ./src/server/server.js",
         "client": "concurrently \"serve -s build\" \"npm run server\"",
         "build": "react-scripts build",
-        "clientStart": "react-scripts start FAST_REFRESH=false",
+        "clientStart": "react-scripts start",
         "start": "node ./src/server/server.js",
         "dev": "concurrently \"npm run server\" \"react-scripts start FAST_REFRESH=false\"",
         "test": "jest"
@@ -54,8 +54,5 @@
     "description": "npm run client",
     "resolutions": {
         "react-error-overlay": "6.0.9"
-    },
-    "engines": {
-        "node": "16.18.0"
     }
 }

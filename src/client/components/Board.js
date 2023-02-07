@@ -1,6 +1,7 @@
 import io from "socket.io-client"
-import {useEffect, useState, useContext} from "react"
+import {useEffect, useState} from "react"
 import {v4 as uuid} from "uuid"
+import { UserContext } from "./UserContext"
 
 import "../styles/board.css"
 import "../styles/modals.css"
@@ -8,7 +9,7 @@ import boardpositions from "../../boardpositions.json"
 import moveSound from "../styles/move-piece.mp3"
 import { updateKingPositionsForMovementFunctions } from "./helperFunctions/movementLogicFunctions"
 import { checkForMate } from "./helperFunctions/checkForMate"
-import { checkForCheck } from "./helperFunctions/checkForCheck"
+import { checkForMateOrStalemate } from "./helperFunctions/checkForMateOrStalemate"
 
 import WaitingOnSecondPlayer from "./modals/WaitingOnSecondPlayer"
 import EnterCodeModal from "./modals/EnterCodeModal"
@@ -17,7 +18,7 @@ import WinScreen from "./modals/WinScreen"
 import ChooseNewPiece from "./modals/ChooseNewPiece"
 import Piece from "./Piece"
 import NewGameModal from "./modals/NewGameModal"
-import { UserContext } from "./UserContext"
+import WaitingOnReconnectModal from "./modals/WaitingOnReconnectModal"
 
 let socketUrl
 
@@ -47,7 +48,6 @@ const Board = () =>{
     const [pieceClicked, setPieceClicked] = useState(false)
     const [isConnectedToRoom, setIsConnectedToRoom] = useState(false)
     const [changeSides, setChangeSides] = useState(false)
-    const [checkOrStale, setCheckOrStale] = useState()
 
 
     ///States for displaying modals
@@ -58,37 +58,18 @@ const Board = () =>{
     const [showPieceModal, setShowPieceModal] = useState(false)
     const [showWinScreen, setShowWinScreen] = useState(false)
     const [showNewGameModal, setShowNewGameModal] = useState(true)
+    const [showWaitingOnReconnect, setShowWaitingOnReconnect] = useState(false)
 
 
     const [boardDiv, setBoardDiv] = useState()
     const [socketIDs, setSocketIDs] = useState({})
     let evenRow = true
 
-    function checkForMateOrStalemate(boardPosition, kingPositions, whiteMoveBoolean){
-        if(!whiteMoveBoolean){
-            if(checkForCheck(boardPosition, kingPositions.whiteKing, "black")){
-                alert("Stalemate")
-                return "stalemate"
-            }else{
-                alert("White checkmates black")
-                return "checkmate"
-            }
-        }else{
-            if(checkForCheck(boardPosition, kingPositions.blackKing, "white")){
-                alert("Stalemate")
-                return "stalemate"
-            }else{
-                alert("Black checkmates white")
-                return "checkmate"
-            }        
-        }
-    }
-
     ///Runs when a piece is moved
     useEffect(() =>{
         if(isConnectedToRoom){
             if(checkForMate(boardPosition, kingPositions, whiteMoveBoolean)){
-                setCheckOrStale(checkForMateOrStalemate(boardPosition, kingPositions, whiteMoveBoolean))
+                checkForMateOrStalemate(boardPosition, kingPositions, whiteMoveBoolean)
                 setShowWinScreen(true)
             }
             socket.emit("piece_moved", {boardPosition: boardPosition, room: room, darkenedSquares: [mostRecentClickedPosition, lastClickedPosition]});
@@ -141,6 +122,10 @@ const Board = () =>{
             setIsConnectedToRoom(true)
             setSocketIDs({whiteSocketID: serverSocketIDs.whiteSocketID, blackSocketID: serverSocketIDs.blackSocketID})
             setShowJoinedExistingGameModal(true)
+        })
+
+        socket.on("userLeft", () =>{
+            setShowWaitingOnReconnect(true)
         })
     }, [socket])
 
@@ -293,6 +278,7 @@ const Board = () =>{
                 {showWinScreen ? <WinScreen /> : null}
                 {showWaitingOnSecondPlayer ? <WaitingOnSecondPlayer setShowWaitingOnSecondPlayer={setShowWaitingOnSecondPlayer} /> : null}
                 {showJoinedExistingGameModal ? <JoinedExistingGameModal setShowJoinedExistingGameModal={setShowJoinedExistingGameModal} /> : null}
+                {showWaitingOnReconnect ? <WaitingOnReconnectModal /> : null}
             </div>
         </UserContext.Provider>
     )
