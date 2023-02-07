@@ -8,7 +8,7 @@ const path = require('path')
 
 app.use(cors())
 require('dotenv').config();
-
+ 
 const server = http.createServer(app)
 
 const roomVariablesMap = new Map(); 
@@ -107,9 +107,9 @@ io.on("connection", (socket)=>{
         socket.to(data.room).emit("update_client_board", tempBoardData);
     })
 
-    socket.on("disconnect", () =>{
-        io.emit("userLeft")
-    })
+    // socket.on("disconnect", () =>{
+    //     io.emit("userLeft")
+    // })
 }) 
 
  

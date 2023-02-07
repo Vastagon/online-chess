@@ -19,6 +19,7 @@ import ChooseNewPiece from "./modals/ChooseNewPiece"
 import Piece from "./Piece"
 import NewGameModal from "./modals/NewGameModal"
 import WaitingOnReconnectModal from "./modals/WaitingOnReconnectModal"
+import { checkIfRooksMoved } from "./helperFunctions/checkIfRooksMoved"
 
 let socketUrl
 
@@ -48,7 +49,8 @@ const Board = () =>{
     const [pieceClicked, setPieceClicked] = useState(false)
     const [isConnectedToRoom, setIsConnectedToRoom] = useState(false)
     const [changeSides, setChangeSides] = useState(false)
-
+    const [haveKingsMoved, setHaveKingsMoved] = useState({blackKing: false, whiteKing: false})
+    const [haveRooksMoved, setHaveRooksMoved] = useState({blackARook: false, blackHRook: false, whiteARook: false, whiteHRook: false})
 
     ///States for displaying modals
     const [showEnterCodeModal, setShowEnterCodeModal] = useState(false)
@@ -76,6 +78,7 @@ const Board = () =>{
             setPotentialMovement([]) 
 
             new Audio(moveSound).play()
+            setHaveRooksMoved(checkIfRooksMoved(boardPosition, haveRooksMoved))
         }
     }, [changeSides])
 
@@ -200,12 +203,20 @@ const Board = () =>{
                 ...prev,
                 blackKing: position
             }))
+            setHaveKingsMoved(prev => ({
+                ...prev,
+                blackKing: true
+            }))
             updateKingPositionsForMovementFunctions("black", position)
         }
         if(piece === "whiteKing"){
             setKingPositions(prev => ({
                 ...prev,
                 whiteKing: position
+            }))
+            setHaveKingsMoved(prev => ({
+                ...prev,
+                whiteKing: true
             }))
             updateKingPositionsForMovementFunctions("white", position)
         }
@@ -250,7 +261,7 @@ const Board = () =>{
                     {/* Determines if square should have a dot */}
                     <div onClick={() => potentialMovementGetsClicked([rowIndex,index])} className={hasDot ? "has-dot" : null} />
 
-                    <Piece key={uuid()} position={[rowIndex,index]} piece={boardPosition[rowIndex][index]}  />
+                    <Piece haveRooksMoved={haveRooksMoved} haveKingsMoved={haveKingsMoved} key={uuid()} position={[rowIndex,index]} piece={boardPosition[rowIndex][index]}  />
                 </div>)
                 })}
             </div>) 

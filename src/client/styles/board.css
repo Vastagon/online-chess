@@ -15,7 +15,6 @@
     justify-content: center;
 }
 .board{
-    /* margin-left: calc((100vw - var(--board-square-width) * 8) /2); */
     border-color: black;
     border-style: solid;
     border-width: 2px;
@@ -26,18 +25,14 @@
     height: var(--board-square-width) !important;
 }
 .green-square{
-    /* background-color: green; */
     background-color: #b58863;
 }
 .white-square{
-    /* background-color: white;
-    border-color: green; */
     border-color: #b58863;
     background-color: #f0d9b5;
 }
 .darkened{
-    opacity: .8;
-    background-color: yellow;
+    background-color: rgba(255, 255, 0, 0.854);
 }
 .board-row{
     display: flex;
