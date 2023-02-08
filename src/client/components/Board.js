@@ -81,6 +81,8 @@ const Board = () =>{
             setHaveRooksMoved(checkIfRooksMoved(boardPosition, haveRooksMoved))
         }
     }, [changeSides])
+    ///Check which piece moved and where, if it was the king, the king hasn't moved yet, and the king ends up in [7,6] or [7,2] for white
+    ///[0,6] or [0,2] for black
 
     useEffect(() =>{ 
         if(boardPosition){
@@ -150,18 +152,19 @@ const Board = () =>{
     }
 
     function potentialMovementGetsClicked(clickedSquare){
+        let clickedPiece = boardPosition[lastClickedPosition[0]][lastClickedPosition[1]]
         setMostRecentClickedPosition(clickedSquare)
         ///Checks if clicked square is in potentialMovement array
         for(let i = 0; i < potentialMovement.length; i++){
             if(JSON.stringify(potentialMovement[i]) === JSON.stringify(clickedSquare) ){
 
                 ///Checks if pawn is near the end of the board / about to be promoted
-                if(boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] === "blackPawn" || "whitePawn"){
-                    if(lastClickedPosition[0] === 6 && boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] === "blackPawn"){
+                if(clickedPiece === "blackPawn" || "whitePawn"){
+                    if(lastClickedPosition[0] === 6 && clickedPiece === "blackPawn"){
                         setBlackOrWhitePromotion("black")
                         setShowPieceModal(true)
                     }
-                    if(lastClickedPosition[0] === 1 && boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] === "whitePawn"){
+                    if(lastClickedPosition[0] === 1 && clickedPiece === "whitePawn"){
                         setBlackOrWhitePromotion("white")
                         setShowPieceModal(true)
                     }
@@ -170,8 +173,13 @@ const Board = () =>{
                 setDarkenedSquares([clickedSquare, lastClickedPosition])
 
                 ///Moves the piece to the proper location while deleting it from previous position
-                boardPosition[clickedSquare[0]][clickedSquare[1]] = boardPosition[lastClickedPosition[0]][lastClickedPosition[1]]
+                boardPosition[clickedSquare[0]][clickedSquare[1]] = clickedPiece
                 boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] = ""
+
+                ///Moving rook properly when castling
+                if(clickedPiece.substring(0,1) === "w" && !haveKingsMoved.whiteKing && clickedSquare === [7,6]){
+                    boardPosition[7][5] = "whiteRook"
+                }
 
                 ///Move piece
                 setWhiteMoveBoolean(prev => !prev)
