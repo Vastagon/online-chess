@@ -416,6 +416,7 @@ export function kingLogic(position, piece, boardPosition, haveKingsMoved, haveRo
         }                
     }
 
+
     ///Checking for castling
     if(piece.substring(0,1) === "w" && !haveKingsMoved?.whiteKing){
         if(!haveRooksMoved?.whiteARook && boardPosition[7][1] === "" && boardPosition[7][2] === "" && boardPosition[7][3] === ""){

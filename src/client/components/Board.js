@@ -42,7 +42,7 @@ const Board = () =>{
     const [blackOrWhitePromotion, setBlackOrWhitePromotion] = useState("")
     const [room, setRoom] = useState("")
 
-    const [kingPositions, setKingPositions] = useState({blackKing: [0,5], whiteKing: [7,4]})
+    const [kingPositions, setKingPositions] = useState({blackKing: [0,4], whiteKing: [7,4]})
     const [darkenedSquares, setDarkenedSquares] = useState([])
 
     const [whiteMoveBoolean, setWhiteMoveBoolean] = useState(true)
@@ -66,6 +66,48 @@ const Board = () =>{
     const [boardDiv, setBoardDiv] = useState()
     const [socketIDs, setSocketIDs] = useState({})
     let evenRow = true
+    console.log(lastClickedPosition)
+    console.log(mostRecentClickedPosition)
+    useEffect(() =>{
+        if(mostRecentClickedPosition){
+            if(boardPosition[7][4] !== "whiteKing"){
+                setHaveKingsMoved(prev => ({
+                    ...prev,
+                    whiteKing: true
+                }))
+            }
+            if(boardPosition[0][4] !== "blackKing"){
+                setHaveKingsMoved(prev => ({
+                    ...prev,
+                    blackKing: true
+                }))            
+            }
+
+            ///Moving rook properly when castling
+            if(socket.id === socketIDs.whiteSocketID && !haveKingsMoved?.whiteKing && JSON.stringify(mostRecentClickedPosition) === JSON.stringify([7,6])){
+                boardPosition[7][5] = "whiteRook"
+                boardPosition[7][7] = ""
+                socket.emit("piece_promoted", {boardPosition: boardPosition, room: room, darkenedSquares: [mostRecentClickedPosition, lastClickedPosition]});
+            }
+            if(socket.id === socketIDs.whiteSocketID && !haveKingsMoved?.whiteKing && JSON.stringify(mostRecentClickedPosition) === JSON.stringify([7,2])){
+                boardPosition[7][3] = "whiteRook"
+                boardPosition[7][0] = ""
+                socket.emit("piece_promoted", {boardPosition: boardPosition, room: room, darkenedSquares: [mostRecentClickedPosition, lastClickedPosition]});
+            }     
+            
+            if(socket.id === socketIDs.blackSocketID && !haveKingsMoved?.blackKing && JSON.stringify(mostRecentClickedPosition) === JSON.stringify([0,6])){
+                boardPosition[0][5] = "blackRook"
+                boardPosition[0][7] = ""
+                socket.emit("piece_promoted", {boardPosition: boardPosition, room: room, darkenedSquares: [mostRecentClickedPosition, lastClickedPosition]});
+            }
+            if(socket.id === socketIDs.blackSocketID && !haveKingsMoved?.blackKing && JSON.stringify(mostRecentClickedPosition) === JSON.stringify([0,2])){
+                boardPosition[0][3] = "blackRook"
+                boardPosition[0][0] = ""
+                socket.emit("piece_promoted", {boardPosition: boardPosition, room: room, darkenedSquares: [mostRecentClickedPosition, lastClickedPosition]});
+            }     
+        }
+
+    }, [JSON.stringify(kingPositions)])
 
     ///Runs when a piece is moved
     useEffect(() =>{
@@ -176,10 +218,13 @@ const Board = () =>{
                 boardPosition[clickedSquare[0]][clickedSquare[1]] = clickedPiece
                 boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] = ""
 
-                ///Moving rook properly when castling
-                if(clickedPiece.substring(0,1) === "w" && !haveKingsMoved.whiteKing && clickedSquare === [7,6]){
-                    boardPosition[7][5] = "whiteRook"
-                }
+                // ///Moving rook properly when castling
+                // if(clickedPiece?.substring(0,1) === "w" && !haveKingsMoved?.whiteKing && clickedSquare === [7,6]){
+                //     boardPosition[7][5] = "whiteRook"
+                // }
+                // if(clickedPiece?.substring(0,1) === "w" && !haveKingsMoved?.whiteKing && clickedSquare === [7,2]){
+                //     boardPosition[7][3] = "whiteRook"
+                // }
 
                 ///Move piece
                 setWhiteMoveBoolean(prev => !prev)
@@ -211,10 +256,7 @@ const Board = () =>{
                 ...prev,
                 blackKing: position
             }))
-            setHaveKingsMoved(prev => ({
-                ...prev,
-                blackKing: true
-            }))
+
             updateKingPositionsForMovementFunctions("black", position)
         }
         if(piece === "whiteKing"){
@@ -222,10 +264,7 @@ const Board = () =>{
                 ...prev,
                 whiteKing: position
             }))
-            setHaveKingsMoved(prev => ({
-                ...prev,
-                whiteKing: true
-            }))
+
             updateKingPositionsForMovementFunctions("white", position)
         }
     }

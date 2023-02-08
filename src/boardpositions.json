@@ -1,6 +1,6 @@
 [
     [
-        "blackRook","blackKnight","blackBishop","blackQueen","blackKing","blackBishop","blackKnight","blackRook"
+        "blackRook","","","","blackKing","","","blackRook"
     ],
     [ 
         "blackPawn", "blackPawn", "blackPawn", "blackPawn", "blackPawn", "blackPawn", "blackPawn", "blackPawn"
@@ -21,6 +21,6 @@
         "whitePawn","whitePawn","whitePawn","whitePawn","whitePawn","whitePawn","whitePawn","whitePawn"
     ],
     [ 
-        "whiteRook","whiteKnight","whiteBishop","whiteQueen","whiteKing","whiteBishop","whiteKnight","whiteRook"
+        "whiteRook","","","","whiteKing","","","whiteRook"
     ]
 ]

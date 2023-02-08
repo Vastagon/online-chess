@@ -73,7 +73,6 @@ io.on("connection", (socket)=>{
             }
 
 
-
             ///Change boolean to check if two players are connected
             roomVariablesMap.set(room, {boardPosition: boardPosition, whiteMoveBoolean: whiteMoveBoolean, whiteSocketID: whiteSocketID, blackSocketID: blackSocketID})
             io.in(room).emit("start_client_board", {boardPosition: boardPosition, whiteMoveBoolean: whiteMoveBoolean, room: room, whiteSocketID: whiteSocketID, blackSocketID: blackSocketID});
@@ -122,11 +121,6 @@ if (process.env.NODE_ENV === "production"){
     }); 
 }
 
-
-///This should be different place from where site is located. Have been able to keep it the same though, further tersting needed
-// server.listen(process.ENV.PORT || 3001, () =>{
-//     console.log("Server is running")
-// })
 
 server.listen(process.env.PORT || 3001, () =>{
     console.log(`Server is running on: ${process.env.PORT || 3001}`)
