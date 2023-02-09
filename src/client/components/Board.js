@@ -218,14 +218,6 @@ const Board = () =>{
                 boardPosition[clickedSquare[0]][clickedSquare[1]] = clickedPiece
                 boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] = ""
 
-                // ///Moving rook properly when castling
-                // if(clickedPiece?.substring(0,1) === "w" && !haveKingsMoved?.whiteKing && clickedSquare === [7,6]){
-                //     boardPosition[7][5] = "whiteRook"
-                // }
-                // if(clickedPiece?.substring(0,1) === "w" && !haveKingsMoved?.whiteKing && clickedSquare === [7,2]){
-                //     boardPosition[7][3] = "whiteRook"
-                // }
-
                 ///Move piece
                 setWhiteMoveBoolean(prev => !prev)
                 setChangeSides(prev => !prev)
@@ -327,7 +319,7 @@ const Board = () =>{
                 <div className={socket.id === socketIDs.blackSocketID && isConnectedToRoom ? "black-board board" : "board"}>
                     {boardDiv}
                     {showPieceModal ? <ChooseNewPiece blackOrWhitePromotion={blackOrWhitePromotion} changePawn={changePawn}/> : null}
-                </div>     
+                </div>
 
                 {showEnterCodeModal ? <EnterCodeModal setShowFailedConnectionModal={setShowFailedConnectionModal} 
                 showFailedConnectionModal={showFailedConnectionModal}  showEnterCodeModal={showEnterCodeModal} /> : null}
