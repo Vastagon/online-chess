@@ -73,7 +73,7 @@ const Piece = (props) =>{
     if(props.piece !== undefined){
         ///Displays piece
         return(
-            <div onClick={IsItMyTurn} className={socket.id === socketIDs.whiteSocketID ? "piece" : "black-piece piece"}>
+            <div onClick={IsItMyTurn} className={socket.id === socketIDs.blackSocketID && props.isConnectedToRoom ? "black-piece piece" : "piece"}>
                 {props.piece ? <img className={props.piece !== undefined ? "chess-piece" : "piece"}
                 src={require(`../images/${props.piece}.png`)}
                 alt="Not here"

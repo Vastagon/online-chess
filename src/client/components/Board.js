@@ -308,7 +308,7 @@ const Board = () =>{
                     {/* Determines if square should have a dot */}
                     <div onClick={() => potentialMovementGetsClicked([rowIndex,index])} className={hasDot ? "has-dot" : null} />
 
-                    <Piece haveRooksMoved={haveRooksMoved} haveKingsMoved={haveKingsMoved} key={uuid()} position={[rowIndex,index]} piece={boardPosition[rowIndex][index]}  />
+                    <Piece isConnectedToRoom={isConnectedToRoom} haveRooksMoved={haveRooksMoved} haveKingsMoved={haveKingsMoved} key={uuid()} position={[rowIndex,index]} piece={boardPosition[rowIndex][index]}  />
                 </div>)
                 })}
             </div>) 
