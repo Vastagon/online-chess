@@ -1,3 +1,5 @@
+import {checkIfKingMovesThroughCheck} from "./checkIfKingMovesThroughCheck"
+
 let kingPositions = {blackKing: [0,4], whiteKing: [7,4]}
 let potentialMovement = []
 
@@ -421,18 +423,22 @@ export function kingLogic(position, piece, boardPosition, haveKingsMoved, haveRo
     if(piece.substring(0,1) === "w" && !haveKingsMoved?.whiteKing){
         if(!haveRooksMoved?.whiteARook && boardPosition[7][1] === "" && boardPosition[7][2] === "" && boardPosition[7][3] === ""){
             temp.push([7,2])
+            checkIfKingMovesThroughCheck([7,2], boardPosition)
         }
         if(!haveRooksMoved?.whiteHRook && boardPosition[7][5] === "" && boardPosition[7][6] === ""){
             temp.push([7,6])
+            checkIfKingMovesThroughCheck([7,6], boardPosition)
         }
     }
 
     if(piece.substring(0,1) === "b" && !haveKingsMoved?.blackKing){
         if(!haveRooksMoved?.blackARook && boardPosition[0][1] === "" && boardPosition[0][2] === "" && boardPosition[0][3] === ""){
             temp.push([0,2])
+            checkIfKingMovesThroughCheck([0,2], boardPosition)
         }
         if(!haveRooksMoved?.blackHRook && boardPosition[0][5] === "" && boardPosition[0][6] === ""){
             temp.push([0,6])
+            checkIfKingMovesThroughCheck([0,6], boardPosition)
         }
     }
     

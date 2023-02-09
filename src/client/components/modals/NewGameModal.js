@@ -1,11 +1,11 @@
 import { useContext } from "react"
 import { UserContext } from "../UserContext"
 
-export default function NewGameModal(props){
-    const {socket, setShowNewGameModal} = useContext(UserContext)
+export default function NewGameModal(){
+    const {socket, setShowNewGameModal, setShowEnterCodeModal} = useContext(UserContext)
 
     function joinGameClicked(){
-        props.setShowEnterCodeModal(true)
+        setShowEnterCodeModal(true)
         setShowNewGameModal(false)
     }
 

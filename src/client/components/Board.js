@@ -324,7 +324,7 @@ const Board = () =>{
                 {showEnterCodeModal ? <EnterCodeModal setShowFailedConnectionModal={setShowFailedConnectionModal} 
                 showFailedConnectionModal={showFailedConnectionModal}  showEnterCodeModal={showEnterCodeModal} /> : null}
 
-                {showNewGameModal ? <NewGameModal setShowEnterCodeModal={setShowEnterCodeModal} /> : null}
+                {showNewGameModal ? <NewGameModal /> : null}
                 {showWinScreen ? <WinScreen /> : null}
                 {showWaitingOnSecondPlayer ? <WaitingOnSecondPlayer setShowWaitingOnSecondPlayer={setShowWaitingOnSecondPlayer} /> : null}
                 {showJoinedExistingGameModal ? <JoinedExistingGameModal setShowJoinedExistingGameModal={setShowJoinedExistingGameModal} /> : null}
