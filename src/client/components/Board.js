@@ -66,8 +66,8 @@ const Board = () =>{
     const [boardDiv, setBoardDiv] = useState()
     const [socketIDs, setSocketIDs] = useState({})
     let evenRow = true
-    console.log(lastClickedPosition)
-    console.log(mostRecentClickedPosition)
+    // console.log(lastClickedPosition)
+    // console.log(mostRecentClickedPosition)
     useEffect(() =>{
         if(mostRecentClickedPosition){
             if(boardPosition[7][4] !== "whiteKing"){

@@ -3,7 +3,6 @@ import {
     rookLogic,
     knightLogic,
     bishopLogic,
-    kingLogic,
     queenLogic
 } from "./movementLogicFunctions"
 
@@ -12,10 +11,20 @@ export function checkIfKingMovesThroughCheck(positionKingMovesTo, boardPosition)
     if(positionKingMovesTo[0] === 7){
         ///White king
         if(positionKingMovesTo[1] === 2){//Check for 2 positions to left and right
-            checkPotentialMovements(boardPosition, 7, [2,3], "black")
+            return checkPotentialMovements(boardPosition, 7, [2,3,4], "black")
         }
-    }else{
+        if(positionKingMovesTo[1] === 6){
+            return checkPotentialMovements(boardPosition, 7, [4,5,6], "black")
+        }
+    }
+    if(positionKingMovesTo[0] === 0){
         ///Black King
+        if(positionKingMovesTo[1] === 2){//Check for 2 positions to left and right
+            return checkPotentialMovements(boardPosition, 0, [2,3,4], "white")
+        }
+        if(positionKingMovesTo[1] === 6){
+            return checkPotentialMovements(boardPosition, 0, [4,5,6], "white")
+        }
     }
 }
 
@@ -28,6 +37,7 @@ function checkPotentialMovements(boardPosition, rowNumber, xPositions, color){
             let piece = boardPosition[i][j]
             let position = [i, j]
             let checkPotentialMovement = []
+
     
             ///Pawn Logic
             if(piece === `${color}Pawn`){
@@ -49,23 +59,17 @@ function checkPotentialMovements(boardPosition, rowNumber, xPositions, color){
                 checkPotentialMovement = queenLogic(position, piece, boardPosition)
     
             }
-    
-            ///King Logic
-            if(piece === `${color}King`){
-                checkPotentialMovement = kingLogic(position, piece, boardPosition)
-            }
-    
+
             ///Knight Logic
             if(piece === `${color}Knight`){
                 checkPotentialMovement = knightLogic(position, piece, boardPosition)
             }
 
-            ///UNFINISHED
             for(let i = 0; i < checkPotentialMovement.length; i++){
-                for(let j = 0; j < 2; j++){
-                    if(JSON.stringify([rowNumber, xPositions[j]]) === JSON.stringify(checkPotentialMovement[j])){
+                for(let j = 0; j < 3; j++){
+                    if(JSON.stringify([rowNumber, xPositions[j]]) === JSON.stringify(checkPotentialMovement[i])){
                         return true
-                    }                    
+                    }                     
                 }
             }
         }

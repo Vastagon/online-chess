@@ -137,7 +137,7 @@ export function rookLogic(position, piece, boardPosition){
     
     ///Checks top
     while(notBlocked){
-        if(y - j > 0){
+        if(y - j >= 0){
             if(boardPosition[y-j][x] === ""){
                 temp.push([y-j, x])
             }else{
@@ -422,23 +422,27 @@ export function kingLogic(position, piece, boardPosition, haveKingsMoved, haveRo
     ///Checking for castling
     if(piece.substring(0,1) === "w" && !haveKingsMoved?.whiteKing){
         if(!haveRooksMoved?.whiteARook && boardPosition[7][1] === "" && boardPosition[7][2] === "" && boardPosition[7][3] === ""){
-            temp.push([7,2])
-            checkIfKingMovesThroughCheck([7,2], boardPosition)
+            if(!checkIfKingMovesThroughCheck([7,2], boardPosition)){
+                temp.push([7,2])
+            }
         }
         if(!haveRooksMoved?.whiteHRook && boardPosition[7][5] === "" && boardPosition[7][6] === ""){
-            temp.push([7,6])
-            checkIfKingMovesThroughCheck([7,6], boardPosition)
+            if(!checkIfKingMovesThroughCheck([7,6], boardPosition)){
+                temp.push([7,6])
+            }
         }
     }
 
     if(piece.substring(0,1) === "b" && !haveKingsMoved?.blackKing){
         if(!haveRooksMoved?.blackARook && boardPosition[0][1] === "" && boardPosition[0][2] === "" && boardPosition[0][3] === ""){
-            temp.push([0,2])
-            checkIfKingMovesThroughCheck([0,2], boardPosition)
+            if(!checkIfKingMovesThroughCheck([0,2], boardPosition)){
+                temp.push([0,2])
+            }
         }
         if(!haveRooksMoved?.blackHRook && boardPosition[0][5] === "" && boardPosition[0][6] === ""){
-            temp.push([0,6])
-            checkIfKingMovesThroughCheck([0,6], boardPosition)
+            if(!checkIfKingMovesThroughCheck([0,6], boardPosition)){
+                temp.push([0,6])
+            }
         }
     }
     
@@ -484,26 +488,26 @@ export function knightLogic(position, piece, boardPosition){
     }
 
     ///Checks one down, two right
-    if(y+1 < 7 && x+2 < 7){
+    if(y+1 < 8 && x+2 < 8){
         if(boardPosition[y+1][x+2] === "" || checkIfOppositePiece(piece, boardPosition[y+1][x+2])){
             temp.push([y+1, x+2])
         }
     }
     ///Two down, one right
-    if(y+2 < 7 && x+1 < 7){
+    if(y+2 < 8 && x+1 < 8){
         if(boardPosition[y+2][x+1] === "" || checkIfOppositePiece(piece, boardPosition[y+2][x+1])){
             temp.push([y+2, x+1])
         }
     }
 
     ///One down, two left
-    if(y+1 < 7 && x-2 >= 0){
+    if(y+1 < 8 && x-2 >= 0){
         if(boardPosition[y+1][x-2] === "" || checkIfOppositePiece(piece, boardPosition[y+1][x-2])){
             temp.push([y+1, x-2])
         }
     }
     ///Two down, one left
-    if(y+2 < 7 && x-1 >= 0){
+    if(y+2 < 8 && x-1 >= 0){
         if(boardPosition[y+2][x-1] === "" || checkIfOppositePiece(piece, boardPosition[y+2][x-1])){
             temp.push([y+2, x-1])
         }
