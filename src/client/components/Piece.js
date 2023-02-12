@@ -45,7 +45,6 @@ const Piece = (props) =>{
  
         ///King Logic
         if(props.piece === "blackKing" || props.piece === "whiteKing"){
-            console.log(props.haveKingsMoved)
             tempPotential = kingLogic(props.position, props.piece, boardPosition, props.haveKingsMoved, props.haveRooksMoved)
         }
 
