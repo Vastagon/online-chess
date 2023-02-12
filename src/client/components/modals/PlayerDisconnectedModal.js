@@ -1,6 +1,6 @@
 
 
-export default function WaitingOnReconnectModal(){
+export default function PlayerDisconnectedModal(){
 
     function closeReconnectModal(){
         window.location.reload()

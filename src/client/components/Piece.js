@@ -54,7 +54,6 @@ const Piece = (props) =>{
             tempPotential = knightLogic(props.position, props.piece, boardPosition)
         }
 
-        ///Doesn't allow the player to put themselves into check. Needs to force them to stop a check when it happens
         setPotentialMovement(removeIllegalMoves(boardPosition, tempPotential, props.piece, kingPositions, props.position))
     }///End of piece movement logic
 
@@ -64,7 +63,6 @@ const Piece = (props) =>{
     function IsItMyTurn(){
         if((whiteMoveBoolean && props.piece.substring(0,5) === "white" && socket.id === socketIDs.whiteSocketID) || (!whiteMoveBoolean && props.piece.substring(0,5) === "black" && socket.id === socketIDs.blackSocketID)){
             setPotentialMovement([]) 
-
             findPotentialMovement()
         }
     }

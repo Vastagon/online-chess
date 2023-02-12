@@ -2,15 +2,15 @@ import { UserContext } from "../UserContext"
 import { useContext } from "react"
 
 export default function ReconnectModal(){
-    const {socket} = useContext(UserContext)
+    // const {socket} = useContext(UserContext)
 
     
-    function reconnectToGame(){
+    // function reconnectToGame(){
 
-    }
-    function closeReconnectModal(){
+    // }
+    // function closeReconnectModal(){
 
-    }
+    // }
 
     return(
         <div className="center-modal-container">

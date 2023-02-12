@@ -57,7 +57,6 @@ function checkPotentialMovements(boardPosition, rowNumber, xPositions, color){
             ///Queen Logic
             if(piece === `${color}Queen`){
                 checkPotentialMovement = queenLogic(position, piece, boardPosition)
-    
             }
 
             ///Knight Logic

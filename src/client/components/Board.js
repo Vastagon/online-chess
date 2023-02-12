@@ -18,7 +18,7 @@ import WinScreen from "./modals/WinScreen"
 import ChooseNewPiece from "./modals/ChooseNewPiece"
 import Piece from "./Piece"
 import NewGameModal from "./modals/NewGameModal"
-import WaitingOnReconnectModal from "./modals/WaitingOnReconnectModal"
+import PlayerDisconnectedModal from "./modals/PlayerDisconnectedModal"
 import { checkIfRooksMoved } from "./helperFunctions/checkIfRooksMoved"
 
 let socketUrl
@@ -60,14 +60,14 @@ const Board = () =>{
     const [showPieceModal, setShowPieceModal] = useState(false)
     const [showWinScreen, setShowWinScreen] = useState(false)
     const [showNewGameModal, setShowNewGameModal] = useState(true)
-    const [showWaitingOnReconnect, setShowWaitingOnReconnect] = useState(false)
+    const [playerDisconnectedModal, setShowPlayerDisconnectedModal] = useState(false)
 
 
     const [boardDiv, setBoardDiv] = useState()
     const [socketIDs, setSocketIDs] = useState({})
     let evenRow = true
-    // console.log(lastClickedPosition)
-    // console.log(mostRecentClickedPosition)
+
+
     useEffect(() =>{
         if(mostRecentClickedPosition){
             if(boardPosition[7][4] !== "whiteKing"){
@@ -123,15 +123,13 @@ const Board = () =>{
             setHaveRooksMoved(checkIfRooksMoved(boardPosition, haveRooksMoved))
         }
     }, [changeSides])
-    ///Check which piece moved and where, if it was the king, the king hasn't moved yet, and the king ends up in [7,6] or [7,2] for white
-    ///[0,6] or [0,2] for black
+
 
     useEffect(() =>{ 
         if(boardPosition){
             updateBoard()
         }
     }, [whiteMoveBoolean, potentialMovement, showPieceModal, JSON.stringify(boardPosition), socketIDs])
-
 
     ///Where all socket changes take place
     useEffect(() =>{
@@ -172,7 +170,7 @@ const Board = () =>{
         })
 
         socket.on("userLeft", () =>{
-            setShowWaitingOnReconnect(true)
+            setShowPlayerDisconnectedModal(true)
         })
     }, [socket])
 
@@ -196,6 +194,7 @@ const Board = () =>{
     function potentialMovementGetsClicked(clickedSquare){
         let clickedPiece = boardPosition[lastClickedPosition[0]][lastClickedPosition[1]]
         setMostRecentClickedPosition(clickedSquare)
+        
         ///Checks if clicked square is in potentialMovement array
         for(let i = 0; i < potentialMovement.length; i++){
             if(JSON.stringify(potentialMovement[i]) === JSON.stringify(clickedSquare) ){
@@ -218,13 +217,15 @@ const Board = () =>{
                 boardPosition[clickedSquare[0]][clickedSquare[1]] = clickedPiece
                 boardPosition[lastClickedPosition[0]][lastClickedPosition[1]] = ""
 
-                ///Move piece
+                ///Change turns
                 setWhiteMoveBoolean(prev => !prev)
                 setChangeSides(prev => !prev)
                 setPotentialMovement([])
             }
         }
     }
+
+
 
     function chooseSquareClassName(evenRow, darkened){
         if(evenRow){
@@ -328,7 +329,7 @@ const Board = () =>{
                 {showWinScreen ? <WinScreen /> : null}
                 {showWaitingOnSecondPlayer ? <WaitingOnSecondPlayer setShowWaitingOnSecondPlayer={setShowWaitingOnSecondPlayer} /> : null}
                 {showJoinedExistingGameModal ? <JoinedExistingGameModal setShowJoinedExistingGameModal={setShowJoinedExistingGameModal} /> : null}
-                {showWaitingOnReconnect ? <WaitingOnReconnectModal /> : null}
+                {playerDisconnectedModal ? <PlayerDisconnectedModal /> : null}
             </div>
         </UserContext.Provider>
     )
