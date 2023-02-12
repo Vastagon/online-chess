@@ -1,7 +1,7 @@
 # Online Chess App
 
 ## Description
-All movement and pie taking is done. Now just need to finish logic for each piece, make the pieces take turns, and check for check, checkmate, and castling
+A chess website where users can connect to each other online using websockets and play a game of chess. Created using the MERN stack. React was great for creating components for each piece.
 
 # Scripts
 
@@ -28,9 +28,5 @@ Create a new build and serve it for heroku using their CLI
 5. potentialMovementGetsClicked() in Board.js || Runs when one of the squares with a dot gets clicked. Determines if it's a pawn promotion and moves the piece selected. This changes whiteMoveBoolean and emits "piece_moved"
 
 
-### `TODO`
-1. Check if the movement puts the person who moved it in check while checking through potentialMovement in movementLogicFunctions. If it puts them in check, don't push that position to the potentialMovement array.
-
-
-###  `General Info`
+# General Info
 - checkForWhiteCheck() determines if white puts black in check
