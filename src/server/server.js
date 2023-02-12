@@ -106,9 +106,13 @@ io.on("connection", (socket)=>{
         socket.to(data.room).emit("update_client_board", tempBoardData);
     })
 
-    // socket.on("disconnect", () =>{
-    //     io.emit("userLeft")
-    // })
+    socket.on("disconnecting", () => {
+        for (const room of socket.rooms) {
+          if (room !== socket.id) {
+            socket.to(room).emit("userLeft", socket.id);
+          }
+        }
+      });
 }) 
 
  
