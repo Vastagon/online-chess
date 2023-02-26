@@ -3,6 +3,9 @@
 ## Description
 A chess website where users can connect to each other online using websockets and play a game of chess. Created using the MERN stack. React was great for creating components for each piece.
 
+## Live Site
+https://vastagon-online-chess.herokuapp.com/
+
 # Scripts
 
 ### `npm run dev`
@@ -26,7 +29,3 @@ Create a new build and serve it for heroku using their CLI
 3. The clickPiece() function can call a variety of movement logic functions from movementLogicFunctions.js
 4. useEffect occurs in Board.js when boardPosition changes to update the board
 5. potentialMovementGetsClicked() in Board.js || Runs when one of the squares with a dot gets clicked. Determines if it's a pawn promotion and moves the piece selected. This changes whiteMoveBoolean and emits "piece_moved"
-
-
-# General Info
-- checkForWhiteCheck() determines if white puts black in check
