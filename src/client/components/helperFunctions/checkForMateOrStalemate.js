@@ -7,7 +7,7 @@ export function checkForMateOrStalemate(boardPosition, kingPositions, whiteMoveB
             return "stalemate"
         }else{
             alert("White checkmates black")
-            return "checkmate"
+            return "White checkmates black"
         }
     }else{
         if(checkForCheck(boardPosition, kingPositions.blackKing, "white")){
@@ -15,7 +15,7 @@ export function checkForMateOrStalemate(boardPosition, kingPositions, whiteMoveB
             return "stalemate"
         }else{
             alert("Black checkmates white")
-            return "checkmate"
+            return "Black checkmates white"
         }        
     }
 }

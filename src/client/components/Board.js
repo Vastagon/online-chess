@@ -41,6 +41,8 @@ const Board = () =>{
     const [mostRecentClickedPosition, setMostRecentClickedPosition] = useState()///Where the piece moved from
     const [blackOrWhitePromotion, setBlackOrWhitePromotion] = useState("")
     const [room, setRoom] = useState("")
+    const [winString, setWinString] = useState(true)
+
 
     const [kingPositions, setKingPositions] = useState({blackKing: [0,4], whiteKing: [7,4]})
     const [darkenedSquares, setDarkenedSquares] = useState([])
@@ -113,10 +115,10 @@ const Board = () =>{
     useEffect(() =>{
         if(isConnectedToRoom){
             if(checkForMate(boardPosition, kingPositions, whiteMoveBoolean)){
-                checkForMateOrStalemate(boardPosition, kingPositions, whiteMoveBoolean)
+                setWinString(checkForMateOrStalemate(boardPosition, kingPositions, whiteMoveBoolean))
                 setShowWinScreen(true)
             }
-            socket.emit("piece_moved", {boardPosition: boardPosition, room: room, darkenedSquares: [mostRecentClickedPosition, lastClickedPosition]});
+            socket.emit("piece_moved", {boardPosition: boardPosition, room: room, darkenedSquares: [mostRecentClickedPosition, lastClickedPosition], kingPositions: kingPositions});
             setPotentialMovement([]) 
 
             new Audio(moveSound).play()
@@ -151,6 +153,12 @@ const Board = () =>{
             setWhiteMoveBoolean(tempBoardData.whiteMoveBoolean)
             setPotentialMovement([]) 
             setDarkenedSquares(tempBoardData.darkenedSquares)
+            setKingPositions(tempBoardData.kingPositions)
+
+            if(checkForMate(tempBoardData.boardPosition, tempBoardData.kingPositions, tempBoardData.whiteMoveBoolean)){
+                setWinString(checkForMateOrStalemate(tempBoardData.boardPosition, tempBoardData.kingPositions, tempBoardData.whiteMoveBoolean))
+                setShowWinScreen(true)
+            }
             new Audio(moveSound).play()
         }) 
 
@@ -326,7 +334,7 @@ const Board = () =>{
                 showFailedConnectionModal={showFailedConnectionModal}  showEnterCodeModal={showEnterCodeModal} /> : null}
 
                 {showNewGameModal ? <NewGameModal /> : null}
-                {showWinScreen ? <WinScreen /> : null}
+                {showWinScreen ? <WinScreen winString={winString} /> : null}
                 {showWaitingOnSecondPlayer ? <WaitingOnSecondPlayer setShowWaitingOnSecondPlayer={setShowWaitingOnSecondPlayer} /> : null}
                 {showJoinedExistingGameModal ? <JoinedExistingGameModal setShowJoinedExistingGameModal={setShowJoinedExistingGameModal} /> : null}
                 {playerDisconnectedModal ? <PlayerDisconnectedModal /> : null}
